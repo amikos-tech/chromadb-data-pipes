@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "chromadb-hfds"
-version = "0.0.1"
+version = "0.0.2"
 description = "Chroma DB Hugging Face Datasets import/export utility"
 authors = ["Trayan Azarov <trayan.azarov@amikos.tech>"]
 license = "MIT"
