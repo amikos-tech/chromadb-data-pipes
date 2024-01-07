@@ -1,5 +1,7 @@
 # About
 
+> WARNING: This is still work in progress
+
 Python utility to import HF datasets to Chroma DB as well as export Chroma DB collections to HF datasets.
 
 ## Installation
