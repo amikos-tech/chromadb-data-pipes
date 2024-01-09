@@ -105,3 +105,4 @@ dmypy.json
 .pytype/
 cython_debug/
 .idea/
+.python-version
