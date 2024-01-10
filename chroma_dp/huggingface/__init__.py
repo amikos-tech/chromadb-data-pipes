@@ -9,8 +9,9 @@ from typing import Annotated, Optional, List
 from chromadb.utils.embedding_functions import ONNXMiniLM_L6_V2
 from pydantic import BaseModel, Field
 
+from chroma_dp.huggingface.hf_export import HFExportRequest, run as export_run
 from chroma_dp.huggingface.hf_import import HFImportRequest, run as import_run
-from chroma_dp.utils.chroma import CDPUri
+from chroma_dp.utils.chroma import CDPUri, get_client_for_uri
 
 
 class SupportedEmbeddingFunctions(str, Enum):
@@ -49,6 +50,7 @@ class HFImportUri(BaseModel):
         doc_feature = query_params.get("doc_feature", [None])[0]
         embed_feature = query_params.get("embed_feature", [None])[0]
         meta_features = query_params.get("meta_features", [None])[0]
+        private = query_params.get("private", [None])[0]
 
         return HFImportUri(
             dataset=dataset,
@@ -60,15 +62,16 @@ class HFImportUri(BaseModel):
             doc_feature=doc_feature,
             embed_feature=embed_feature,
             meta_features=meta_features.split(",") if meta_features else None,
+            private=private,
         )
 
 
-@hf_commands.command(name="import", help="Import HF dataset into Chroma.")  # type: ignore
+@hf_commands.command(name="import", help="Import HF dataset into Chroma.", no_args_is_help=True)  # type: ignore
 def hf_import(
         dataset: Annotated[
             Optional[str],
             typer.Option(
-                help="The Hugging Face dataset. Expected format: <user>/<dataset_id>."
+                help="The HuggingFace dataset. Expected format: <user>/<dataset_id>."
             ),
         ] = None,
         doc_feature: Annotated[str, typer.Option(help="The document feature.")] = None,
@@ -123,8 +126,7 @@ def hf_import(
 
     if cdp_uri is not None:
         parsed_uri = CDPUri.from_uri(cdp_uri)
-        # TODO add auth
-        client = chromadb.HttpClient(host=parsed_uri.host, port=f"{parsed_uri.port}")
+        client = get_client_for_uri(parsed_uri)
         _collection = parsed_uri.collection
         _batch_size = parsed_uri.batch_size or batch_size
         _offset = parsed_uri.offset or offset
@@ -144,7 +146,6 @@ def hf_import(
         _doc_feature = _hf_uri.doc_feature or doc_feature
         _embed_feature = _hf_uri.embed_feature or embed_feature
         _meta_features = _hf_uri.meta_features or meta_features
-
     _import_request = HFImportRequest(
         client=client,
         collection=_collection,
@@ -161,13 +162,15 @@ def hf_import(
         upsert=_upsert,
         offset=_offset,
         batch_size=_batch_size,
+
     )
 
     response = import_run(_import_request)
     typer.echo(response)
 
 
-@hf_commands.command(name="export", help="Export Chroma collection to HF dataset.")  # type: ignore
+@hf_commands.command(name="export", help="Export Chroma collection to HF dataset.",
+                     no_args_is_help=True)  # type: ignore
 def hf_export(
         chroma_endpoint: Annotated[str, typer.Option(help="The Chroma endpoint.")] = None,
         collection: Annotated[str, typer.Option(help="The Chroma collection.")] = None,
@@ -175,41 +178,55 @@ def hf_export(
         split: Annotated[
             Optional[str], typer.Option(help="The Hugging Face")
         ] = "train",
-        stream: Annotated[
-            bool, typer.Option(help="Stream dataset instead of downloading.")
-        ] = False,
-        create: Annotated[
-            bool, typer.Option(help="Create the Chroma collection if it does not exist.")
-        ] = False,
-        embed_feature: Annotated[
-            str, typer.Option(help="The embedding feature.")
-        ] = None,
         meta_features: Annotated[
             List[str], typer.Option(help="The metadata features.")
         ] = None,
-        id_feature: Annotated[str, typer.Option(help="The id feature.")] = None,
         limit: Annotated[int, typer.Option(help="The limit.")] = -1,
         offset: Annotated[int, typer.Option(help="The offset.")] = 0,
         batch_size: Annotated[int, typer.Option(help="The batch size.")] = 100,
-        embedding_function: Annotated[
-            SupportedEmbeddingFunctions, typer.Option(help="The embedding function.")
-        ] = SupportedEmbeddingFunctions.default,
-        upsert: Annotated[bool, typer.Option(help="Upsert documents.")] = False,
+        upload: Annotated[bool, typer.Option(help="Upload")] = False,
+        private: Annotated[bool, typer.Option(help="Private HF Repo")] = False,
         cdp_uri: Annotated[str, typer.Option(help="The ChromaDP URI.")] = None,
         hf_uri: Annotated[str, typer.Option(help="The Hugging Face URI.")] = None,
+        out: Annotated[str, typer.Option(help="The output path.")] = None,
 ):
     if cdp_uri is None and chroma_endpoint is None:
         raise ValueError("Please provide a ChromaDP URI or a Chroma endpoint.")
     _collection = collection
     _batch_size = batch_size
-    _upsert = upsert
-    _create = create
     _dataset = dataset
     _limit = limit
     _offset = offset
     _split = split
-    _stream = stream
-    _id_feature = id_feature
-    _doc_feature = None
-    _embed_feature = embed_feature
-    _meta
+    _upload = upload
+    _private = private
+
+    if cdp_uri is not None:
+        parsed_uri = CDPUri.from_uri(cdp_uri)
+        client = get_client_for_uri(parsed_uri)
+        _collection = parsed_uri.collection
+        _batch_size = parsed_uri.batch_size or batch_size
+        _offset = parsed_uri.offset or offset
+        _limit = parsed_uri.limit or limit
+    else:
+        client = chromadb.HttpClient(host=chroma_endpoint)
+
+    if hf_uri is not None:
+        _hf_uri = HFImportUri.from_uri(hf_uri)
+        _dataset = _hf_uri.dataset
+        _split = _hf_uri.split or split
+        _meta_features = _hf_uri.meta_features or meta_features
+        _private = _hf_uri.private if _hf_uri.private is not None else private  # do we need it this way?
+
+    export_request = HFExportRequest(
+        client=client,
+        collection=_collection,
+        dataset=_dataset,
+        split=_split,
+        output_path=out or os.path.join(os.getcwd(), _dataset.split("/")[-1]),
+        upload=_upload,
+        private=_private,
+    )
+
+    rest = export_run(export_request)
+    typer.echo(rest)

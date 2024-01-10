@@ -1,5 +1,6 @@
 from typing import Optional
 
+import chromadb
 from chromadb import ClientAPI, GetResult
 from chromadb.api.models.Collection import Collection
 import urllib.parse
@@ -104,3 +105,20 @@ class CDPUri(BaseModel):
             create_collection=_create_collection,
             upsert=upsert
         )
+
+
+def get_client_for_uri(uri: CDPUri) -> ClientAPI:
+    """Gets a ChromaDB client for a given URI."""
+    client = chromadb.HttpClient(
+        host=uri.host,
+        port=f"{uri.port}",
+        database=uri.database or chromadb.api.DEFAULT_DATABASE,
+        tenant=uri.tenant or chromadb.api.DEFAULT_TENANT,
+        # TODO auth
+        # settings=chromadb.Settings(
+        #     chroma_client_auth_provider="chromadb.auth.token.TokenAuthClientProvider",
+        #     chroma_client_auth_credentials=parsed_uri.auth,
+        #     chroma_client_auth_token_transport_header="X-CHROMA-TOKEN",
+        # )
+    )
+    return client
