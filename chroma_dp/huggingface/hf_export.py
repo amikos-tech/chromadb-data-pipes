@@ -1,3 +1,4 @@
+from os import PathLike
 from typing import Optional
 
 import datasets
@@ -14,8 +15,8 @@ from chroma_dp.utils.chroma import check_collection_exists, get_collection, read
 
 class HFExportRequest(ExportRequest):
     dataset: str = Field(..., description="Dataset name.")
-    dataset_split: Optional[str] = Field("train", description="Dataset split.")
-    dataset_file: Optional[str] = Field(..., description="Path to dataset file.")
+    split: Optional[str] = Field("train", description="Dataset split.")
+    output_path: Optional[PathLike] = Field(..., description="Dataset output path.")
     upload: Optional[bool] = Field(False, description="Upload to ChromaDB.")
     private: Optional[bool] = Field(False, description="Make dataset private on Hugging Face Hub.")
 
@@ -68,9 +69,11 @@ def run(export_request: HFExportRequest) -> ExportResult:
         **(metadata_feature if metadata_feature else {})
     })
     dataset = Dataset.from_dict(data, features=features, info=datasets.DatasetInfo(
-        description=f"Chroma Dataset for collection {_collection.name}", features=features))
-    dataset.save_to_disk(str(export_request.dataset_file))
+        description=f"Chroma Dataset for collection {_collection.name}", features=features),
+                                split=export_request.split)
+    dataset.save_to_disk(str(export_request.output_path))
 
+    # TODO implement the upload as strategy pattern
     if export_request.upload and dataset:
         dataset.push_to_hub(export_request.dataset, private=export_request.private)
         # TODO add metadata to feature mapping in the x-chroma field
@@ -96,56 +99,5 @@ def run(export_request: HFExportRequest) -> ExportResult:
             repo_id=export_request.dataset,
             repo_type="dataset",
         )
-
-    #
-    #
-    # if len(data["id"]) > 0:
-    #     features = datasets.Features({
-    #         "id": datasets.Value("string"),
-    #         # TODO this should be int or float
-    #         "embedding": datasets.features.Sequence(
-    #             feature=datasets.Value(dtype='float32')
-    #         ),
-    #         "document": datasets.Value("string"),
-    #         **metadata_feature
-    #     })
-    #     dataset = Dataset.from_dict(data, features=features)
-    #     dataset.save_to_disk(str(dataset_path) + f"-{offset}")
-    #     temp_datasets.append(dataset)
-    #
-    # if len(temp_datasets) >= 1:
-    #     dataset = concatenate_datasets(temp_datasets)
-    #     dataset.save_to_disk(dataset_path)
-    #     for safe_path in temp_dateset_paths:
-    #         shutil.rmtree(safe_path)
-    #     if dataset_file:
-    #         dataset.save(dataset_file)
-    #     _persist_export_state(_export_state_file, {
-    #         **_export_config, "safe_point_paths": [], "finished": True})
-    #     if dataset_upload:
-    #         dataset.push_to_hub(dataset_remote_path)
-    #         custom_metadata = {
-    #             "license": "mit",
-    #             "language": "en",
-    #             "pretty_name": f"Chroma export of collection {col.name}",
-    #             "size_categories": ["n<1K"],
-    #             "x-chroma": {
-    #                 "description": f"Chroma Dataset for collection {col.name}",
-    #                 "collection": col.name,
-    #                 "metadata": col.metadata,
-    #             }}
-    #         # TODO move this in a separate function
-    #         card = DatasetCard.load(
-    #             repo_id_or_path=dataset_remote_path,
-    #             repo_type="dataset")
-    #         data_info = card.data
-    #         data_dict = {**data_info.to_dict(), **custom_metadata}
-    #         card.content = f"---\n{str(data_dict)}\n---\n{card.text}"
-    #         HfApi(endpoint=datasets.config.HF_ENDPOINT).upload_file(
-    #             path_or_fileobj=str(card).encode(),
-    #             path_in_repo="README.md",
-    #             repo_id=dataset_remote_path,
-    #             repo_type="dataset",
-    #         )
 
     return ExportResult(success=True, message="Export successful.")

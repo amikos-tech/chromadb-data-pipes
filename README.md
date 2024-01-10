@@ -2,7 +2,7 @@
 
 > WARNING: This is still work in progress
 
-Python library for your data management for Chroma DB.
+CLI for managing data in Chroma DB.
 
 ## Installation
 
@@ -12,13 +12,50 @@ pip install chromadb-dp
 
 ## Usage
 
+Help:
+
 ```bash
-chroma-dp --help # get help
-chroma-dp hf import \
-  --dataset tazarov/chroma-qna \
+cdp --help
+```
+
+### Import
+
+> Note: For importing private dataset to HF make sure that you have your HF token as env
+> var - `export HF_TOKEN=hf_abcd1234`
+
+Common import options:
+
+| Option               | Type    | Description                                                           |
+|----------------------|---------|-----------------------------------------------------------------------|
+| --doc-feature        | TEXT    | The document feature. Default: `None`                                 |
+| --chroma-endpoint    | TEXT    | The Chroma endpoint. Default: `None`                                  |
+| --collection         | TEXT    | The Chroma collection. Default: `None`                                |
+| --create             | FLAG    | Create the Chroma collection if it does not exist. Default: disabled  |
+| --embed-feature      | TEXT    | The embedding feature. Default: `None`                                |
+| --meta-features      | TEXT    | The metadata features. Default: `None`                                |
+| --id-feature         | TEXT    | The id feature. Default: `None`                                       |
+| --limit              | INTEGER | The limit. Default: `-1` (the whole dataset will be imported)         |
+| --offset             | INTEGER | The offset. Default: `0` (the dataset is imported from the beginning) |
+| --batch-size         | INTEGER | The batch size. Default: `100`                                        |
+| --embedding-function | default | The embedding function. Default: `default`                            |
+| --upsert             | FLAG    | Upsert documents. Default: disabled                                   |
+| --cdp-uri            | TEXT    | The ChromaDP URI. Default: `None`                                     |
+
+#### HuggingFace Import
+
+| Option    | Type | Description                                                                      |
+|-----------|------|----------------------------------------------------------------------------------|
+| --dataset | TEXT | The HuggingFace dataset. Expected format: `<user>/<dataset_id>`. Default: `None` |
+| --split   | TEXT | The Hugging Face. Default: `train`                                               |
+| --stream  | FLAG | Stream dataset instead of downloading. Default: disabled                         |
+| --hf-uri  | TEXT | The Hugging Face URI. Default: `None`                                            |
+
+```bash
+cdp hf import \
+  --dataset KShivendu/dbpedia-entities-openai-1M \
   --collection chroma-qna \
   --create \
-  --chroma-endpoint http://localhost:8080 \
+  --chroma-endpoint http://localhost:8000 \
   --limit 1000 \
   --doc-feature text \
   --embed-feature openai \
@@ -27,88 +64,80 @@ chroma-dp hf import \
   --upsert \
   --batch-size 100
 ```
+
 ```bash
 cdp hf import \
-  --hf-uri "hf:KShivendu/dbpedia-entities-openai-1M" \
+  --hf-uri "hf:KShivendu/dbpedia-entities-openai-1M?split=train" \
   --offset 0 \
   --limit 1000 \
-  --split train \
   --id-feature _id \
   --doc-feature text \
   --meta-features title \
   --embed-feature openai \
-  --cdp-uri "http://localhost:8000/_/test?create_collection=true"
+  --cdp-uri "http://localhost:8000/default_database/test?create_collection=true"
 ```
+
+URI only import:
 
 ```bash
-cdp hf import --hf-uri "hf:KShivendu/dbpedia-entities-openai-1M?limit=1000&offset=1000&split=train&stream=false&id_feature=_id&doc_feature=text&meta_features=title&embed_feature=openai" \
-  --cdp-uri "http://localhost:8000/_/test?create_collection=true"
-
+cdp hf import \
+  --hf-uri "hf:KShivendu/dbpedia-entities-openai-1M?limit=1000&offset=1000&split=train&stream=false&id_feature=_id&doc_feature=text&meta_features=title&embed_feature=openai" \
+  --cdp-uri "http://localhost:8000/default_database/test?create_collection=true"
 ```
+
+### Export
+
+Common export options:
+
+| Option            | Type    | Description                          |
+|-------------------|---------|--------------------------------------|
+| --chroma-endpoint | TEXT    | The Chroma endpoint. Default: None   |
+| --collection      | TEXT    | The Chroma collection. Default: None |
+| --meta-features   | TEXT    | The metadata features. Default: None |
+| --limit           | INTEGER | The limit. Default: -1               |
+| --offset          | INTEGER | The offset. Default: 0               |
+| --batch-size      | INTEGER | The batch size. Default: 100         |
+| --cdp-uri         | TEXT    | The ChromaDP URI. Default: None      |
+| --out             | TEXT    | The output path. Default: None       |
+
+#### HuggingFace Export
+
+> Note: For exporting dataset to HF make sure that you have your HF token as env var - `export HF_TOKEN=hf_abcd1234`
+
+| Option    | Type | Description                             |
+|-----------|------|-----------------------------------------|
+| --dataset | TEXT | The Hugging Face dataset. Default: None |
+| --split   | TEXT | The Hugging Face. Default: train        |
+| --upload  | FLAG | Upload. Default: no-upload              |
+| --private | FLAG | Private HF Repo. Default: no-private    |
+| --hf-uri  | TEXT | The Hugging Face URI. Default: None     |
 
 ```bash
 cdp hf export \
   --dataset tazarov/chroma-qna \
   --collection chroma-qna \
-  --chroma-endpoint http://localhost:8080 \
+  --chroma-endpoint http://localhost:8000 \
   --limit 1000 \
-  --metadata-features title \
+  --meta-features title \
   --upload
 ```
 
-### Import
-
-- dataset (e.g. `KShivendu/dbpedia-entities-openai-1M`) - the id of the HuggingFace dataset to import.
-- collection name (e.g. `dbpedia-entities-openai-1M`) - The name of the collection to import into.
-- create (e.g. `True`) - create collection if it doesn't exist
-- chroma endpoint (e.g. `http://localhost:8080`) - the endpoint of the Chroma DB instance to import into.
-- document feature (e.g. `text`) - The dataset feature to use as the document text.
-- embedding feature (e.g. `openai`) - The dataset feature to use as the document embedding. If not provided, the
-  embedding will be generated automatically.
-- metadata features (e.g. `["label", "uri"]`) - The dataset features to use as document metadatas.
-- id feature (e.g. `_id` ) - The dataset feature to use as the document id. If not provided, the id will be generated
-  automatically.
-- limit (e.g. `1000`) - The number of documents to import.
-- offset (e.g. `0`) - The offset to start importing from. (Not yet implemented)
-- batch_size (e.g. `100`) - The batch size to use for importing.
-- embedding_function (chromadb embedding function, e.g. `default`) - The embedding function to use for generating
-  embeddings. If not provided, the default embedding function will be used.
-
-```python
-from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
-from chroma_dp.chroma_import import ChromaDBImportBuilder, ImportRequest
-
-import_req = ImportRequest(
-    dataset="KShivendu/dbpedia-entities-openai-1M",
-    dataset_split="train",
-    dataset_stream=False,
-    endpoint="http://localhost:8000",
-    collection="dbpedia",
-    create=True,
-    document_feature="text",
-    embedding_feature="openai",
-    metadata_features=["title"],
-    id_feature="_id",
-    limit=10000,
-    offset=0,
-    batch_size=100,
-    embedding_function=DefaultEmbeddingFunction(),
-    client=None,
-)
-
-ChromaDBImportBuilder(import_req).run()
-```
-
-Commandline:
+Exporting with URI and mix of parameters:
 
 ```bash
-cdp \
-    --dataset-id "KShivendu/dbpedia-entities-openai-1M" \
-    --collection test123 --create \
-    --chroma-endpoint "http://localhost:8000" \
-    --limit 1000 \
-    --document-feature text \
-    --embedding-feature openai \
-    --metadata-features title \
-    --id-feature _id
+cdp hf export \
+  --hf-uri hf:tazarov/dataset123-1 \
+  --cdp-uri http://localhost:8000/default_database/test \
+  --upload \
+  --private
+```
+
+Exporting with URI only:
+
+```bash
+cdp hf export \
+  --hf-uri "hf:tazarov/dataset123-1?split=train&meta_features=title" \
+  --cdp-uri "http://localhost:8000/default_database/test?limit=1000&offset=1000" \
+  --upload \
+  --private
 ```

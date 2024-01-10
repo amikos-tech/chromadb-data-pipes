@@ -7,9 +7,9 @@ license = "MIT"
 readme = "README.md"
 packages = [{ include = "chroma_dp" }]
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/amikos-tech/chromadb-hfds/issues"
-"Homepage" = "https://github.com/amikos-tech/chromadb-hfds/"
-"Source" = "https://github.com/amikos-tech/chromadb-hfds/"
+"Bug Tracker" = "https://github.com/amikos-tech/chromadb-data-pump/issues"
+"Homepage" = "https://github.com/amikos-tech/chromadb-data-pump/"
+"Source" = "https://github.com/amikos-tech/chromadb-data-pump/"
 
 [tool.poetry.scripts]
 "cdp" = "chroma_dp.main:app"
