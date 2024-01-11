@@ -1,5 +1,11 @@
-# TODO placeholder
-FROM ubuntu:latest
-LABEL authors="tazarov"
+FROM python:3.11-slim-bookworm as final
 
-ENTRYPOINT ["top", "-b"]
+COPY ./ /app
+
+WORKDIR /app
+
+# install poetry
+RUN pip install poetry && \
+    poetry install --no-dev --no-interaction --no-ansi
+
+ENTRYPOINT ["poetry", "run", "cdp"]

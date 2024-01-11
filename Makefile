@@ -13,3 +13,6 @@ install:
 test:
 	@echo "Running tests"
 	@poetry run pytest
+build-docker:
+	@echo "Building docker image"
+	@docker build -t chromadb-dp .
