@@ -27,6 +27,8 @@ extra:
       We use cookies for analytics purposes. By continuing to use this website, you agree to their use.
 extra_javascript:
   - javascripts/gtag.js
+extra_css:
+  - custom-styles.css
 markdown_extensions:
   - abbr
   - admonition
