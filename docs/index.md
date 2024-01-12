@@ -1,4 +1,4 @@
-# ChromaDB Data Pipes | Rediscover AI/ML the Unix Way
+# ChromaDB Data Pipes 🖇️| Rediscover AI/ML the Unix Way
 
 ChromaDB Data Pipes is a collection of tools to build data pipelines for Chroma DB, inspired by the Unix philosophy of "
 do one thing and do it well".
