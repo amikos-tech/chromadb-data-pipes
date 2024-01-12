@@ -1,14 +1,30 @@
 from inspect import signature
-from typing import Optional, Sequence, Any, Dict, Union
+from typing import Optional, Sequence, Any, Dict, Union, Protocol, Generator, TypeVar, Iterable
 
 from chromadb import EmbeddingFunction
 from chromadb.api import ClientAPI
+from chromadb.api.types import Embedding
 from pydantic import BaseModel, Field, field_validator
 
 
+class ChromaDocument(BaseModel):
+    id: Optional[str] = Field(None, description="Document ID")
+    text_chunk: Optional[str] = Field(None, description="Document text chunk")
+    metadata: Optional[Dict[str, Union[str, int, float, bool]]] = Field(None, description="Document metadata")
+    embedding: Optional[Embedding] = Field(None, description="Document embedding")
+
+
+D = TypeVar("D", bound=ChromaDocument, contravariant=True)
+
+
+class ChromaDocumentSourceGenerator(Protocol[D]):
+    def __iter__(self) -> Generator[ChromaDocument, None, None]:
+        ...
+
+
 class ImportRequest(BaseModel):
-    client: ClientAPI = Field(..., description="ChromaDB client")
-    collection: Optional[str] = Field(..., description="ChromaDB collection")
+    client: Optional[ClientAPI] = Field(None, description="ChromaDB client")
+    collection: Optional[str] = Field(None, description="ChromaDB collection")
     collection_metadata: Optional[dict] = Field(None,
                                                 description="Collection metadata. "
                                                             "Such as hnsw:batch_size and hnsw:sync_threshold."

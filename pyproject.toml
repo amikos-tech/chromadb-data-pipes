@@ -1,14 +1,14 @@
 [tool.poetry]
-name = "chromadb-dp"
+name = "chromadb-data-pipes"
 version = "0.0.1"
-description = "Chroma DB Data Pump - import/export utility for AI-native Chroma DB"
+description = "Chroma DB Data Pipes is a collection of tools for working with data in Chroma DB and building RAG systems"
 authors = ["Trayan Azarov <trayan.azarov@amikos.tech>"]
 license = "MIT"
 readme = "README.md"
 packages = [{ include = "chroma_dp" }]
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/amikos-tech/chromadb-data-pump/issues"
-"Homepage" = "https://github.com/amikos-tech/chromadb-data-pump/"
+"Homepage" = "https://datapipes.chromadb.dev/"
 "Source" = "https://github.com/amikos-tech/chromadb-data-pump/"
 
 [tool.poetry.scripts]
@@ -16,13 +16,11 @@ packages = [{ include = "chroma_dp" }]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-chromadb-client = "0.4.23.dev0"
+chromadb = "0.4.22"
 datasets = "^2.15.0"
 tqdm = "^4.66.1"
 rich = "^13.7.0"
-typer = {extras = ["all"], version = "^0.9.0"}
-onnxruntime = "^1.16.3"
-tokenizers = "^0.15.0"
+typer = { extras = ["all"], version = "^0.9.0" }
 pydantic = "^2.5.3"
 tenacity = "^8.2.3"
 fastapi = "^0.108.0"

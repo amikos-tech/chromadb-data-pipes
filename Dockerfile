@@ -8,4 +8,4 @@ WORKDIR /app
 RUN pip install poetry && \
     poetry install --no-dev --no-interaction --no-ansi
 
-ENTRYPOINT ["poetry", "run", "cdp"]
+ENTRYPOINT ["poetry", "run"]

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict, Any, List
 
 import chromadb
 from chromadb import ClientAPI, GetResult
@@ -6,6 +6,8 @@ from chromadb.api.models.Collection import Collection
 import urllib.parse
 
 from pydantic import BaseModel, Field
+
+from chroma_dp import ChromaDocument
 
 
 def check_collection_exists(client: ClientAPI, collection_name: str) -> bool:
@@ -122,3 +124,12 @@ def get_client_for_uri(uri: CDPUri) -> ClientAPI:
         # )
     )
     return client
+
+
+def remap_features(in_dict: Dict[str, Any], doc_feature: str, embed_feature: str, meta_features: List[str],
+                   id_feature: str) -> ChromaDocument:
+    _doc = in_dict[doc_feature]
+    _embed = in_dict[embed_feature] if embed_feature else None
+    _meta = {k: in_dict[k] for k in meta_features} if meta_features else None
+    _id = in_dict[id_feature] if id_feature else None
+    return ChromaDocument(text_chunk=_doc, embedding=_embed, metadata=_meta, id=_id)
