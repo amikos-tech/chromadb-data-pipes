@@ -1,5 +1,6 @@
 site_name: ChromaDB Data Pipes 🖇️| Rediscover AI/ML the Unix Way
 site_url: https://datapipes.chromadb.dev
+repo_url: https://github.com/amikos-tech/chromadb-data-pipes
 theme:
   name: material
   palette:
@@ -16,6 +17,9 @@ theme:
     - navigation.instant.progress
     - navigation.tracking
     - navigation.indexes
+  source:
+    branch: main
+    edit_uri: edit/main/docs/
 extra:
   homepage: https://www.trychroma.com
   analytics:

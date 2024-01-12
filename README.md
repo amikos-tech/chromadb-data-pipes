@@ -3,6 +3,13 @@
 ChromaDB Data Pipes is a collection of tools to build data pipelines for Chroma DB, inspired by the Unix philosophy of "
 do one thing and do it well".
 
+Roadmap:
+
+- Integration with LangChain 🦜🔗
+- Integration with LlamaIndex 🦙
+- Support more than `all-MiniLM-L6-v2` as embedding functions
+- Much more!
+
 ## Installation
 
 ```bash
