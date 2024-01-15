@@ -5,7 +5,7 @@ from typing import Annotated, Optional, List, Dict, Any
 import typer
 from chromadb.utils.embedding_functions import ONNXMiniLM_L6_V2
 
-from chroma_dp import ChromaDocument
+from chroma_dp import EmbeddableTextResource
 from chroma_dp.huggingface import SupportedEmbeddingFunctions
 from chroma_dp.utils.chroma import remap_features
 
@@ -47,7 +47,7 @@ def filter_embed(
         if len(_batch["documents"]) >= batch_size:
             _batch["embeddings"] = _embedding_function(_batch["documents"])
             for d, m, i, e in zip(_batch["documents"], _batch["metadatas"], _batch["ids"], _batch["embeddings"]):
-                typer.echo(ChromaDocument(text_chunk=d, metadata=m, id=i, embedding=e).model_dump_json())
+                typer.echo(EmbeddableTextResource(text_chunk=d, metadata=m, id=i, embedding=e).model_dump_json())
             _batch: Dict[str, Any] = {
                 "documents": [],
                 "embeddings": [],
@@ -57,4 +57,4 @@ def filter_embed(
     if len(_batch["documents"]) > 0:
         _batch["embeddings"] = _embedding_function(_batch["documents"])
         for d, m, i, e in zip(_batch["documents"], _batch["metadatas"], _batch["ids"], _batch["embeddings"]):
-            typer.echo(ChromaDocument(text_chunk=d, metadata=m, id=i, embedding=e).model_dump_json())
+            typer.echo(EmbeddableTextResource(text_chunk=d, metadata=m, id=i, embedding=e).model_dump_json())

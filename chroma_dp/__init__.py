@@ -1,24 +1,48 @@
 from inspect import signature
-from typing import Optional, Sequence, Any, Dict, Union, Protocol, Generator, TypeVar, Iterable
+from typing import Optional, Sequence, Any, Dict, Union, Protocol, Generator, TypeVar, Iterable, Generic
 
 from chromadb import EmbeddingFunction
 from chromadb.api import ClientAPI
 from chromadb.api.types import Embedding
 from pydantic import BaseModel, Field, field_validator
 
+C = TypeVar("C")
 
-class ChromaDocument(BaseModel):
+
+class ResourceFeature(BaseModel, Generic[C]):
+    feature_name: str
+    feature_type: C
+
+
+Metadata = Dict[str, Union[str, int, float, bool]]
+
+
+class EmbeddableResource(BaseModel):
     id: Optional[str] = Field(None, description="Document ID")
-    text_chunk: Optional[str] = Field(None, description="Document text chunk")
-    metadata: Optional[Dict[str, Union[str, int, float, bool]]] = Field(None, description="Document metadata")
+    metadata: Optional[Metadata] = Field(None, description="Document metadata")
     embedding: Optional[Embedding] = Field(None, description="Document embedding")
 
+    @staticmethod
+    def resource_features() -> Sequence[ResourceFeature]:
+        return [ResourceFeature[Embedding](feature_name='embedding', feature_type=Embedding),
+                ResourceFeature[Metadata](feature_name='metadata', eature_type=Metadata),
+                ResourceFeature[str](feature_name='id', feature_type=str)]
 
-D = TypeVar("D", bound=ChromaDocument, contravariant=True)
+
+class EmbeddableTextResource(EmbeddableResource):
+    text_chunk: Optional[str] = Field(None, description="Document text chunk")
+
+    @staticmethod
+    def resource_features() -> Sequence[ResourceFeature]:
+        return [ResourceFeature[str](feature_name='text_chunk', feature_type=str),
+                *super().resource_features()]
+
+
+D = TypeVar("D", bound=EmbeddableResource, contravariant=True)
 
 
 class ChromaDocumentSourceGenerator(Protocol[D]):
-    def __iter__(self) -> Generator[ChromaDocument, None, None]:
+    def __iter__(self) -> Generator[D, None, None]:
         ...
 
 
@@ -27,13 +51,8 @@ class CdpProducer(Protocol[D]):
         ...
 
 
-class CdpFilter(Protocol[D]):
+class CdpProcessor(Protocol[D]):
     def filter(self, *, documents: Iterable[D], **kwargs: Dict[str, Any]) -> Iterable[D]:
-        ...
-
-
-class CdpTransformer(Protocol[D]):
-    def transform(self, *, documents: Iterable[D], **kwargs: Dict[str, Any]) -> Iterable[D]:
         ...
 
 

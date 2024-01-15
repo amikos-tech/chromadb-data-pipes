@@ -5,22 +5,22 @@ from chromadb import GetResult
 from chromadb.api.models import Collection
 from rich.progress import track
 
-from chroma_dp import ChromaDocument
+from chroma_dp import EmbeddableTextResource
 from chroma_dp.utils.chroma import CDPUri, get_client_for_uri
 
 
-def _get_result_to_chroma_doc_list(result: GetResult) -> List[ChromaDocument]:
+def _get_result_to_chroma_doc_list(result: GetResult) -> List[EmbeddableTextResource]:
     """Converts a GetResult to a list of ChromaDocuments."""
     docs = []
     for idx, _ in enumerate(result["ids"]):
-        docs.append(ChromaDocument(text_chunk=result["documents"][idx],
-                                   embedding=result["embeddings"][idx],
-                                   metadata=result["metadatas"][idx],
-                                   id=result["ids"][idx]))
+        docs.append(EmbeddableTextResource(text_chunk=result["documents"][idx],
+                                           embedding=result["embeddings"][idx],
+                                           metadata=result["metadatas"][idx],
+                                           id=result["ids"][idx]))
     return docs
 
 
-def remap_features(doc: ChromaDocument,
+def remap_features(doc: EmbeddableTextResource,
                    doc_feature: Optional[str] = "text_chunk",
                    embed_feature: Optional[str] = "embedding",
                    id_feature: str = "id",

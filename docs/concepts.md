@@ -10,15 +10,15 @@ The source of the data is implementation dependent, HF datasets, ChromaDB, file 
 
 Consumes a stream of data from a file or stdin.
 
-## Filter
+## Processor
 
-Consumes a stream of data from a file or stdin and filters it by some criteria. Produces a stream of data to a file or
+Consumes a stream of data from a file or stdin and processes it by some criteria. Produces a stream of data to a file or
 stdout.
-
-## Transformer
-
-Consumes a stream of data from a file or stdin and transforms it. Produces a stream of data to a file or stdout.
 
 ## Pipeline
 
 Reusable set of producer, consumer, filter, and transformer.
+
+Properties:
+- Variables
+- 

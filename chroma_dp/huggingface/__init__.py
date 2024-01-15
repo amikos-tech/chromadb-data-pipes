@@ -14,7 +14,7 @@ from datasets.config import HF_ENDPOINT
 from huggingface_hub import DatasetCard, HfApi
 from pydantic import BaseModel, Field
 
-from chroma_dp import ChromaDocumentSourceGenerator, ChromaDocument
+from chroma_dp import ChromaDocumentSourceGenerator, EmbeddableTextResource
 from chroma_dp.huggingface.utils import _infer_hf_type
 from chroma_dp.utils.chroma import remap_features
 
@@ -41,8 +41,8 @@ class HFImportRequest(BaseModel):
         arbitrary_types_allowed = True
 
 
-def _doc_wrapper(row, document_feature, embedding_feature, id_feature, metadata_features) -> ChromaDocument:
-    doc = ChromaDocument(
+def _doc_wrapper(row, document_feature, embedding_feature, id_feature, metadata_features) -> EmbeddableTextResource:
+    doc = EmbeddableTextResource(
         id=row[id_feature] if id_feature else None,
         text_chunk=row[document_feature],
         metadata={k: row[k] for k in metadata_features} if metadata_features else None,
@@ -96,7 +96,7 @@ class HFChromaDocumentSourceGenerator(ChromaDocumentSourceGenerator):
     def _get_batch(self, offset: int, limit: int) -> Dataset:
         return self._dataset[offset:offset + limit]
 
-    def __iter__(self) -> Generator[ChromaDocument, None, None]:
+    def __iter__(self) -> Generator[EmbeddableTextResource, None, None]:
         if self._stream:
             yield from self._streaming_iterator()
         else:
@@ -110,7 +110,7 @@ class HFChromaDocumentSourceGenerator(ChromaDocumentSourceGenerator):
                                          self._meta_features) for values in
                             zip(*(subset[key] for key in self._extract_features))]
 
-    def _streaming_iterator(self) -> Generator[ChromaDocument, None, None]:
+    def _streaming_iterator(self) -> Generator[EmbeddableTextResource, None, None]:
         count = 0
         for item in self._dataset:
             if count < self._offset:
