@@ -8,7 +8,7 @@ from chromadb import EmbeddingFunction
 from chromadb.api.models import Collection
 from chromadb.utils.embedding_functions import ONNXMiniLM_L6_V2
 
-from chroma_dp import ChromaDocument
+from chroma_dp import EmbeddableTextResource
 from chroma_dp.huggingface import SupportedEmbeddingFunctions
 from chroma_dp.utils.chroma import CDPUri, get_client_for_uri, remap_features
 
