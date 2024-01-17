@@ -1,6 +1,7 @@
 import typer
 from chroma_dp.chroma.chroma_export import chroma_export
 from chroma_dp.chroma.chroma_import import chroma_import
+from chroma_dp.processor.chunk import chunk_process
 from chroma_dp.processor.embed import filter_embed
 from chroma_dp.huggingface import hf_import, hf_export
 from chroma_dp.producer.file.pdf import pdf_export
@@ -36,6 +37,11 @@ transform_commands.command(
     help="Embedding Transformer. Re-embeds document contents.",
     no_args_is_help=True,
 )(filter_embed)
+transform_commands.command(
+    name="chunk",
+    help="Chunk documents into smaller pieces.",
+    no_args_is_help=True,
+)(chunk_process)
 
 app.add_typer(
     export_commands, name="exp", no_args_is_help=True, help="Export Commands."

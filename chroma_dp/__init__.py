@@ -71,7 +71,7 @@ class CdpProducer(Protocol[D]):
 
 
 class CdpProcessor(Protocol[D]):
-    def filter(
+    def process(
         self, *, documents: Iterable[D], **kwargs: Dict[str, Any]
     ) -> Iterable[D]:
         ...

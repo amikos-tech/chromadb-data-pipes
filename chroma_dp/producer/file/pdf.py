@@ -7,24 +7,16 @@ from langchain_community.document_loaders.pdf import PyPDFDirectoryLoader
 from langchain_core.documents import Document
 
 from chroma_dp import CdpProducer, EmbeddableTextResource
-
-
-def convert_lc_doc_to_chroma_resource(doc: Document) -> EmbeddableTextResource:
-    return EmbeddableTextResource(
-        text_chunk=doc.page_content,
-        embedding=None,
-        metadata=doc.metadata,
-        id=str(uuid.uuid4()),
-    )
+from chroma_dp.processor.langchain_utils import convert_lc_doc_to_chroma_resource
 
 
 class PDFProducer(CdpProducer[EmbeddableTextResource]):
     def __init__(
-            self,
-            path: str,
-            glob: Optional[str] = None,
-            recursive: bool = False,
-            batch_size: int = 100,
+        self,
+        path: str,
+        glob: Optional[str] = None,
+        recursive: bool = False,
+        batch_size: int = 100,
     ) -> None:
         self.path = path
         self.glob = glob
@@ -32,7 +24,7 @@ class PDFProducer(CdpProducer[EmbeddableTextResource]):
         self.batch_size = batch_size
 
     def produce(
-            self, limit: int = -1, offset: int = 0, **kwargs: Dict[str, Any]
+        self, limit: int = -1, offset: int = 0, **kwargs: Dict[str, Any]
     ) -> Iterable[EmbeddableTextResource]:
         loader = PyPDFDirectoryLoader(
             self.path, glob=self.glob, recursive=self.recursive
@@ -40,40 +32,45 @@ class PDFProducer(CdpProducer[EmbeddableTextResource]):
         docs = loader.load()
         _start = 0
         for _offset in range(_start, len(docs), self.batch_size):
-            for doc in docs[_offset: _offset + self.batch_size]:
+            for doc in docs[_offset : _offset + self.batch_size]:
                 yield convert_lc_doc_to_chroma_resource(doc)
 
 
 def pdf_export(
-        path: Annotated[str, typer.Argument(
+    path: Annotated[
+        str,
+        typer.Argument(
             ...,
             help="The path to the directory containing the PDF files.",
-        )],
-        glob: Annotated[
-            Optional[str],
-            typer.Option(
-                ...,
-                "--glob", "-g",
-                help="The glob pattern to filter files in the directory.",
-            ),
-        ] = "**/[!.]*.pdf",
-        recursive: Annotated[
-            Optional[bool],
-            typer.Option(
-                ...,
-                "--recursive", "-r",
-                help="A flag whether to recursively search the directory.",
-            ),
-        ] = False,
-        batch_size: Annotated[
-            Optional[int],
-            typer.Option(
-                ...,
-                "--batch-size",
-                "-b",
-                help="The batch size to use when processing the PDF files.",
-            ),
-        ] = 100,
+        ),
+    ],
+    glob: Annotated[
+        Optional[str],
+        typer.Option(
+            ...,
+            "--glob",
+            "-g",
+            help="The glob pattern to filter files in the directory.",
+        ),
+    ] = "**/[!.]*.pdf",
+    recursive: Annotated[
+        Optional[bool],
+        typer.Option(
+            ...,
+            "--recursive",
+            "-r",
+            help="A flag whether to recursively search the directory.",
+        ),
+    ] = False,
+    batch_size: Annotated[
+        Optional[int],
+        typer.Option(
+            ...,
+            "--batch-size",
+            "-b",
+            help="The batch size to use when processing the PDF files.",
+        ),
+    ] = 100,
 ) -> None:
     """Export PDF files from a directory to ChromaDB."""
     producer = PDFProducer(
