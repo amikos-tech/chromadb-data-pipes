@@ -42,6 +42,17 @@ collection will be created if it does not exist and documents will be upserted.
 cdp imp hf --uri "hf://tazarov/chroma-qna?split=train" | cdp imp chroma --uri "http://localhost:8000/default_database/chroma-qna" --upsert --create
 ```
 
+**Importing from a directory with PDF files:**
+
+```bash
+cdp imp pdf sample-data/papers/ |grep "2401.02412.pdf" | head -1 | cdp tx chunk -s 500 | cdp tx embed --ef default | cdp imp chroma --uri "http://localhost:8000/default_database/my-pdfs" --upsert --create
+```
+
+!!! note
+
+    The above command will import the first PDF file from the `sample-data/papers/` directory, chunk it into 500 word
+    chunks, embed each chunk and import the chunks to the `my-pdfs` collection in Chroma DB.
+
 ### Exporting
 
 **Export data from Chroma DB to `.jsonl` file:**
@@ -76,7 +87,7 @@ cdp exp chroma --uri "http://localhost:8000/default_database/chroma-qna" --limit
 
     The file is  relative to the current working directory.
 
-### Transforming
+### Processing
 
 **Copy collection from one Chroma collection to another and re-embed the documents:**
 
@@ -88,6 +99,12 @@ cdp exp chroma --uri "http://localhost:8000/default_database/chroma-qna" | cdp t
 
 ```bash
 cdp imp hf --uri "hf://tazarov/ds2?split=train" | cdp tx embed --ef default | cdp imp chroma --uri "http://localhost:8000/default_database/chroma-qna-def-emb-hf" --upsert --create
+```
+
+**Chunk Large Documents:**
+
+```bash
+cdp imp pdf sample-data/papers/ | grep "2401.02412.pdf" | head -1 | cdp tx chunk -s 500
 ```
 
 ### Misc
