@@ -6,7 +6,7 @@ from chroma_dp.processor.embed import filter_embed
 from chroma_dp.huggingface import hf_import, hf_export
 from chroma_dp.producer.file.pdf import pdf_export
 
-app = typer.Typer(no_args_is_help=True, help="ChromaDB Data Pump commands.")
+app = typer.Typer(no_args_is_help=True, help="ChromaDB Data Pipes commands.")
 
 # Import commands
 import_commands = typer.Typer(no_args_is_help=True, help="Import commands.")
