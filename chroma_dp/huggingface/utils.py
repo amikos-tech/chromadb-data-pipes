@@ -21,11 +21,11 @@ def _infer_hf_type(value):
         return datasets.Value("string")
     elif isinstance(value, list):
         if all(isinstance(elem, int) for elem in value):
-            return datasets.features.Sequence(feature=datasets.Value(dtype='int32'))
+            return datasets.features.Sequence(feature=datasets.Value(dtype="int32"))
         elif all(isinstance(elem, float) for elem in value):
-            return datasets.features.Sequence(feature=datasets.Value(dtype='float32'))
+            return datasets.features.Sequence(feature=datasets.Value(dtype="float32"))
         elif all(isinstance(elem, str) for elem in value):
-            return datasets.features.Sequence(feature=datasets.Value(dtype='string'))
+            return datasets.features.Sequence(feature=datasets.Value(dtype="string"))
         else:
             raise ValueError("Unsupported list type")
     else:

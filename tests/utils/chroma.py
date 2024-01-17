@@ -2,8 +2,10 @@ from chroma_dp.utils.chroma import CDPUri
 
 
 def test_parse_cdp_uri_basic():
-    uri = "https://basic_user:basic_password@localhost:5432" \
-          "/mydb/mycollection?tenant=mytenant&batch_size=100&limit=10&offset=0"
+    uri = (
+        "https://basic_user:basic_password@localhost:5432"
+        "/mydb/mycollection?tenant=mytenant&batch_size=100&limit=10&offset=0"
+    )
     parsed = CDPUri.from_uri(uri)
     assert parsed.host == "localhost"
     assert parsed.port == 5432

@@ -42,4 +42,3 @@ jobs:
         run: |
           set -e
           poetry update
-          

@@ -21,4 +21,3 @@ Reusable set of producer, consumer, filter, and transformer.
 
 Properties:
 - Variables
-- 
