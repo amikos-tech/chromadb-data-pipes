@@ -1,12 +1,6 @@
-#
-# class CdpProcessor(Protocol[D]):
-#     def filter(
-#             self, *, documents: Iterable[D], **kwargs: Dict[str, Any]
-#     ) -> Iterable[D]:
-#         ...
 import json
 import sys
-from typing import Dict, Any, Iterable, Annotated, Optional
+from typing import Any, Iterable, Annotated, Optional
 
 import typer
 
@@ -20,11 +14,11 @@ from chroma_dp.processor.langchain_utils import (
 
 
 class ChunkProcessor(CdpProcessor[EmbeddableTextResource]):
-    def __init__(self, type: str = "character"):
+    def __init__(self, type: Optional[str] = "character"):
         self.type = type
 
     def process(
-        self, *, documents: Iterable[EmbeddableTextResource], **kwargs: Dict[str, Any]
+        self, *, documents: Iterable[EmbeddableTextResource], **kwargs: Any
     ) -> Iterable[EmbeddableTextResource]:
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=kwargs.get("size"),
@@ -35,7 +29,7 @@ class ChunkProcessor(CdpProcessor[EmbeddableTextResource]):
             split_docs = text_splitter.split_documents(
                 [convert_chroma_emb_resource_to_lc_doc(doc)]
             )
-            for split_doc in split_docs:
+            for _, split_doc in enumerate(split_docs):
                 yield convert_lc_doc_to_chroma_resource(split_doc, doc.metadata)
 
 
@@ -50,6 +44,7 @@ def chunk_process(
         ),
     ],
     inf: typer.FileText = typer.Argument(sys.stdin),
+    file: Optional[str] = typer.Option(None, "--in", help="The Chroma collection."),
     overlap: Annotated[
         int,
         typer.Option(
@@ -80,7 +75,8 @@ def chunk_process(
 ) -> None:
     """Chunk a document."""
     processor = ChunkProcessor(type=type)
-    for line in inf:
+
+    def process_docs(line: str) -> None:
         doc = EmbeddableTextResource(**json.loads(line))
         for doc in processor.process(
             documents=[doc],
@@ -90,3 +86,11 @@ def chunk_process(
             type=type,
         ):
             typer.echo(doc.model_dump_json())
+
+    if file:
+        with open(file, "r") as inf:
+            for line in inf:
+                process_docs(line)
+    else:
+        for line in inf:
+            process_docs(line)

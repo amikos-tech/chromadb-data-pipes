@@ -1,10 +1,10 @@
 import json
 import uuid
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from langchain_core.documents import Document
 
-from chroma_dp import EmbeddableTextResource
+from chroma_dp import EmbeddableTextResource, Metadata
 
 
 def normalize_metadata(metadata: Optional[Dict[str, Any]]) -> Dict[str, Any]:
@@ -28,7 +28,8 @@ def convert_chroma_emb_resource_to_lc_doc(doc: EmbeddableTextResource) -> Docume
 
 
 def convert_lc_doc_to_chroma_resource(
-    doc: Document, extra_metadata: Dict[str, Any] = None
+    doc: Document,
+    extra_metadata: Optional[Union[Dict[str, Any], Dict[str, Metadata]]] = None,
 ) -> EmbeddableTextResource:
     return EmbeddableTextResource(
         text_chunk=doc.page_content,
