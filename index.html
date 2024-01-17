@@ -318,9 +318,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#transforming" class="md-nav__link">
+  <a href="#processing" class="md-nav__link">
     <span class="md-ellipsis">
-      Transforming
+      Processing
     </span>
   </a>
   
@@ -572,9 +572,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#transforming" class="md-nav__link">
+  <a href="#processing" class="md-nav__link">
     <span class="md-ellipsis">
-      Transforming
+      Processing
     </span>
   </a>
   
@@ -639,10 +639,18 @@ do one thing and do it well".</p>
 collection will be created if it does not exist and documents will be upserted.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>hf<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;hf://tazarov/chroma-qna?split=train&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>imp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna&quot;</span><span class="w"> </span>--upsert<span class="w"> </span>--create
 </span></code></pre></div>
+<p><strong>Importing from a directory with PDF files:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>pdf<span class="w"> </span>sample-data/papers/<span class="w"> </span><span class="p">|</span>grep<span class="w"> </span><span class="s2">&quot;2401.02412.pdf&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">500</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>default<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>imp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/my-pdfs&quot;</span><span class="w"> </span>--upsert<span class="w"> </span>--create
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The above command will import the first PDF file from the <code>sample-data/papers/</code> directory, chunk it into 500 word
+chunks, embed each chunk and import the chunks to the <code>my-pdfs</code> collection in Chroma DB.</p>
+</div>
 <h3 id="exporting">Exporting<a class="headerlink" href="#exporting" title="Permanent link">&para;</a></h3>
 <p><strong>Export data from Chroma DB to <code>.jsonl</code> file:</strong></p>
 <p>The below command will export the first 10 documents from the <code>chroma-qna</code> collection to <code>chroma-qna.jsonl</code> file.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cdp<span class="w"> </span>exp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna&quot;</span><span class="w"> </span>--limit<span class="w"> </span><span class="m">10</span><span class="w"> </span>&gt;<span class="w"> </span>chroma-qna.jsonl
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cdp<span class="w"> </span>exp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna&quot;</span><span class="w"> </span>--limit<span class="w"> </span><span class="m">10</span><span class="w"> </span>&gt;<span class="w"> </span>chroma-qna.jsonl
 </span></code></pre></div>
 <p><strong>Export data from Chroma DB to HuggingFace Datasets:</strong></p>
 <p>The below command will export the first 10 documents with offset 10 from the <code>chroma-qna</code> collection to HuggingFace
@@ -652,25 +660,28 @@ Datasets <code>tazarov/chroma-qna</code> dataset. The dataset will be uploaded t
 <p>Make sure you have <code>HF_TOKEN=hf_....</code> environment variable set.
 If you want your dataset to be private, add <code>--private</code> flag to the <code>cdp exp hf</code> command.</p>
 </div>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cdp<span class="w"> </span>exp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna&quot;</span><span class="w"> </span>--limit<span class="w"> </span><span class="m">10</span><span class="w"> </span>--offset<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>exp<span class="w"> </span>hf<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;hf://tazarov/chroma-qna-modified&quot;</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cdp<span class="w"> </span>exp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna&quot;</span><span class="w"> </span>--limit<span class="w"> </span><span class="m">10</span><span class="w"> </span>--offset<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>exp<span class="w"> </span>hf<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;hf://tazarov/chroma-qna-modified&quot;</span>
 </span></code></pre></div>
 <p>To export a dataset to a file, use <code>--uri</code> with <code>file://</code> prefix:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cdp<span class="w"> </span>exp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna&quot;</span><span class="w"> </span>--limit<span class="w"> </span><span class="m">10</span><span class="w"> </span>--offset<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>exp<span class="w"> </span>hf<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;file://chroma-qna&quot;</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>cdp<span class="w"> </span>exp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna&quot;</span><span class="w"> </span>--limit<span class="w"> </span><span class="m">10</span><span class="w"> </span>--offset<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>exp<span class="w"> </span>hf<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;file://chroma-qna&quot;</span>
 </span></code></pre></div>
 <div class="admonition note file location">
 <p class="admonition-title">Note</p>
 <p>The file is  relative to the current working directory.</p>
 </div>
-<h3 id="transforming">Transforming<a class="headerlink" href="#transforming" title="Permanent link">&para;</a></h3>
+<h3 id="processing">Processing<a class="headerlink" href="#processing" title="Permanent link">&para;</a></h3>
 <p><strong>Copy collection from one Chroma collection to another and re-embed the documents:</strong></p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>cdp<span class="w"> </span>exp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>default<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>imp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna-def-emb&quot;</span><span class="w"> </span>--upsert<span class="w"> </span>--create
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cdp<span class="w"> </span>exp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>default<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>imp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna-def-emb&quot;</span><span class="w"> </span>--upsert<span class="w"> </span>--create
 </span></code></pre></div>
 <p><strong>Import dataset from HF to Chroma and embed the documents:</strong></p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>hf<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;hf://tazarov/ds2?split=train&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>default<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>imp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna-def-emb-hf&quot;</span><span class="w"> </span>--upsert<span class="w"> </span>--create
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>hf<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;hf://tazarov/ds2?split=train&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>default<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>imp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna-def-emb-hf&quot;</span><span class="w"> </span>--upsert<span class="w"> </span>--create
+</span></code></pre></div>
+<p><strong>Chunk Large Documents:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>pdf<span class="w"> </span>sample-data/papers/<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;2401.02412.pdf&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">500</span>
 </span></code></pre></div>
 <h3 id="misc">Misc<a class="headerlink" href="#misc" title="Permanent link">&para;</a></h3>
 <p><strong>Count the number of documents in a collection:</strong></p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>cdp<span class="w"> </span>exp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>cdp<span class="w"> </span>exp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
 </span></code></pre></div>
 
 
