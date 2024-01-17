@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "chromadb-data-pipes"
-version = "0.0.1"
+version = "0.0.2"
 description = "Chroma DB Data Pipes is a collection of tools for working with data in Chroma DB and building RAG systems"
 authors = ["Trayan Azarov <trayan.azarov@amikos.tech>"]
 license = "MIT"
