@@ -1,15 +1,15 @@
 [tool.poetry]
 name = "chromadb-data-pipes"
 version = "0.0.2"
-description = "Chroma DB Data Pipes is a collection of tools for working with data in Chroma DB and building RAG systems"
+description = "ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB"
 authors = ["Trayan Azarov <trayan.azarov@amikos.tech>"]
 license = "MIT"
 readme = "README.md"
 packages = [{ include = "chroma_dp" }]
 [tool.poetry.urls]
-"Bug Tracker" = "https://github.com/amikos-tech/chromadb-data-pump/issues"
+"Bug Tracker" = "https://github.com/amikos-tech/chromadb-data-pipes/issues"
 "Homepage" = "https://datapipes.chromadb.dev/"
-"Source" = "https://github.com/amikos-tech/chromadb-data-pump/"
+"Source" = "https://github.com/amikos-tech/chromadb-data-pipes/"
 
 [tool.poetry.scripts]
 "cdp" = "chroma_dp.main:app"
