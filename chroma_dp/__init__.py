@@ -1,5 +1,16 @@
 from inspect import signature
-from typing import Optional, Sequence, Any, Dict, Union, Protocol, Generator, TypeVar, Iterable, Generic
+from typing import (
+    Optional,
+    Sequence,
+    Any,
+    Dict,
+    Union,
+    Protocol,
+    Generator,
+    TypeVar,
+    Iterable,
+    Generic,
+)
 
 from chromadb import EmbeddingFunction
 from chromadb.api import ClientAPI
@@ -24,9 +35,13 @@ class EmbeddableResource(BaseModel):
 
     @staticmethod
     def resource_features() -> Sequence[ResourceFeature]:
-        return [ResourceFeature[Embedding](feature_name='embedding', feature_type=Embedding),
-                ResourceFeature[Metadata](feature_name='metadata', eature_type=Metadata),
-                ResourceFeature[str](feature_name='id', feature_type=str)]
+        return [
+            ResourceFeature[Embedding](
+                feature_name="embedding", feature_type=Embedding
+            ),
+            ResourceFeature[Metadata](feature_name="metadata", eature_type=Metadata),
+            ResourceFeature[str](feature_name="id", feature_type=str),
+        ]
 
 
 class EmbeddableTextResource(EmbeddableResource):
@@ -34,8 +49,10 @@ class EmbeddableTextResource(EmbeddableResource):
 
     @staticmethod
     def resource_features() -> Sequence[ResourceFeature]:
-        return [ResourceFeature[str](feature_name='text_chunk', feature_type=str),
-                *super().resource_features()]
+        return [
+            ResourceFeature[str](feature_name="text_chunk", feature_type=str),
+            *super().resource_features(),
+        ]
 
 
 D = TypeVar("D", bound=EmbeddableResource, contravariant=True)
@@ -47,12 +64,14 @@ class ChromaDocumentSourceGenerator(Protocol[D]):
 
 
 class CdpProducer(Protocol[D]):
-    def produce(self, limit: int = -1, offset: int = 0, **kwargs: Dict[str, Any]) -> Iterable[D]:
+    def produce(
+        self, limit: int = -1, offset: int = 0, **kwargs: Dict[str, Any]
+    ) -> Iterable[D]:
         ...
 
 
 class CdpProcessor(Protocol[D]):
-    def filter(self, *, documents: Iterable[D], **kwargs: Dict[str, Any]) -> Iterable[D]:
+    def process(self, *, documents: Iterable[D], **kwargs: Any) -> Iterable[D]:
         ...
 
 

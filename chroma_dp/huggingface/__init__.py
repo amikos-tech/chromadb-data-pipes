@@ -29,19 +29,25 @@ hf_commands = typer.Typer()
 class HFImportRequest(BaseModel):
     dataset: Union[str, Dataset]
     split: Optional[str] = Field("train", description="The Hugging Face dataset split")
-    stream: Optional[bool] = Field(False, description="Stream dataset instead of downloading.")
+    stream: Optional[bool] = Field(
+        False, description="Stream dataset instead of downloading."
+    )
     limit: Optional[int] = None
     offset: Optional[int] = None
     document_feature: Optional[str] = Field(..., description="Document feature")
     id_feature: Optional[str] = Field(None, description="ID feature")
     embedding_feature: Optional[str] = Field(None, description="Embedding feature")
-    metadata_features: Optional[Sequence[str]] = Field(None, description="Metadata features")
+    metadata_features: Optional[Sequence[str]] = Field(
+        None, description="Metadata features"
+    )
 
     class Config:
         arbitrary_types_allowed = True
 
 
-def _doc_wrapper(row, document_feature, embedding_feature, id_feature, metadata_features) -> EmbeddableTextResource:
+def _doc_wrapper(
+    row, document_feature, embedding_feature, id_feature, metadata_features
+) -> EmbeddableTextResource:
     doc = EmbeddableTextResource(
         id=row[id_feature] if id_feature else None,
         text_chunk=row[document_feature],
@@ -59,7 +65,9 @@ class HFChromaDocumentSourceGenerator(ChromaDocumentSourceGenerator):
     def __init__(self, import_request: HFImportRequest):
         if isinstance(import_request.dataset, str):
             self._dataset = load_dataset(
-                import_request.dataset, split=import_request.split, streaming=import_request.stream
+                import_request.dataset,
+                split=import_request.split,
+                streaming=import_request.stream,
             )
         else:
             self._dataset = import_request.dataset
@@ -78,23 +86,36 @@ class HFChromaDocumentSourceGenerator(ChromaDocumentSourceGenerator):
         if import_request.embedding_feature:
             self._extract_features.append(self._embed_feature)
         if import_request.metadata_features:
-            if not all(_metadata_column in self._dataset.features for _metadata_column in
-                       import_request.metadata_features):
-                missing_features = [f for f in import_request.metadata_features if f not in self._dataset.features]
+            if not all(
+                _metadata_column in self._dataset.features
+                for _metadata_column in import_request.metadata_features
+            ):
+                missing_features = [
+                    f
+                    for f in import_request.metadata_features
+                    if f not in self._dataset.features
+                ]
                 raise ValueError(
-                    f"Metadata feature(s) {missing_features} not found in dataset features {self._dataset.features.keys()}")
+                    f"Metadata feature(s) {missing_features} not found in dataset features {self._dataset.features.keys()}"
+                )
             self._extract_features.extend(import_request.metadata_features)
 
-        _dataset_len = self._dataset.num_rows if hasattr(self._dataset, "num_rows") else -1
+        _dataset_len = (
+            self._dataset.num_rows if hasattr(self._dataset, "num_rows") else -1
+        )
         if _dataset_len > 0:
-            self._limit = min(import_request.limit, _dataset_len) if import_request.limit != -1 else _dataset_len
+            self._limit = (
+                min(import_request.limit, _dataset_len)
+                if import_request.limit != -1
+                else _dataset_len
+            )
         else:
             self._limit = import_request.limit
         self._offset = import_request.offset
         self._stream = import_request.stream
 
     def _get_batch(self, offset: int, limit: int) -> Dataset:
-        return self._dataset[offset:offset + limit]
+        return self._dataset[offset : offset + limit]
 
     def __iter__(self) -> Generator[EmbeddableTextResource, None, None]:
         if self._stream:
@@ -102,13 +123,17 @@ class HFChromaDocumentSourceGenerator(ChromaDocumentSourceGenerator):
         else:
             end = self._offset + self._limit
             for start in range(self._offset, end, 10):
-                subset = self._dataset[start:min(start + 10, end)]
-                yield from [_doc_wrapper(dict(zip(self._extract_features, values)),
-                                         self._doc_feature,
-                                         self._embed_feature,
-                                         self._id_feature,
-                                         self._meta_features) for values in
-                            zip(*(subset[key] for key in self._extract_features))]
+                subset = self._dataset[start : min(start + 10, end)]
+                yield from [
+                    _doc_wrapper(
+                        dict(zip(self._extract_features, values)),
+                        self._doc_feature,
+                        self._embed_feature,
+                        self._id_feature,
+                        self._meta_features,
+                    )
+                    for values in zip(*(subset[key] for key in self._extract_features))
+                ]
 
     def _streaming_iterator(self) -> Generator[EmbeddableTextResource, None, None]:
         count = 0
@@ -134,8 +159,11 @@ class HFImportUri(BaseModel):
     embed_feature: Optional[str] = None
     is_remote: Optional[bool] = None
     meta_features: Optional[List[str]] = None
-    private: Optional[bool] = Field(False, description="Make dataset private on Hugging Face Hub. "
-                                                       "Note: This parameter is only applicable to exports.")
+    private: Optional[bool] = Field(
+        False,
+        description="Make dataset private on Hugging Face Hub. "
+        "Note: This parameter is only applicable to exports.",
+    )
 
     @staticmethod
     def from_uri(uri: str) -> "HFImportUri":
@@ -143,7 +171,9 @@ class HFImportUri(BaseModel):
         query_params = parse_qs(parsed_uri.query)
 
         if parsed_uri.scheme not in ["file", "hf"]:
-            raise ValueError(f"Unsupported scheme: {parsed_uri.scheme}. Must be 'hf:` or `file:`.")
+            raise ValueError(
+                f"Unsupported scheme: {parsed_uri.scheme}. Must be 'hf:` or `file:`."
+            )
         dataset = parsed_uri.hostname + parsed_uri.path
         is_remote = False
         if parsed_uri.scheme == "hf":
@@ -176,24 +206,27 @@ class HFImportUri(BaseModel):
 
 
 def hf_import(
-        uri: Annotated[str, typer.Option(help="Dataset uri. eg. `hf:user/dataset?split=train`")],
-
-        split: Annotated[
-            Optional[str], typer.Option(help="The HuggingFace dataset split")
-        ] = "train",
-        stream: Annotated[
-            bool, typer.Option(help="Stream dataset instead of downloading.")
-        ] = False,
-        doc_feature: Annotated[str, typer.Option(help="The document feature.")] = "document",
-        embed_feature: Annotated[
-            str, typer.Option(help="The embedding feature.")
-        ] = "embedding",
-        meta_features: Annotated[
-            List[str], typer.Option(help="The metadata features.")
-        ] = None,
-        id_feature: Annotated[str, typer.Option(help="The id feature.")] = "id",
-        limit: Annotated[int, typer.Option(help="The limit.")] = -1,
-        offset: Annotated[int, typer.Option(help="The offset.")] = 0
+    uri: Annotated[
+        str, typer.Option(help="Dataset uri. eg. `hf:user/dataset?split=train`")
+    ],
+    split: Annotated[
+        Optional[str], typer.Option(help="The HuggingFace dataset split")
+    ] = "train",
+    stream: Annotated[
+        bool, typer.Option(help="Stream dataset instead of downloading.")
+    ] = False,
+    doc_feature: Annotated[
+        str, typer.Option(help="The document feature.")
+    ] = "document",
+    embed_feature: Annotated[
+        str, typer.Option(help="The embedding feature.")
+    ] = "embedding",
+    meta_features: Annotated[
+        List[str], typer.Option(help="The metadata features.")
+    ] = None,
+    id_feature: Annotated[str, typer.Option(help="The id feature.")] = "id",
+    limit: Annotated[int, typer.Option(help="The limit.")] = -1,
+    offset: Annotated[int, typer.Option(help="The offset.")] = 0,
 ):
     _hf_uri = HFImportUri.from_uri(uri)
     _dataset = _hf_uri.dataset
@@ -223,25 +256,32 @@ def hf_import(
 
 
 def hf_export(
-        uri: Annotated[str, typer.Option(
-            help="Dataset uri. eg. `hf:user/dataset?split=train` or `file:dataset-name?split=train`")],
-        inf: typer.FileText = typer.Argument(sys.stdin),
-        split: Annotated[
-            Optional[str], typer.Option(help="The HuggingFace dataset split")
-        ] = "train",
-        doc_feature: Annotated[str, typer.Option(help="The document feature.")] = "text_chunk",
-        embed_feature: Annotated[
-            str, typer.Option(help="The embedding feature.")
-        ] = "embedding",
-        meta_features: Annotated[
-            List[str], typer.Option(help="The metadata features.")
-        ] = None,
-        id_feature: Annotated[str, typer.Option(help="The id feature.")] = "id",
-        limit: Annotated[int, typer.Option(help="The limit.")] = -1,
-        offset: Annotated[int, typer.Option(help="The offset.")] = 0,
-        batch_size: Annotated[int, typer.Option(help="The batch size.")] = 100,
-        private: Annotated[bool, typer.Option(help="Make dataset private on Hugging Face Hub. ")] = False,
-
+    uri: Annotated[
+        str,
+        typer.Option(
+            help="Dataset uri. eg. `hf:user/dataset?split=train` or `file:dataset-name?split=train`"
+        ),
+    ],
+    inf: typer.FileText = typer.Argument(sys.stdin),
+    split: Annotated[
+        Optional[str], typer.Option(help="The HuggingFace dataset split")
+    ] = "train",
+    doc_feature: Annotated[
+        str, typer.Option(help="The document feature.")
+    ] = "text_chunk",
+    embed_feature: Annotated[
+        str, typer.Option(help="The embedding feature.")
+    ] = "embedding",
+    meta_features: Annotated[
+        List[str], typer.Option(help="The metadata features.")
+    ] = None,
+    id_feature: Annotated[str, typer.Option(help="The id feature.")] = "id",
+    limit: Annotated[int, typer.Option(help="The limit.")] = -1,
+    offset: Annotated[int, typer.Option(help="The offset.")] = 0,
+    batch_size: Annotated[int, typer.Option(help="The batch size.")] = 100,
+    private: Annotated[
+        bool, typer.Option(help="Make dataset private on Hugging Face Hub. ")
+    ] = False,
 ):
     _hf_uri = HFImportUri.from_uri(uri)
     _dataset = _hf_uri.dataset
@@ -260,20 +300,26 @@ def hf_export(
         "embedding": [],
     }
 
-    features = datasets.Features({
-        "id": datasets.Value("string"),
-        "embedding": datasets.features.Sequence(feature=datasets.Value(dtype='float32')),
-        "document": datasets.Value("string"),
-        # **(metadata_feature if metadata_feature else {})
-    })
+    features = datasets.Features(
+        {
+            "id": datasets.Value("string"),
+            "embedding": datasets.features.Sequence(
+                feature=datasets.Value(dtype="float32")
+            ),
+            "document": datasets.Value("string"),
+            # **(metadata_feature if metadata_feature else {})
+        }
+    )
     features.update()
     dataset = None
     for line in inf:
-        doc = remap_features(json.loads(line),
-                             doc_feature,
-                             embed_feature=embed_feature,
-                             meta_features=meta_features,
-                             id_feature=id_feature)
+        doc = remap_features(
+            json.loads(line),
+            doc_feature,
+            embed_feature=embed_feature,
+            meta_features=meta_features,
+            id_feature=id_feature,
+        )
 
         _batch["id"].append(doc.id)
         _batch["document"].append(doc.text_chunk)
@@ -286,13 +332,23 @@ def hf_export(
 
         if len(_batch["document"]) >= _batch_size:
             if dataset is None:
-                dataset = Dataset.from_dict(_batch, features=features, info=datasets.DatasetInfo(
-                    description="Chroma Collection export.", features=features),
-                                            split=_split)
+                dataset = Dataset.from_dict(
+                    _batch,
+                    features=features,
+                    info=datasets.DatasetInfo(
+                        description="Chroma Collection export.", features=features
+                    ),
+                    split=_split,
+                )
             else:
-                new_dataset = Dataset.from_dict(_batch, features=features, info=datasets.DatasetInfo(
-                    description="Chroma Collection export.", features=features),
-                                                split=_split)
+                new_dataset = Dataset.from_dict(
+                    _batch,
+                    features=features,
+                    info=datasets.DatasetInfo(
+                        description="Chroma Collection export.", features=features
+                    ),
+                    split=_split,
+                )
                 dataset = concatenate_datasets([dataset, new_dataset])
             _batch: Dict[str, Any] = {
                 "id": [],
@@ -302,13 +358,23 @@ def hf_export(
 
     if len(_batch["document"]) > 0:
         if dataset is None:
-            dataset = Dataset.from_dict(_batch, features=features, info=datasets.DatasetInfo(
-                description="Chroma Collection export.", features=features),
-                                        split=_split)
+            dataset = Dataset.from_dict(
+                _batch,
+                features=features,
+                info=datasets.DatasetInfo(
+                    description="Chroma Collection export.", features=features
+                ),
+                split=_split,
+            )
         else:
-            new_dataset = Dataset.from_dict(_batch, features=features, info=datasets.DatasetInfo(
-                description="Chroma Collection export.", features=features),
-                                            split=_split)
+            new_dataset = Dataset.from_dict(
+                _batch,
+                features=features,
+                info=datasets.DatasetInfo(
+                    description="Chroma Collection export.", features=features
+                ),
+                split=_split,
+            )
             dataset = concatenate_datasets([dataset, new_dataset])
     dataset.save_to_disk("test_dataset")
 
@@ -323,10 +389,9 @@ def hf_export(
                 "description": "Chroma Dataset",
                 "collection": "N/A",
                 "metadata": "N/A",
-            }}
-        card = DatasetCard.load(
-            repo_id_or_path=_hf_uri.dataset,
-            repo_type="dataset")
+            },
+        }
+        card = DatasetCard.load(repo_id_or_path=_hf_uri.dataset, repo_type="dataset")
         data_info = card.data
         data_dict = {**data_info.to_dict(), **custom_metadata}
         card.content = f"---\n{str(data_dict)}\n---\n{card.text}"

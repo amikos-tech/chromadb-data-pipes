@@ -13,7 +13,12 @@ from chroma_dp.huggingface import SupportedEmbeddingFunctions
 from chroma_dp.utils.chroma import CDPUri, get_client_for_uri, remap_features
 
 
-def add_to_col(col: Collection, batch: Dict[str, Any], upsert: bool = False, ef: EmbeddingFunction = None) -> None:
+def add_to_col(
+    col: Collection,
+    batch: Dict[str, Any],
+    upsert: bool = False,
+    ef: EmbeddingFunction = None,
+) -> None:
     try:
         if ef:
             batch["embeddings"] = ef(batch["documents"])
@@ -26,28 +31,34 @@ def add_to_col(col: Collection, batch: Dict[str, Any], upsert: bool = False, ef:
 
 
 def chroma_import(
-        uri: Annotated[str, typer.Option(help="The Chroma endpoint.")],
-        collection: Annotated[str, typer.Option(help="The Chroma collection.")] = None,
-        inf: typer.FileText = typer.Argument(sys.stdin),
-        import_file: Optional[str] = typer.Option(None, "--in", help="The Chroma collection."),
-        create: Annotated[
-            bool, typer.Option(help="Create the Chroma collection if it does not exist.")
-        ] = False,
-        limit: Annotated[int, typer.Option(help="The limit.")] = -1,
-        offset: Annotated[int, typer.Option(help="The offset.")] = 0,
-        batch_size: Annotated[int, typer.Option(help="The batch size.")] = 100,
-        embedding_function: Optional[SupportedEmbeddingFunctions] = typer.Option(None,
-                                                                                 "--ef",
-                                                                                 help="The embedding function."),
-        upsert: Annotated[bool, typer.Option(help="Upsert documents.")] = False,
-        embed_feature: Annotated[
-            str, typer.Option(help="The embedding feature.")
-        ] = "embedding",
-        meta_features: Annotated[
-            List[str], typer.Option(help="The metadata features.")
-        ] = None,
-        id_feature: Annotated[str, typer.Option(help="The id feature.")] = "id",
-        doc_feature: Annotated[str, typer.Option(help="The document feature.")] = "text_chunk",
+    uri: Annotated[str, typer.Option(help="The Chroma endpoint.")],
+    collection: Annotated[str, typer.Option(help="The Chroma collection.")] = None,
+    inf: typer.FileText = typer.Argument(
+        sys.stdin, help="Stdin input. Requires to pass `-` as the argument."
+    ),
+    import_file: Optional[str] = typer.Option(
+        None, "--in", help="The file to use for the import instead of stdin."
+    ),
+    create: Annotated[
+        bool, typer.Option(help="Create the Chroma collection if it does not exist.")
+    ] = False,
+    limit: Annotated[int, typer.Option(help="The limit.")] = -1,
+    offset: Annotated[int, typer.Option(help="The offset.")] = 0,
+    batch_size: Annotated[int, typer.Option(help="The batch size.")] = 100,
+    embedding_function: Optional[SupportedEmbeddingFunctions] = typer.Option(
+        None, "--ef", help="The embedding function."
+    ),
+    upsert: Annotated[bool, typer.Option(help="Upsert documents.")] = False,
+    embed_feature: Annotated[
+        str, typer.Option(help="The embedding feature.")
+    ] = "embedding",
+    meta_features: Annotated[
+        List[str], typer.Option(help="The metadata features.")
+    ] = None,
+    id_feature: Annotated[str, typer.Option(help="The id feature.")] = "id",
+    doc_feature: Annotated[
+        str, typer.Option(help="The document feature.")
+    ] = "text_chunk",
 ):
     _embedding_function = None
     if embedding_function == SupportedEmbeddingFunctions.default:
@@ -71,16 +82,23 @@ def chroma_import(
     chroma_collection = client.get_or_create_collection(_collection)
     lc_count = 0
     if import_file:
-        with open(import_file, 'r') as inf:
+        with open(import_file, "r") as inf:
             for line in inf:
                 if lc_count < _offset:
                     continue
                 if _limit != -1 and lc_count >= _limit:
                     break
-                doc = remap_features(json.loads(line), doc_feature, embed_feature, meta_features, id_feature)
+                doc = remap_features(
+                    json.loads(line),
+                    doc_feature,
+                    embed_feature,
+                    meta_features,
+                    id_feature,
+                )
                 _batch["documents"].append(doc.text_chunk)
                 _batch["embeddings"].append(
-                    doc.embedding if _embedding_function is None else None)  # call EF?
+                    doc.embedding if _embedding_function is None else None
+                )  # call EF?
                 _batch["metadatas"].append(doc.metadata)
                 _batch["ids"].append(doc.id if doc.id else uuid.uuid4())
                 if len(_batch["documents"]) >= _batch_size:
@@ -100,10 +118,13 @@ def chroma_import(
                 continue
             if _limit != -1 and lc_count >= _limit:
                 break
-            doc = remap_features(json.loads(line), doc_feature, embed_feature, meta_features, id_feature)
+            doc = remap_features(
+                json.loads(line), doc_feature, embed_feature, meta_features, id_feature
+            )
             _batch["documents"].append(doc.text_chunk)
             _batch["embeddings"].append(
-                doc.embedding if _embedding_function is None else None)  # call EF?
+                doc.embedding if _embedding_function is None else None
+            )  # call EF?
             _batch["metadatas"].append(doc.metadata)
             _batch["ids"].append(doc.id if doc.id else uuid.uuid4())
             if len(_batch["documents"]) >= _batch_size:

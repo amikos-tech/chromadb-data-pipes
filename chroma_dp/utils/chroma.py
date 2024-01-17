@@ -16,7 +16,9 @@ def check_collection_exists(client: ClientAPI, collection_name: str) -> bool:
     return collection_name in [collection.name for collection in collections]
 
 
-def create_collection(client: ClientAPI, collection_name: str, if_not_exist: bool = False) -> Collection:
+def create_collection(
+    client: ClientAPI, collection_name: str, if_not_exist: bool = False
+) -> Collection:
     """Creates a collection in ChromaDB."""
     if if_not_exist:
         return client.get_or_create_collection(collection_name)
@@ -28,12 +30,13 @@ def get_collection(client: ClientAPI, collection_name: str) -> Collection:
     return client.get_collection(collection_name)
 
 
-def read_large_data_in_chunks(collection: Collection, offset: int = 0, limit: int = 100) -> GetResult:
+def read_large_data_in_chunks(
+    collection: Collection, offset: int = 0, limit: int = 100
+) -> GetResult:
     """Reads large data in chunks from ChromaDB."""
     result = collection.get(
-        limit=limit,
-        offset=offset,
-        include=["embeddings", "documents", "metadatas"])
+        limit=limit, offset=offset, include=["embeddings", "documents", "metadatas"]
+    )
     return result
 
 
@@ -48,9 +51,11 @@ class CDPUri(BaseModel):
     collection: Optional[str] = None
     tenant: Optional[str] = None
     batch_size: Optional[int] = None
-    limit: Optional[int] = Field(None,
-                                 description="Limit of documents to export. Note: "
-                                             "This parameter is only valid for chroma exports")
+    limit: Optional[int] = Field(
+        None,
+        description="Limit of documents to export. Note: "
+        "This parameter is only valid for chroma exports",
+    )
     offset: Optional[int] = None
     create_collection: Optional[bool] = False
     upsert: Optional[bool] = False
@@ -60,41 +65,33 @@ class CDPUri(BaseModel):
         parsed = urlparse(uri)
         user_info = parsed.username or None
         password_token = parsed.password or None
-        if user_info == '__auth_token__':
+        if user_info == "__auth_token__":
+            auth = {"type": "token", "token": password_token, "header": "AUTHORIZATION"}
+        elif user_info == "__x_chroma_token__":
             auth = {
-                'type': 'token',
-                'token': password_token,
-                'header': 'AUTHORIZATION'
-            }
-        elif user_info == '__x_chroma_token__':
-            auth = {
-                'type': 'token',
-                'token': password_token,
-                'header': 'X-CHROMA-TOKEN'
+                "type": "token",
+                "token": password_token,
+                "header": "X-CHROMA-TOKEN",
             }
         elif user_info is not None:
-            auth = {
-                'type': 'basic',
-                'username': user_info,
-                'password': password_token
-            }
+            auth = {"type": "basic", "username": user_info, "password": password_token}
         else:
             auth = None
 
-        host = parsed.hostname or ''
-        port = parsed.port or ''
+        host = parsed.hostname or ""
+        port = parsed.port or ""
 
         # Splitting the path into database and collection
-        path_components = parsed.path.strip('/').split('/')
-        database = path_components[0] if len(path_components) > 0 else ''
-        collection = path_components[1] if len(path_components) > 1 else ''
+        path_components = parsed.path.strip("/").split("/")
+        database = path_components[0] if len(path_components) > 0 else ""
+        collection = path_components[1] if len(path_components) > 1 else ""
 
         # Parsing query parameters
         query_params = parse_qs(parsed.query)
-        tenant = query_params.get('tenant', [None])[0]
-        batch_size = query_params.get('batch_size', [None])[0]
-        _create_collection = query_params.get('create_collection', [None])[0]
-        upsert = query_params.get('upsert', [None])[0]
+        tenant = query_params.get("tenant", [None])[0]
+        batch_size = query_params.get("batch_size", [None])[0]
+        _create_collection = query_params.get("create_collection", [None])[0]
+        upsert = query_params.get("upsert", [None])[0]
 
         return CDPUri(
             auth=auth,
@@ -105,7 +102,7 @@ class CDPUri(BaseModel):
             tenant=tenant,
             batch_size=batch_size,
             create_collection=_create_collection,
-            upsert=upsert
+            upsert=upsert,
         )
 
 
@@ -126,10 +123,17 @@ def get_client_for_uri(uri: CDPUri) -> ClientAPI:
     return client
 
 
-def remap_features(in_dict: Dict[str, Any], doc_feature: str, embed_feature: str, meta_features: List[str],
-                   id_feature: str) -> EmbeddableTextResource:
+def remap_features(
+    in_dict: Dict[str, Any],
+    doc_feature: str,
+    embed_feature: str,
+    meta_features: List[str],
+    id_feature: str,
+) -> EmbeddableTextResource:
     _doc = in_dict[doc_feature]
     _embed = in_dict[embed_feature] if embed_feature else None
     _meta = {k: in_dict[k] for k in meta_features} if meta_features else None
     _id = in_dict[id_feature] if id_feature else None
-    return EmbeddableTextResource(text_chunk=_doc, embedding=_embed, metadata=_meta, id=_id)
+    return EmbeddableTextResource(
+        text_chunk=_doc, embedding=_embed, metadata=_meta, id=_id
+    )
