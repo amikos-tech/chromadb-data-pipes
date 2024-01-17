@@ -5,11 +5,11 @@ do one thing and do it well".
 
 Roadmap:
 
-- Integration with LangChain 🦜🔗
-- Integration with LlamaIndex 🦙
-- Support more than `all-MiniLM-L6-v2` as embedding functions
-- Multimodal support
-- Much more!
+- ✅ Integration with LangChain 🦜🔗
+- 🚫 Integration with LlamaIndex 🦙
+- 🚫 Support more than `all-MiniLM-L6-v2` as embedding functions
+- 🚫 Multimodal support
+- ♾️ Much more!
 
 ## Installation
 
