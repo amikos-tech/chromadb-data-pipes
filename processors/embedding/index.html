@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://datapipes.chromadb.dev/processors/chunking/">
+        <link rel="canonical" href="https://datapipes.chromadb.dev/processors/embedding/">
       
       
-        <link rel="prev" href="../../concepts/">
+        <link rel="prev" href="../chunking/">
       
       
-        <link rel="next" href="../embedding/">
+        <link rel="next" href="../../producers/pdf/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Chunking - ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB</title>
+        <title>Embedding Processors - ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB</title>
       
     
     
@@ -84,7 +84,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#chunking" class="md-skip">
+        <a href="#embedding-processors" class="md-skip">
           Skip to content
         </a>
       
@@ -119,7 +119,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Chunking
+              Embedding Processors
             
           </span>
         </div>
@@ -317,6 +317,27 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../chunking/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chunking
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -329,29 +350,18 @@
         
       
       
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
   
   <span class="md-ellipsis">
-    Chunking
+    Embedding Processors
   </span>
   
 
-      </a>
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../embedding/" class="md-nav__link">
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -360,6 +370,52 @@
   
 
       </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#default" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Default">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -463,6 +519,38 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#default" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Default">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -479,28 +567,25 @@
   
 
 
-<h1 id="chunking">Chunking<a class="headerlink" href="#chunking" title="Permanent link">&para;</a></h1>
-<p>To chunk documents we have a chunk processor - <code>cdp tx chunk</code> that can be used as follows:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>pdf<span class="w"> </span>sample-data/papers/<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;2401.02412.pdf&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">500</span><span class="w"> </span>-a
+<h1 id="embedding-processors">Embedding Processors<a class="headerlink" href="#embedding-processors" title="Permanent link">&para;</a></h1>
+<h2 id="default">Default<a class="headerlink" href="#default" title="Permanent link">&para;</a></h2>
+<p>CDP comes with a default embedding processor that supports the following embedding functions:</p>
+<ul>
+<li>Default (<code>default</code>) - The default ChromaDB embedding function based on OnnxRuntime and MiniLM-L6-v2 model.</li>
+<li>OpenAI (<code>openai</code>) - OpenAI's text-embedding-ada-002 model.</li>
+</ul>
+<h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
+<h4 id="default_1">Default<a class="headerlink" href="#default_1" title="Permanent link">&para;</a></h4>
+<p>The below command will read a PDF files at the specified path, filter the output for a particular pdf (<code>grep</code>). Select
+the first document's page, chunk it to 500 characters, embed each chunk using Chroma's default (MiniLM-L2-v2) model. The
+resulting documents with embeddings will be written to <code>chroma-data.jsonl</code> file.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>pdf<span class="w"> </span>sample-data/papers/<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">500</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>default<span class="w"> </span>&gt;<span class="w"> </span>chroma-data.jsonl
 </span></code></pre></div>
-<p>The above will chunk the document into 500 character chunks and print the chunks to stdout. We will also add (<code>-a</code>
-option) the offset position of each chunk within the document as metadata <code>start_index</code>.</p>
-<p>Alternatively you can chunk from an input <code>jsonl</code> file:</p>
-<div class="admonition note">
-<p class="admonition-title">Create a <code>jsonl</code> file</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>pdf<span class="w"> </span>sample-data/papers/<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;2401.02412.pdf&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>&gt;<span class="w"> </span>chunk.jsonl
+<h4 id="openai">OpenAI<a class="headerlink" href="#openai" title="Permanent link">&para;</a></h4>
+<p>The below command will read a PDF files at the specified path, filter the output for a particular pdf (<code>grep</code>). Select
+the first document's page, chunk it to 500 characters, embed each chunk using OpenAI's text-embedding-ada-002 model.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>pdf<span class="w"> </span>sample-data/papers/<span class="w"> </span><span class="p">|</span>grep<span class="w"> </span><span class="s2">&quot;2401.02412.pdf&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">500</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>openai
 </span></code></pre></div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">jsonl format</p>
-<p>It is expected that the <code>jsonl</code> file contains <code>chroma_dp.EmbeddableTextResource</code> objects (one per line).</p>
-</div>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cdp<span class="w"> </span>tx<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">500</span><span class="w"> </span>--in<span class="w"> </span>chunk.jsonl
-</span></code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Help</p>
-<p>Run <code>cdp tx chunk --help</code> for more information.</p>
-</div>
 
 
 

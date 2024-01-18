@@ -379,6 +379,8 @@
       
         
       
+        
+      
     
     
     
@@ -421,6 +423,27 @@
   
   <span class="md-ellipsis">
     Chunking
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="processors/embedding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Embedding Processors
   </span>
   
 
@@ -632,7 +655,7 @@ do one thing and do it well".</p>
 </span></code></pre></div>
 <h3 id="importing">Importing<a class="headerlink" href="#importing" title="Permanent link">&para;</a></h3>
 <p><strong>Import data from HuggingFace Datasets to <code>.jsonl</code> file:</strong></p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>hf<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;hf:tazarov/chroma-qna?split=train&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>chroma-qna.jsonl
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>hf<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;hf://tazarov/chroma-qna?split=train&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>chroma-qna.jsonl
 </span></code></pre></div>
 <p><strong>Import data from HuggingFace Datasets to Chroma DB:</strong></p>
 <p>The below command will import the <code>train</code> split of the given dataset to Chroma chroma-qna <code>chroma-qna</code> collection. The
@@ -673,6 +696,10 @@ If you want your dataset to be private, add <code>--private</code> flag to the <
 <p><strong>Copy collection from one Chroma collection to another and re-embed the documents:</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cdp<span class="w"> </span>exp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>default<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>imp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna-def-emb&quot;</span><span class="w"> </span>--upsert<span class="w"> </span>--create
 </span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Embeddings Processor</p>
+<p>See <a href="processors/embedding/">Embedding Processors</a> for more info about supported embedding functions.</p>
+</div>
 <p><strong>Import dataset from HF to Chroma and embed the documents:</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>hf<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;hf://tazarov/ds2?split=train&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>default<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>imp<span class="w"> </span>chroma<span class="w"> </span>--uri<span class="w"> </span><span class="s2">&quot;http://localhost:8000/default_database/chroma-qna-def-emb-hf&quot;</span><span class="w"> </span>--upsert<span class="w"> </span>--create
 </span></code></pre></div>
