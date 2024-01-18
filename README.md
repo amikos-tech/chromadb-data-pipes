@@ -1,5 +1,6 @@
 # ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB
 
+
 ChromaDB Data Pipes is a collection of tools to build data pipelines for Chroma DB, inspired by the Unix philosophy of "
 do one thing and do it well".
 
@@ -30,7 +31,7 @@ cdp --help
 **Import data from HuggingFace Datasets to `.jsonl` file:**
 
 ```bash
-cdp imp hf --uri "hf:tazarov/chroma-qna?split=train" > chroma-qna.jsonl
+cdp imp hf --uri "hf://tazarov/chroma-qna?split=train" > chroma-qna.jsonl
 ```
 
 **Import data from HuggingFace Datasets to Chroma DB:**
@@ -94,6 +95,10 @@ cdp exp chroma --uri "http://localhost:8000/default_database/chroma-qna" --limit
 ```bash
 cdp exp chroma --uri "http://localhost:8000/default_database/chroma-qna" | cdp tx embed --ef default | cdp imp chroma --uri "http://localhost:8000/default_database/chroma-qna-def-emb" --upsert --create
 ```
+
+!!! note "Embeddings Processor"
+
+    See [Embedding Processors](./processors/embedding.md) for more info about supported embedding functions.
 
 **Import dataset from HF to Chroma and embed the documents:**
 

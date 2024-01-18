@@ -3,10 +3,12 @@ import sys
 from typing import Annotated, Optional, List, Dict, Any
 
 import typer
-from chromadb.utils.embedding_functions import ONNXMiniLM_L6_V2
 
 from chroma_dp import EmbeddableTextResource
-from chroma_dp.huggingface import SupportedEmbeddingFunctions
+from chroma_dp.utils.embedding import (
+    SupportedEmbeddingFunctions,
+    get_embedding_function_for_name,
+)
 from chroma_dp.utils.chroma import remap_features
 
 
@@ -33,10 +35,7 @@ def filter_embed(
         "metadatas": [],
         "ids": [],
     }
-    if embedding_function == SupportedEmbeddingFunctions.default:
-        _embedding_function = ONNXMiniLM_L6_V2()
-    else:
-        raise ValueError("Please provide a valid embedding function.")
+    _embedding_function = get_embedding_function_for_name(embedding_function)
     for line in inf:
         doc = remap_features(
             json.loads(line),
