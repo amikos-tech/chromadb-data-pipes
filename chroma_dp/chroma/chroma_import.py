@@ -8,8 +8,10 @@ from chromadb import EmbeddingFunction
 from chromadb.api.models import Collection
 from chromadb.utils.embedding_functions import ONNXMiniLM_L6_V2
 
-from chroma_dp import EmbeddableTextResource
-from chroma_dp.huggingface import SupportedEmbeddingFunctions
+from chroma_dp.utils.embedding import (
+    SupportedEmbeddingFunctions,
+    get_embedding_function_for_name,
+)
 from chroma_dp.utils.chroma import CDPUri, get_client_for_uri, remap_features
 
 
@@ -61,8 +63,8 @@ def chroma_import(
     ] = "text_chunk",
 ):
     _embedding_function = None
-    if embedding_function == SupportedEmbeddingFunctions.default:
-        _embedding_function = ONNXMiniLM_L6_V2()
+    if embedding_function is not None:
+        _embedding_function = get_embedding_function_for_name(embedding_function)
     if uri is None:
         raise ValueError("Please provide a ChromaDP URI.")
     parsed_uri = CDPUri.from_uri(uri)

@@ -18,11 +18,6 @@ from chroma_dp import ChromaDocumentSourceGenerator, EmbeddableTextResource
 from chroma_dp.huggingface.utils import _infer_hf_type
 from chroma_dp.utils.chroma import remap_features
 
-
-class SupportedEmbeddingFunctions(str, Enum):
-    default = "default"
-
-
 hf_commands = typer.Typer()
 
 
