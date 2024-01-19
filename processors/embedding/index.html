@@ -591,7 +591,8 @@ The API key must be exported as env variable <code>OPENAI_API_KEY=sk-xxxxxx</cod
 </div>
 <p>The below command will read a PDF files at the specified path, filter the output for a particular pdf (<code>grep</code>). Select
 the first document's page, chunk it to 500 characters, embed each chunk using OpenAI's text-embedding-ada-002 model.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>pdf<span class="w"> </span>sample-data/papers/<span class="w"> </span><span class="p">|</span>grep<span class="w"> </span><span class="s2">&quot;2401.02412.pdf&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">500</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>openai
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">OPENAI_API_KEY</span><span class="o">=</span>sk-xxxxxx
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>cdp<span class="w"> </span>imp<span class="w"> </span>pdf<span class="w"> </span>sample-data/papers/<span class="w"> </span><span class="p">|</span>grep<span class="w"> </span><span class="s2">&quot;2401.02412.pdf&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">500</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>openai
 </span></code></pre></div>
 <h4 id="cohere">Cohere<a class="headerlink" href="#cohere" title="Permanent link">&para;</a></h4>
 <div class="admonition note">
@@ -610,8 +611,28 @@ More about available models can be found at <a href="https://docs.cohere.com/ref
 <p>The below command will read a PDF files at the specified path, select
 the last document's page, chunk it to 100 characters, embed each chunk using Cohere's embed-english-light-v3.0 model.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COHERE_API_KEY</span><span class="o">=</span>x4q
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COHERE_MODEL_NAME</span><span class="o">=</span>embed-english-light-v3.0
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COHERE_MODEL_NAME</span><span class="o">=</span><span class="s2">&quot;embed-english-light-v3.0&quot;</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>cdp<span class="w"> </span>imp<span class="w"> </span>pdf<span class="w"> </span>sample-data/papers/<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>cohere
+</span></code></pre></div>
+<h4 id="huggingface">HuggingFace<a class="headerlink" href="#huggingface" title="Permanent link">&para;</a></h4>
+<div class="admonition note">
+<p class="admonition-title">HF API Token</p>
+<p>You need to have a HuggungFace API token to use this embedding function.
+Create or use one from your <a href="https://huggingface.co/settings/tokens">tokens page</a>.
+The API key must be exported as env variable <code>HF_TOKEN=hf_xxxx</code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">HF Embedding Models</p>
+<p>By default, if not specified, the <code>sentence-transformers/all-MiniLM-L6-v2</code> model is used.
+You can pass in an optional <code>--model=BAAI/bge-large-en-v1.5</code> argument or
+env variable <code>HF_MODEL_NAME=BAAI/bge-large-en-v1.5</code> , which lets you choose which Cohere embeddings model to use.</p>
+</div>
+<p>The below command will read a PDF files at the specified path, select
+the first two pages, chunk it to 150 characters, selects the last chunk and embeds the chunk
+using BAAI/bge-large-en-v1.5 model.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">HF_TOKEN</span><span class="o">=</span>hf_xxxx
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">HF_MODEL_NAME</span><span class="o">=</span><span class="s2">&quot;BAAI/bge-large-en-v1.5&quot;</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>cdp<span class="w"> </span>imp<span class="w"> </span>pdf<span class="w"> </span>sample-data/papers/<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-2<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">150</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>hf
 </span></code></pre></div>
 
 
