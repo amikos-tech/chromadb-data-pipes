@@ -32,6 +32,7 @@ The below command will read a PDF files at the specified path, filter the output
 the first document's page, chunk it to 500 characters, embed each chunk using OpenAI's text-embedding-ada-002 model.
 
 ```bash
+export OPENAI_API_KEY=sk-xxxxxx
 cdp imp pdf sample-data/papers/ |grep "2401.02412.pdf" | head -1 | cdp tx chunk -s 500 | cdp tx embed --ef openai
 ```
 
@@ -55,6 +56,30 @@ the last document's page, chunk it to 100 characters, embed each chunk using Coh
 
 ```bash
 export COHERE_API_KEY=x4q
-export COHERE_MODEL_NAME=embed-english-light-v3.0
+export COHERE_MODEL_NAME="embed-english-light-v3.0"
 cdp imp pdf sample-data/papers/ | tail -1 | cdp tx chunk -s 100 | cdp tx embed --ef cohere
+```
+
+#### HuggingFace
+
+!!! note "HF API Token"
+
+    You need to have a HuggungFace API token to use this embedding function.
+    Create or use one from your [tokens page](https://huggingface.co/settings/tokens).
+    The API key must be exported as env variable `HF_TOKEN=hf_xxxx`.
+
+!!! note "HF Embedding Models"
+
+    By default, if not specified, the `sentence-transformers/all-MiniLM-L6-v2` model is used.
+    You can pass in an optional `--model=BAAI/bge-large-en-v1.5` argument or
+    env variable `HF_MODEL_NAME=BAAI/bge-large-en-v1.5` , which lets you choose which Cohere embeddings model to use.
+
+The below command will read a PDF files at the specified path, select
+the first two pages, chunk it to 150 characters, selects the last chunk and embeds the chunk
+using BAAI/bge-large-en-v1.5 model.
+
+```bash
+export HF_TOKEN=hf_xxxx
+export HF_MODEL_NAME="BAAI/bge-large-en-v1.5"
+cdp imp pdf sample-data/papers/ | head -2 | cdp tx chunk -s 150 | tail -1 | cdp tx embed --ef hf
 ```

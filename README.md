@@ -7,7 +7,8 @@ Roadmap:
 
 - ✅ Integration with LangChain 🦜🔗
 - 🚫 Integration with LlamaIndex 🦙
-- 🚫 Support more than `all-MiniLM-L6-v2` as embedding functions
+- ✅ Support more than `all-MiniLM-L6-v2` as embedding functions (head over
+  to [Embedding Processors](https://datapipes.chromadb.dev/processors/embedding/) for more info)
 - 🚫 Multimodal support
 - ♾️ Much more!
 
@@ -79,7 +80,7 @@ To export a dataset to a file, use `--uri` with `file://` prefix:
 cdp exp chroma --uri "http://localhost:8000/chroma-qna" --limit 10 --offset 10 | cdp exp hf --uri "file://chroma-qna"
 ```
 
-> File Location The file is  relative to the current working directory.
+> File Location The file is relative to the current working directory.
 
 ### Processing
 
