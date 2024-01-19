@@ -17,7 +17,7 @@ def check_collection_exists(client: ClientAPI, collection_name: str) -> bool:
 
 
 def create_collection(
-    client: ClientAPI, collection_name: str, if_not_exist: bool = False
+        client: ClientAPI, collection_name: str, if_not_exist: bool = False
 ) -> Collection:
     """Creates a collection in ChromaDB."""
     if if_not_exist:
@@ -31,7 +31,7 @@ def get_collection(client: ClientAPI, collection_name: str) -> Collection:
 
 
 def read_large_data_in_chunks(
-    collection: Collection, offset: int = 0, limit: int = 100
+        collection: Collection, offset: int = 0, limit: int = 100
 ) -> GetResult:
     """Reads large data in chunks from ChromaDB."""
     result = collection.get(
@@ -45,16 +45,17 @@ from urllib.parse import urlparse, parse_qs
 
 class CDPUri(BaseModel):
     auth: Optional[dict] = None
-    host: Optional[str] = None
+    host_or_path: Optional[str] = None
     port: Optional[int] = None
     database: Optional[str] = None
     collection: Optional[str] = None
     tenant: Optional[str] = None
     batch_size: Optional[int] = None
+    is_local: Optional[bool] = False
     limit: Optional[int] = Field(
         None,
         description="Limit of documents to export. Note: "
-        "This parameter is only valid for chroma exports",
+                    "This parameter is only valid for chroma exports",
     )
     offset: Optional[int] = None
     create_collection: Optional[bool] = False
@@ -63,6 +64,14 @@ class CDPUri(BaseModel):
     @staticmethod
     def from_uri(uri: str) -> "CDPUri":
         parsed = urlparse(uri)
+        if parsed.scheme not in ["http", "https", "file"]:
+            raise ValueError(
+                f"Unsupported scheme: {parsed.scheme}. Must be 'http', 'https' or 'file'."
+            )
+
+        is_local = False
+        if parsed.scheme == "file":
+            is_local = True
         user_info = parsed.username or None
         password_token = parsed.password or None
         if user_info == "__auth_token__":
@@ -78,24 +87,27 @@ class CDPUri(BaseModel):
         else:
             auth = None
 
-        host = parsed.hostname or ""
-        port = parsed.port or ""
+        host_or_path = parsed.hostname or ""
+        port = parsed.port or "8000"
 
         # Splitting the path into database and collection
-        path_components = parsed.path.strip("/").split("/")
-        database = path_components[0] if len(path_components) > 0 else ""
-        collection = path_components[1] if len(path_components) > 1 else ""
-
+        collection = parsed.path.split("/")[-1]
+        if is_local:
+            host_or_path = host_or_path+parsed.path[:parsed.path.index(collection)]
         # Parsing query parameters
         query_params = parse_qs(parsed.query)
+        database = query_params.get("database", [None])[0]
         tenant = query_params.get("tenant", [None])[0]
         batch_size = query_params.get("batch_size", [None])[0]
         _create_collection = query_params.get("create_collection", [None])[0]
         upsert = query_params.get("upsert", [None])[0]
+        limit = query_params.get("limit", [None])[0]
+        offset = query_params.get("offset", [None])[0]
 
         return CDPUri(
             auth=auth,
-            host=host,
+            host_or_path=host_or_path,
+            is_local=is_local,
             port=port,
             database=database,
             collection=collection,
@@ -103,32 +115,41 @@ class CDPUri(BaseModel):
             batch_size=batch_size,
             create_collection=_create_collection,
             upsert=upsert,
+            limit=limit,
+            offset=offset,
         )
 
 
 def get_client_for_uri(uri: CDPUri) -> ClientAPI:
     """Gets a ChromaDB client for a given URI."""
-    client = chromadb.HttpClient(
-        host=uri.host,
-        port=f"{uri.port}",
-        database=uri.database or chromadb.api.DEFAULT_DATABASE,
-        tenant=uri.tenant or chromadb.api.DEFAULT_TENANT,
-        # TODO auth
-        # settings=chromadb.Settings(
-        #     chroma_client_auth_provider="chromadb.auth.token.TokenAuthClientProvider",
-        #     chroma_client_auth_credentials=parsed_uri.auth,
-        #     chroma_client_auth_token_transport_header="X-CHROMA-TOKEN",
-        # )
-    )
+    if uri.is_local:
+        client = chromadb.PersistentClient(path=uri.host_or_path,
+                                           database=uri.database or chromadb.api.DEFAULT_DATABASE,
+                                           tenant=uri.tenant or chromadb.api.DEFAULT_TENANT,
+                                           )
+    else:
+        client = chromadb.HttpClient(
+            host=uri.host_or_path,
+            port=f"{uri.port}",
+            database=uri.database or chromadb.api.DEFAULT_DATABASE,
+            tenant=uri.tenant or chromadb.api.DEFAULT_TENANT,
+            # TODO auth
+            # settings=chromadb.Settings(
+            #     chroma_client_auth_provider="chromadb.auth.token.TokenAuthClientProvider",
+            #     chroma_client_auth_credentials=parsed_uri.auth,
+            #     chroma_client_auth_token_transport_header="X-CHROMA-TOKEN",
+            # )
+        )
+
     return client
 
 
 def remap_features(
-    in_dict: Dict[str, Any],
-    doc_feature: str,
-    embed_feature: str,
-    meta_features: List[str],
-    id_feature: str,
+        in_dict: Dict[str, Any],
+        doc_feature: str,
+        embed_feature: str,
+        meta_features: List[str],
+        id_feature: str,
 ) -> EmbeddableTextResource:
     _doc = in_dict[doc_feature]
     _embed = in_dict[embed_feature] if embed_feature else None

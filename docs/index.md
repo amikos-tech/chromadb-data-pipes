@@ -33,19 +33,19 @@ cdp --help
 cdp imp hf --uri "hf://tazarov/chroma-qna?split=train" > chroma-qna.jsonl
 ```
 
-**Import data from HuggingFace Datasets to Chroma DB:**
+**Import data from HuggingFace Datasets to Chroma DB Server:**
 
 The below command will import the `train` split of the given dataset to Chroma chroma-qna `chroma-qna` collection. The
 collection will be created if it does not exist and documents will be upserted.
 
 ```bash
-cdp imp hf --uri "hf://tazarov/chroma-qna?split=train" | cdp imp chroma --uri "http://localhost:8000/default_database/chroma-qna" --upsert --create
+cdp imp hf --uri "hf://tazarov/chroma-qna?split=train" | cdp imp chroma --uri "http://localhost:8000/chroma-qna" --upsert --create
 ```
 
-**Importing from a directory with PDF files:**
+**Importing from a directory with PDF files into Local Persisted Chroma DB:**
 
 ```bash
-cdp imp pdf sample-data/papers/ |grep "2401.02412.pdf" | head -1 | cdp tx chunk -s 500 | cdp tx embed --ef default | cdp imp chroma --uri "http://localhost:8000/default_database/my-pdfs" --upsert --create
+cdp imp pdf sample-data/papers/ | grep "2401.02412.pdf" | head -1 | cdp tx chunk -s 500 | cdp tx embed --ef default | cdp imp chroma --uri "http://chroma-data/my-pdfs" --upsert --create
 ```
 
 !!! note
@@ -55,15 +55,15 @@ cdp imp pdf sample-data/papers/ |grep "2401.02412.pdf" | head -1 | cdp tx chunk 
 
 ### Exporting
 
-**Export data from Chroma DB to `.jsonl` file:**
+**Export data from Local Persisted Chroma DB to `.jsonl` file:**
 
 The below command will export the first 10 documents from the `chroma-qna` collection to `chroma-qna.jsonl` file.
 
 ```bash
-cdp exp chroma --uri "http://localhost:8000/default_database/chroma-qna" --limit 10 > chroma-qna.jsonl
+cdp exp chroma --uri "http://chroma-data/chroma-qna" --limit 10 > chroma-qna.jsonl
 ```
 
-**Export data from Chroma DB to HuggingFace Datasets:**
+**Export data from Chroma DB Server to HuggingFace Datasets:**
 
 The below command will export the first 10 documents with offset 10 from the `chroma-qna` collection to HuggingFace
 Datasets `tazarov/chroma-qna` dataset. The dataset will be uploaded to HF.
@@ -74,13 +74,13 @@ Datasets `tazarov/chroma-qna` dataset. The dataset will be uploaded to HF.
     If you want your dataset to be private, add `--private` flag to the `cdp exp hf` command.
 
 ```bash
-cdp exp chroma --uri "http://localhost:8000/default_database/chroma-qna" --limit 10 --offset 10 | cdp exp hf --uri "hf://tazarov/chroma-qna-modified"
+cdp exp chroma --uri "http://localhost:8000/chroma-qna" --limit 10 --offset 10 | cdp exp hf --uri "hf://tazarov/chroma-qna-modified"
 ```
 
 To export a dataset to a file, use `--uri` with `file://` prefix:
 
 ```bash
-cdp exp chroma --uri "http://localhost:8000/default_database/chroma-qna" --limit 10 --offset 10 | cdp exp hf --uri "file://chroma-qna"
+cdp exp chroma --uri "http://localhost:8000/chroma-qna" --limit 10 --offset 10 | cdp exp hf --uri "file://chroma-qna"
 ```
 
 !!! note File Location
@@ -92,17 +92,17 @@ cdp exp chroma --uri "http://localhost:8000/default_database/chroma-qna" --limit
 **Copy collection from one Chroma collection to another and re-embed the documents:**
 
 ```bash
-cdp exp chroma --uri "http://localhost:8000/default_database/chroma-qna" | cdp tx embed --ef default | cdp imp chroma --uri "http://localhost:8000/default_database/chroma-qna-def-emb" --upsert --create
+cdp exp chroma --uri "http://localhost:8000/chroma-qna" | cdp tx embed --ef default | cdp imp chroma --uri "http://localhost:8000/chroma-qna-def-emb" --upsert --create
 ```
 
 !!! note "Embeddings Processor"
 
     See [Embedding Processors](./processors/embedding.md) for more info about supported embedding functions.
 
-**Import dataset from HF to Chroma and embed the documents:**
+**Import dataset from HF to Local Persisted Chroma and embed the documents:**
 
 ```bash
-cdp imp hf --uri "hf://tazarov/ds2?split=train" | cdp tx embed --ef default | cdp imp chroma --uri "http://localhost:8000/default_database/chroma-qna-def-emb-hf" --upsert --create
+cdp imp hf --uri "hf://tazarov/ds2?split=train" | cdp tx embed --ef default | cdp imp chroma --uri "file://chroma-data/chroma-qna-def-emb-hf" --upsert --create
 ```
 
 **Chunk Large Documents:**
@@ -116,5 +116,5 @@ cdp imp pdf sample-data/papers/ | grep "2401.02412.pdf" | head -1 | cdp tx chunk
 **Count the number of documents in a collection:**
 
 ```bash
-cdp exp chroma --uri "http://localhost:8000/default_database/chroma-qna" | wc -l
+cdp exp chroma --uri "http://localhost:8000/chroma-qna" | wc -l
 ```
