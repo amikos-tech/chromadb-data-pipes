@@ -8,6 +8,7 @@ from chromadb.utils.embedding_functions import (
     OpenAIEmbeddingFunction,
     CohereEmbeddingFunction,
     HuggingFaceEmbeddingFunction,
+    SentenceTransformerEmbeddingFunction,
 )
 
 
@@ -16,6 +17,7 @@ class SupportedEmbeddingFunctions(str, Enum):
     openai = "openai"
     cohere = "cohere"
     hf = "hf"
+    st = "st"
 
 
 def get_embedding_function_for_name(
@@ -51,6 +53,17 @@ def get_embedding_function_for_name(
         )
         return HuggingFaceEmbeddingFunction(
             api_key=os.environ.get("HF_TOKEN"), model_name=model
+        )
+    elif name == SupportedEmbeddingFunctions.st:
+        model = (
+            kwargs.get("model")
+            if kwargs.get("model")
+            else os.environ.get("ST_MODEL_NAME", "all-MiniLM-L6-v2")
+        )
+        return SentenceTransformerEmbeddingFunction(
+            model_name=model,
+            device=os.environ.get("ST_DEVICE", "cpu"),
+            normalize_embeddings=os.environ.get("ST_NORMALIZE", "True") == "True",
         )
     else:
         raise ValueError("Please provide a valid embedding function.")

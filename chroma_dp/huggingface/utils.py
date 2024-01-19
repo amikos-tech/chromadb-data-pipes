@@ -1,7 +1,9 @@
+from typing import Union, Any
+
 import datasets
 
 
-def _infer_hf_type(value):
+def _infer_hf_type(value: Any) -> Union[datasets.Value, datasets.features.Sequence]:
     """
     Infers the Hugging Face data type from a Python type.
 
