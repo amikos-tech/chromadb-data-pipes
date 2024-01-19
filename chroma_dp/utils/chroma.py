@@ -3,7 +3,6 @@ from typing import Optional, Dict, Any, List
 import chromadb
 from chromadb import ClientAPI, GetResult
 from chromadb.api.models.Collection import Collection
-import urllib.parse
 
 from pydantic import BaseModel, Field
 

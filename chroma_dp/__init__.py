@@ -1,4 +1,3 @@
-from inspect import signature
 from typing import (
     Optional,
     Sequence,
@@ -12,10 +11,8 @@ from typing import (
     Generic,
 )
 
-from chromadb import EmbeddingFunction
-from chromadb.api import ClientAPI
 from chromadb.api.types import Embedding
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 
 C = TypeVar("C")
 

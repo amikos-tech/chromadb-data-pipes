@@ -7,7 +7,8 @@ Roadmap:
 
 - ✅ Integration with LangChain 🦜🔗
 - 🚫 Integration with LlamaIndex 🦙
-- 🚫 Support more than `all-MiniLM-L6-v2` as embedding functions
+- ✅ Support more than `all-MiniLM-L6-v2` as embedding functions (head over
+  to [Embedding Processors](./processors/embedding.md) for more info)
 - 🚫 Multimodal support
 - ♾️ Much more!
 

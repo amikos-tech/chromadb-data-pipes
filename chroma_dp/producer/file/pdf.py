@@ -1,10 +1,8 @@
 # cdp imp pdf /home/alex/Downloads/ --glob *.pdf
-import uuid
 from typing import Dict, Any, Iterable, Optional, Annotated
 
 import typer
 from langchain_community.document_loaders.pdf import PyPDFDirectoryLoader
-from langchain_core.documents import Document
 
 from chroma_dp import CdpProducer, EmbeddableTextResource
 from chroma_dp.processor.langchain_utils import convert_lc_doc_to_chroma_resource

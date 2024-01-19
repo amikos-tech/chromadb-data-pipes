@@ -21,6 +21,7 @@ class ChunkProcessor(CdpProcessor[EmbeddableTextResource]):
         self, *, documents: Iterable[EmbeddableTextResource], **kwargs: Any
     ) -> Iterable[EmbeddableTextResource]:
         text_splitter = CharacterTextSplitter(
+            separator=kwargs.get("separator", "\n"),
             chunk_size=kwargs.get("size"),
             chunk_overlap=kwargs.get("overlap", 0),
             add_start_index=kwargs.get("add_start_index", False),
@@ -28,6 +29,11 @@ class ChunkProcessor(CdpProcessor[EmbeddableTextResource]):
         for doc in documents:
             split_docs = text_splitter.split_documents(
                 [convert_chroma_emb_resource_to_lc_doc(doc)]
+            )
+            print(
+                [convert_chroma_emb_resource_to_lc_doc(doc)],
+                kwargs.get("size"),
+                kwargs.get("overlap", 0),
             )
             for _, split_doc in enumerate(split_docs):
                 yield convert_lc_doc_to_chroma_resource(split_doc, doc.metadata)

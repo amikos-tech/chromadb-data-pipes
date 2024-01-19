@@ -3,7 +3,6 @@ from typing import Annotated, Optional, List, Dict, Any
 import typer
 from chromadb import GetResult
 from chromadb.api.models import Collection
-from rich.progress import track
 
 from chroma_dp import EmbeddableTextResource
 from chroma_dp.utils.chroma import CDPUri, get_client_for_uri
