@@ -21,7 +21,7 @@ class ChunkProcessor(CdpProcessor[EmbeddableTextResource]):
         self, *, documents: Iterable[EmbeddableTextResource], **kwargs: Any
     ) -> Iterable[EmbeddableTextResource]:
         text_splitter = CharacterTextSplitter(
-            separator=kwargs.get("separator", "\n"),
+            separator=kwargs.get("separator") if kwargs.get("separator") else "\n",
             chunk_size=kwargs.get("size"),
             chunk_overlap=kwargs.get("overlap", 0),
             add_start_index=kwargs.get("add_start_index", False),
@@ -29,11 +29,6 @@ class ChunkProcessor(CdpProcessor[EmbeddableTextResource]):
         for doc in documents:
             split_docs = text_splitter.split_documents(
                 [convert_chroma_emb_resource_to_lc_doc(doc)]
-            )
-            print(
-                [convert_chroma_emb_resource_to_lc_doc(doc)],
-                kwargs.get("size"),
-                kwargs.get("overlap", 0),
             )
             for _, split_doc in enumerate(split_docs):
                 yield convert_lc_doc_to_chroma_resource(split_doc, doc.metadata)
@@ -46,7 +41,7 @@ def chunk_process(
             ...,
             "--size",
             "-s",
-            help="The maximum size of each chunk",
+            help="The maximum size of each chunk.",
         ),
     ],
     inf: typer.FileText = typer.Argument(sys.stdin),
@@ -60,6 +55,15 @@ def chunk_process(
             help="The overlap between chunks",
         ),
     ] = 0,
+    separator: Annotated[
+        str,
+        typer.Option(
+            ...,
+            "--separator",
+            "-p",
+            help="The separator character to use for splitting the text.",
+        ),
+    ] = "\n",
     add_start_index: Annotated[
         bool,
         typer.Option(
@@ -90,6 +94,7 @@ def chunk_process(
             overlap=overlap,
             add_start_index=add_start_index,
             type=type,
+            separator=separator,
         ):
             typer.echo(doc.model_dump_json())
 
