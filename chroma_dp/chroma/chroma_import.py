@@ -6,7 +6,6 @@ from typing import Annotated, Optional, List, Dict, Any
 import typer
 from chromadb import EmbeddingFunction
 from chromadb.api.models import Collection
-from chromadb.utils.embedding_functions import ONNXMiniLM_L6_V2
 
 from chroma_dp.utils.embedding import (
     SupportedEmbeddingFunctions,

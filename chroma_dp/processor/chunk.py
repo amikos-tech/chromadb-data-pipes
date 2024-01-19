@@ -5,7 +5,7 @@ from typing import Any, Iterable, Annotated, Optional
 import typer
 
 from chroma_dp import EmbeddableTextResource, CdpProcessor
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.text_splitter import CharacterTextSplitter
 
 from chroma_dp.processor.langchain_utils import (
     convert_chroma_emb_resource_to_lc_doc,
@@ -20,7 +20,7 @@ class ChunkProcessor(CdpProcessor[EmbeddableTextResource]):
     def process(
         self, *, documents: Iterable[EmbeddableTextResource], **kwargs: Any
     ) -> Iterable[EmbeddableTextResource]:
-        text_splitter = RecursiveCharacterTextSplitter(
+        text_splitter = CharacterTextSplitter(
             chunk_size=kwargs.get("size"),
             chunk_overlap=kwargs.get("overlap", 0),
             add_start_index=kwargs.get("add_start_index", False),
