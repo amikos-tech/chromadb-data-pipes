@@ -17,7 +17,7 @@ def check_collection_exists(client: ClientAPI, collection_name: str) -> bool:
 
 
 def create_collection(
-        client: ClientAPI, collection_name: str, if_not_exist: bool = False
+    client: ClientAPI, collection_name: str, if_not_exist: bool = False
 ) -> Collection:
     """Creates a collection in ChromaDB."""
     if if_not_exist:
@@ -31,7 +31,7 @@ def get_collection(client: ClientAPI, collection_name: str) -> Collection:
 
 
 def read_large_data_in_chunks(
-        collection: Collection, offset: int = 0, limit: int = 100
+    collection: Collection, offset: int = 0, limit: int = 100
 ) -> GetResult:
     """Reads large data in chunks from ChromaDB."""
     result = collection.get(
@@ -55,7 +55,7 @@ class CDPUri(BaseModel):
     limit: Optional[int] = Field(
         None,
         description="Limit of documents to export. Note: "
-                    "This parameter is only valid for chroma exports",
+        "This parameter is only valid for chroma exports",
     )
     offset: Optional[int] = None
     create_collection: Optional[bool] = False
@@ -93,7 +93,7 @@ class CDPUri(BaseModel):
         # Splitting the path into database and collection
         collection = parsed.path.split("/")[-1]
         if is_local:
-            host_or_path = host_or_path+parsed.path[:parsed.path.index(collection)]
+            host_or_path = host_or_path + parsed.path[: parsed.path.index(collection)]
         # Parsing query parameters
         query_params = parse_qs(parsed.query)
         database = query_params.get("database", [None])[0]
@@ -123,10 +123,11 @@ class CDPUri(BaseModel):
 def get_client_for_uri(uri: CDPUri) -> ClientAPI:
     """Gets a ChromaDB client for a given URI."""
     if uri.is_local:
-        client = chromadb.PersistentClient(path=uri.host_or_path,
-                                           database=uri.database or chromadb.api.DEFAULT_DATABASE,
-                                           tenant=uri.tenant or chromadb.api.DEFAULT_TENANT,
-                                           )
+        client = chromadb.PersistentClient(
+            path=uri.host_or_path,
+            database=uri.database or chromadb.api.DEFAULT_DATABASE,
+            tenant=uri.tenant or chromadb.api.DEFAULT_TENANT,
+        )
     else:
         client = chromadb.HttpClient(
             host=uri.host_or_path,
@@ -145,11 +146,11 @@ def get_client_for_uri(uri: CDPUri) -> ClientAPI:
 
 
 def remap_features(
-        in_dict: Dict[str, Any],
-        doc_feature: str,
-        embed_feature: str,
-        meta_features: List[str],
-        id_feature: str,
+    in_dict: Dict[str, Any],
+    doc_feature: str,
+    embed_feature: str,
+    meta_features: Optional[List[str]],
+    id_feature: str,
 ) -> EmbeddableTextResource:
     _doc = in_dict[doc_feature]
     _embed = in_dict[embed_feature] if embed_feature else None

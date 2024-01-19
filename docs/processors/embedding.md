@@ -6,6 +6,7 @@ CDP comes with a default embedding processor that supports the following embeddi
 
 - Default (`default`) - The default ChromaDB embedding function based on OnnxRuntime and MiniLM-L6-v2 model.
 - OpenAI (`openai`) - OpenAI's text-embedding-ada-002 model.
+- Cohere (`cohere`) - Cohere's embedding models.
 
 ### Usage
 
@@ -21,9 +22,39 @@ cdp imp pdf sample-data/papers/ | cdp tx chunk -s 500 | cdp tx embed --ef defaul
 
 #### OpenAI
 
+!!! note "OpenAI API Key"
+
+    You need to have an OpenAI API key to use this embedding function. You can get an API key by signing up for an account
+    at [OpenAI](https://openai.com/api/).
+    The API key must be exported as env variable `OPENAI_API_KEY=sk-xxxxxx`.
+
 The below command will read a PDF files at the specified path, filter the output for a particular pdf (`grep`). Select
 the first document's page, chunk it to 500 characters, embed each chunk using OpenAI's text-embedding-ada-002 model.
 
 ```bash
 cdp imp pdf sample-data/papers/ |grep "2401.02412.pdf" | head -1 | cdp tx chunk -s 500 | cdp tx embed --ef openai
+```
+
+#### Cohere
+
+!!! note "Cohere API Key"
+
+    You need to have a Cohere API key to use this embedding function. You can get an API key by signing up for an account
+    at [Cohere](https://dashboard.cohere.ai/welcome/register).
+    The API key must be exported as env variable `COHERE_API_KEY=x4q...`.
+
+!!! note "Cohere Embedding Models"
+
+    By default, if not specified, the `embed-english-v3.0` model is used.
+    You can pass in an optional `--model=embed-english-light-v3.0` argument or
+    env variable `COHERE_MODEL_NAME=embed-multilingual-v3.0` , which lets you choose which Cohere embeddings model to use.
+    More about available models can be found at [Cohere's API docs](https://docs.cohere.com/reference/embed)
+
+The below command will read a PDF files at the specified path, select
+the last document's page, chunk it to 100 characters, embed each chunk using Cohere's embed-english-light-v3.0 model.
+
+```bash
+export COHERE_API_KEY=x4q
+export COHERE_MODEL_NAME=embed-english-light-v3.0
+cdp imp pdf sample-data/papers/ | tail -1 | cdp tx chunk -s 100 | cdp tx embed --ef cohere
 ```

@@ -18,24 +18,31 @@ def filter_embed(
     embedding_function: Optional[SupportedEmbeddingFunctions] = typer.Option(
         ..., "--ef", help="The embedding function."
     ),
+    embedding_model: Optional[str] = typer.Option(
+        None,
+        "--model",
+        help="The embedding model to be used by the embedding function.",
+    ),
     embed_feature: Annotated[
         str, typer.Option(help="The embedding feature.")
     ] = "embedding",
     meta_features: Annotated[
-        List[str], typer.Option(help="The metadata features.")
+        Optional[List[str]], typer.Option(help="The metadata features.")
     ] = None,
     id_feature: Annotated[str, typer.Option(help="The id feature.")] = "id",
     doc_feature: Annotated[
         str, typer.Option(help="The document feature.")
     ] = "text_chunk",
-):
+) -> None:
     _batch: Dict[str, Any] = {
         "documents": [],
         "embeddings": [],
         "metadatas": [],
         "ids": [],
     }
-    _embedding_function = get_embedding_function_for_name(embedding_function)
+    _embedding_function = get_embedding_function_for_name(
+        embedding_function, model=embedding_model
+    )
     for line in inf:
         doc = remap_features(
             json.loads(line),
