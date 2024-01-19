@@ -1,12 +1,16 @@
 # Embedding Processors
 
-## Default
+## Default Embedding Processor
 
 CDP comes with a default embedding processor that supports the following embedding functions:
 
 - Default (`default`) - The default ChromaDB embedding function based on OnnxRuntime and MiniLM-L6-v2 model.
 - OpenAI (`openai`) - OpenAI's text-embedding-ada-002 model.
 - Cohere (`cohere`) - Cohere's embedding models.
+- HuggingFrace (`hf`) - HuggingFace's embedding models.
+- SentenceTransformers (`st`) - SentenceTransformers' embedding models.
+
+The embedding functions are based on [ChromaDB's embedding functions](https://docs.trychroma.com/embeddings).
 
 ### Usage
 
@@ -21,6 +25,12 @@ cdp imp pdf sample-data/papers/ | cdp tx chunk -s 500 | cdp tx embed --ef defaul
 ```
 
 #### OpenAI
+
+To use this embedding function, you need to install the `openai` python package.
+
+```bash
+pip install openai
+```
 
 !!! note "OpenAI API Key"
 
@@ -37,6 +47,12 @@ cdp imp pdf sample-data/papers/ |grep "2401.02412.pdf" | head -1 | cdp tx chunk 
 ```
 
 #### Cohere
+
+To use this embedding function, you need to install the `cohere` python package.
+
+```bash
+pip install cohere
+```
 
 !!! note "Cohere API Key"
 
@@ -82,4 +98,28 @@ using BAAI/bge-large-en-v1.5 model.
 export HF_TOKEN=hf_xxxx
 export HF_MODEL_NAME="BAAI/bge-large-en-v1.5"
 cdp imp pdf sample-data/papers/ | head -2 | cdp tx chunk -s 150 | tail -1 | cdp tx embed --ef hf
+```
+
+#### SentenceTransformers
+
+To use this embedding function, you need to install the `sentence-transformers` python package.
+
+```bash
+pip install sentence-transformers
+```
+
+!!! note "SentenceTransformers Embedding Models"
+
+    By default, if not specified, the `all-MiniLM-L6-v2` model is used.
+    You can pass in an optional `--model=BAAI/bge-large-en-v1.5` argument or
+    env variable `ST_MODEL_NAME=BAAI/bge-large-en-v1.5` , which lets you choose which Sentence Transformers
+    embeddings model to use.
+
+The below command will read a PDF files at the specified path, select
+the first two pages, chunk it to 150 characters, selects the last chunk and embeds the chunk
+using BAAI/bge-small-en-v1.5 model.
+
+```bash
+export ST_MODEL_NAME="BAAI/bge-small-en-v1.5"
+cdp imp pdf sample-data/papers/ | head -2 | cdp tx chunk -s 150 | tail -1 | cdp tx embed --ef st
 ```
