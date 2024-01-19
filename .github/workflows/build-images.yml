@@ -1,15 +1,15 @@
 name: Build Images
-#TODO this is temporary, to be moved to release
+
 on:
-  workflow_dispatch:
-    inputs:
-      cdp-version:
-        description: "Version"
-        required: true
+  release:
+    types: [ created ]
+permissions:
+  actions: write
+  packages: write
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: "https://github.com/amikos-tech/chromadb-data-pipes"
+  IMAGE_NAME: "ghcr.io/amikos-tech/chromadb-data-pipes/cdp"
 
 jobs:
   build-images:
@@ -41,4 +41,4 @@ jobs:
           file: Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: "${{ env.IMAGE_NAME }}:${{ github.event.inputs.cdp-version }},${{ env.IMAGE_NAME }}:latest"
+          tags: "${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }},${{ env.IMAGE_NAME }}:latest"

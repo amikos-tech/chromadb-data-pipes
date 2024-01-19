@@ -6,6 +6,7 @@ WORKDIR /app
 
 # install poetry
 RUN pip install poetry && \
-    poetry install --no-dev --no-interaction --no-ansi
+    poetry update --no-interaction --no-ansi --with=docs --with=embeddings --with=web
 
 ENTRYPOINT ["poetry", "run"]
+CMD ["cdp","--help"]
