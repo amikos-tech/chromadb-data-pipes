@@ -6,6 +6,7 @@ from chroma_dp.processor.embed import filter_embed
 from chroma_dp.huggingface import hf_import, hf_export
 from chroma_dp.processor.misc.emoji_clean import emoji_clean
 from chroma_dp.producer.file.pdf import pdf_import
+from chroma_dp.producer.file.text import txt_import
 from chroma_dp.producer.url.url_loader import url_import
 
 app = typer.Typer(no_args_is_help=True, help="ChromaDB Data Pipes commands.")
@@ -26,6 +27,10 @@ import_commands.command(
 import_commands.command(
     name="url", help="Imports from remote url.", no_args_is_help=True
 )(url_import)
+
+import_commands.command(
+    name="txt", help="Import text files from target dir.", no_args_is_help=True
+)(txt_import)
 
 # Export commands
 export_commands = typer.Typer(no_args_is_help=True, help="Export commands.")
