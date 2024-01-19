@@ -4,7 +4,9 @@ from chroma_dp.chroma.chroma_import import chroma_import
 from chroma_dp.processor.chunk import chunk_process
 from chroma_dp.processor.embed import filter_embed
 from chroma_dp.huggingface import hf_import, hf_export
-from chroma_dp.producer.file.pdf import pdf_export
+from chroma_dp.processor.misc.emoji_clean import emoji_clean
+from chroma_dp.producer.file.pdf import pdf_import
+from chroma_dp.producer.url.url_loader import url_import
 
 app = typer.Typer(no_args_is_help=True, help="ChromaDB Data Pipes commands.")
 
@@ -19,7 +21,11 @@ import_commands.command(
 
 import_commands.command(
     name="pdf", help="Import PDF files from target dir.", no_args_is_help=True
-)(pdf_export)
+)(pdf_import)
+
+import_commands.command(
+    name="url", help="Imports from remote url.", no_args_is_help=True
+)(url_import)
 
 # Export commands
 export_commands = typer.Typer(no_args_is_help=True, help="Export commands.")
@@ -42,6 +48,11 @@ transform_commands.command(
     help="Chunk documents into smaller pieces.",
     no_args_is_help=True,
 )(chunk_process)
+transform_commands.command(
+    name="emoji-clean",
+    help="Cleans emojis from documents.",
+    no_args_is_help=True,
+)(emoji_clean)
 
 app.add_typer(
     export_commands, name="exp", no_args_is_help=True, help="Export Commands."

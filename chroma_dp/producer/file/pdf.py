@@ -34,7 +34,7 @@ class PDFProducer(CdpProducer[EmbeddableTextResource]):
                 yield convert_lc_doc_to_chroma_resource(doc)
 
 
-def pdf_export(
+def pdf_import(
     path: Annotated[
         str,
         typer.Argument(
