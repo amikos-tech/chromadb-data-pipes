@@ -21,7 +21,7 @@ the first document's page, chunk it to 500 characters, embed each chunk using Ch
 resulting documents with embeddings will be written to `chroma-data.jsonl` file.
 
 ```bash
-cdp imp pdf sample-data/papers/ | cdp tx chunk -s 500 | cdp tx embed --ef default > chroma-data.jsonl
+cdp imp pdf sample-data/papers/ | cdp chunk -s 500 | cdp embed --ef default > chroma-data.jsonl
 ```
 
 #### OpenAI
@@ -43,7 +43,7 @@ the first document's page, chunk it to 500 characters, embed each chunk using Op
 
 ```bash
 export OPENAI_API_KEY=sk-xxxxxx
-cdp imp pdf sample-data/papers/ |grep "2401.02412.pdf" | head -1 | cdp tx chunk -s 500 | cdp tx embed --ef openai
+cdp imp pdf sample-data/papers/ |grep "2401.02412.pdf" | head -1 | cdp chunk -s 500 | cdp embed --ef openai
 ```
 
 #### Cohere
@@ -73,7 +73,7 @@ the last document's page, chunk it to 100 characters, embed each chunk using Coh
 ```bash
 export COHERE_API_KEY=x4q
 export COHERE_MODEL_NAME="embed-english-light-v3.0"
-cdp imp pdf sample-data/papers/ | tail -1 | cdp tx chunk -s 100 | cdp tx embed --ef cohere
+cdp imp pdf sample-data/papers/ | tail -1 | cdp chunk -s 100 | cdp embed --ef cohere
 ```
 
 #### HuggingFace
@@ -97,7 +97,7 @@ using BAAI/bge-large-en-v1.5 model.
 ```bash
 export HF_TOKEN=hf_xxxx
 export HF_MODEL_NAME="BAAI/bge-large-en-v1.5"
-cdp imp pdf sample-data/papers/ | head -2 | cdp tx chunk -s 150 | tail -1 | cdp tx embed --ef hf
+cdp imp pdf sample-data/papers/ | head -2 | cdp chunk -s 150 | tail -1 | cdp embed --ef hf
 ```
 
 #### SentenceTransformers
@@ -121,5 +121,5 @@ using BAAI/bge-small-en-v1.5 model.
 
 ```bash
 export ST_MODEL_NAME="BAAI/bge-small-en-v1.5"
-cdp imp pdf sample-data/papers/ | head -2 | cdp tx chunk -s 150 | tail -1 | cdp tx embed --ef st
+cdp imp pdf sample-data/papers/ | head -2 | cdp chunk -s 150 | tail -1 | cdp embed --ef st
 ```

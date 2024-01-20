@@ -36,5 +36,5 @@ chunks the data into 512 byte chunks, cleans the data of emojis, and embeds the 
 function.
 
 ```bash
-cdp imp url https://docs.trychroma.com/ -d 3 | cdp tx chunk -s 512| cdp tx emoji-clean -m | cdp tx embed --ef default
+cdp imp url https://docs.trychroma.com/ -d 3 | cdp chunk -s 512| cdp tx emoji-clean -m | cdp embed --ef default
 ```
