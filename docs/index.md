@@ -31,7 +31,7 @@ cdp --help
 **Import data from HuggingFace Datasets to `.jsonl` file:**
 
 ```bash
-cdp ds-get --uri "hf://tazarov/chroma-qna?split=train" > chroma-qna.jsonl
+cdp ds-get "hf://tazarov/chroma-qna?split=train" > chroma-qna.jsonl
 ```
 
 **Import data from HuggingFace Datasets to Chroma DB Server:**
@@ -40,7 +40,7 @@ The below command will import the `train` split of the given dataset to Chroma c
 collection will be created if it does not exist and documents will be upserted.
 
 ```bash
-cdp ds-get --uri "hf://tazarov/chroma-qna?split=train" | cdp import "http://localhost:8000/chroma-qna" --upsert --create
+cdp ds-get "hf://tazarov/chroma-qna?split=train" | cdp import "http://localhost:8000/chroma-qna" --upsert --create
 ```
 
 **Importing from a directory with PDF files into Local Persisted Chroma DB:**
@@ -75,13 +75,13 @@ Datasets `tazarov/chroma-qna` dataset. The dataset will be uploaded to HF.
     If you want your dataset to be private, add `--private` flag to the `cdp ds-put` command.
 
 ```bash
-cdp export "http://localhost:8000/chroma-qna" --limit 10 --offset 10 | cdp ds-put --uri "hf://tazarov/chroma-qna-modified"
+cdp export "http://localhost:8000/chroma-qna" --limit 10 --offset 10 | cdp ds-put "hf://tazarov/chroma-qna-modified"
 ```
 
 To export a dataset to a file, use `--uri` with `file://` prefix:
 
 ```bash
-cdp export "http://localhost:8000/chroma-qna" --limit 10 --offset 10 | cdp ds-put --uri "file://chroma-qna"
+cdp export "http://localhost:8000/chroma-qna" --limit 10 --offset 10 | cdp ds-put "file://chroma-qna"
 ```
 
 !!! note File Location
@@ -103,7 +103,7 @@ cdp export "http://localhost:8000/chroma-qna" | cdp embed --ef default | cdp imp
 **Import dataset from HF to Local Persisted Chroma and embed the documents:**
 
 ```bash
-cdp ds-get --uri "hf://tazarov/ds2?split=train" | cdp embed --ef default | cdp import "file://chroma-data/chroma-qna-def-emb-hf" --upsert --create
+cdp ds-get "hf://tazarov/ds2?split=train" | cdp embed --ef default | cdp import "file://chroma-data/chroma-qna-def-emb-hf" --upsert --create
 ```
 
 **Chunk Large Documents:**
