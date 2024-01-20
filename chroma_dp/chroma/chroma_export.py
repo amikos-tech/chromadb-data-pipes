@@ -56,7 +56,7 @@ def read_large_data_in_chunks(
 
 
 def chroma_export(
-    uri: Annotated[str, typer.Option(help="The Chroma endpoint.")],
+    uri: Annotated[str, typer.Argument(help="The Chroma endpoint.")],
     collection: Annotated[str, typer.Option(help="The Chroma collection.")] = None,
     export_file: Optional[str] = typer.Option(
         None, "--out", help="Export .jsonl file."
