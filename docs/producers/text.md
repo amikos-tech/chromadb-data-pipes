@@ -5,7 +5,7 @@
 Reading a dir with text files to stdout:
 
 ```bash
-cdp imp txt sample-data/text/ | head -1 | cdp tx chunk -s 100 | tail -1 | cdp tx embed --ef default
+cdp imp txt sample-data/text/ | head -1 | cdp chunk -s 100 | tail -1 | cdp embed --ef default
 ```
 
 !!! note "Help"
