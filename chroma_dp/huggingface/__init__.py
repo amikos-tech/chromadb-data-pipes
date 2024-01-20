@@ -12,7 +12,7 @@ from huggingface_hub import DatasetCard, HfApi
 from pydantic import BaseModel, Field
 
 from chroma_dp import ChromaDocumentSourceGenerator, EmbeddableTextResource
-from chroma_dp.huggingface.utils import _infer_hf_type
+from chroma_dp.huggingface.utils import _infer_hf_type, int_or_none, bool_or_false
 from chroma_dp.utils.chroma import remap_features
 
 hf_commands = typer.Typer()
@@ -38,7 +38,11 @@ class HFImportRequest(BaseModel):
 
 
 def _doc_wrapper(
-    row, document_feature, embedding_feature, id_feature, metadata_features
+    row: Any,
+    document_feature: str,
+    embedding_feature: str,
+    id_feature: str,
+    metadata_features: Dict[str, Any],
 ) -> EmbeddableTextResource:
     doc = EmbeddableTextResource(
         id=row[id_feature] if id_feature else None,
@@ -49,7 +53,9 @@ def _doc_wrapper(
     return doc
 
 
-class HFChromaDocumentSourceGenerator(ChromaDocumentSourceGenerator):
+class HFChromaDocumentSourceGenerator(
+    ChromaDocumentSourceGenerator[EmbeddableTextResource]
+):
     """
     A generator of chroma document from a Hugging Face dataset.
     """
@@ -171,15 +177,15 @@ class HFImportUri(BaseModel):
         if parsed_uri.scheme == "hf":
             is_remote = True
         dataset_name = parsed_uri.path
-        limit = query_params.get("limit", [None])[0]
-        offset = query_params.get("offset", [None])[0]
+        limit = int_or_none(query_params.get("limit", [None])[0])
+        offset = int_or_none(query_params.get("offset", [None])[0])
         split = query_params.get("split", [None])[0]
-        stream = query_params.get("stream", [None])[0]
+        stream = bool_or_false(query_params.get("stream", [False])[0])
         id_feature = query_params.get("id_feature", [None])[0]
         doc_feature = query_params.get("doc_feature", [None])[0]
         embed_feature = query_params.get("embed_feature", [None])[0]
         meta_features = query_params.get("meta_features", [None])[0]
-        private = query_params.get("private", [None])[0]
+        private = bool_or_false(query_params.get("private", [False])[0])
 
         return HFImportUri(
             dataset=dataset,
@@ -199,7 +205,7 @@ class HFImportUri(BaseModel):
 
 def hf_import(
     uri: Annotated[
-        str, typer.Option(help="Dataset uri. eg. `hf:user/dataset?split=train`")
+        str, typer.Argument(help="Dataset uri. eg. `hf:user/dataset?split=train`")
     ],
     split: Annotated[
         Optional[str], typer.Option(help="The HuggingFace dataset split")
@@ -211,14 +217,14 @@ def hf_import(
         str, typer.Option(help="The document feature.")
     ] = "document",
     embed_feature: Annotated[
-        str, typer.Option(help="The embedding feature.")
+        Optional[str], typer.Option(help="The embedding feature.")
     ] = "embedding",
     meta_features: Annotated[
-        List[str], typer.Option(help="The metadata features.")
+        Optional[List[str]], typer.Option(help="The metadata features.")
     ] = None,
-    id_feature: Annotated[str, typer.Option(help="The id feature.")] = "id",
-    limit: Annotated[int, typer.Option(help="The limit.")] = -1,
-    offset: Annotated[int, typer.Option(help="The offset.")] = 0,
+    id_feature: Annotated[Optional[str], typer.Option(help="The id feature.")] = "id",
+    limit: Annotated[Optional[int], typer.Option(help="The limit.")] = -1,
+    offset: Annotated[Optional[int], typer.Option(help="The offset.")] = 0,
 ):
     _hf_uri = HFImportUri.from_uri(uri)
     _dataset = _hf_uri.dataset
@@ -250,7 +256,7 @@ def hf_import(
 def hf_export(
     uri: Annotated[
         str,
-        typer.Option(
+        typer.Argument(
             help="Dataset uri. eg. `hf:user/dataset?split=train` or `file:dataset-name?split=train`"
         ),
     ],
@@ -262,10 +268,10 @@ def hf_export(
         str, typer.Option(help="The document feature.")
     ] = "text_chunk",
     embed_feature: Annotated[
-        str, typer.Option(help="The embedding feature.")
+        Optional[str], typer.Option(help="The embedding feature.")
     ] = "embedding",
     meta_features: Annotated[
-        List[str], typer.Option(help="The metadata features.")
+        Optional[List[str]], typer.Option(help="The metadata features.")
     ] = None,
     id_feature: Annotated[str, typer.Option(help="The id feature.")] = "id",
     limit: Annotated[int, typer.Option(help="The limit.")] = -1,
