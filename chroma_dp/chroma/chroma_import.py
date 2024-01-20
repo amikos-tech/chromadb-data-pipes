@@ -7,6 +7,7 @@ import typer
 from chromadb import EmbeddingFunction
 from chromadb.api.models import Collection
 
+from chroma_dp.utils import smart_open
 from chroma_dp.utils.embedding import (
     SupportedEmbeddingFunctions,
     get_embedding_function_for_name,
@@ -33,7 +34,9 @@ def add_to_col(
 
 def chroma_import(
     uri: Annotated[str, typer.Argument(help="The Chroma endpoint.")],
-    collection: Annotated[str, typer.Option(help="The Chroma collection.")] = None,
+    collection: Annotated[
+        Optional[str], typer.Option(help="The Chroma collection.")
+    ] = None,
     inf: typer.FileText = typer.Argument(
         sys.stdin, help="Stdin input. Requires to pass `-` as the argument."
     ),
@@ -60,7 +63,7 @@ def chroma_import(
     doc_feature: Annotated[
         str, typer.Option(help="The document feature.")
     ] = "text_chunk",
-):
+) -> None:
     _embedding_function = None
     if embedding_function is not None:
         _embedding_function = get_embedding_function_for_name(embedding_function)
@@ -82,39 +85,8 @@ def chroma_import(
     }
     chroma_collection = client.get_or_create_collection(_collection)
     lc_count = 0
-    if import_file:
-        with open(import_file, "r") as inf:
-            for line in inf:
-                if lc_count < _offset:
-                    continue
-                if _limit != -1 and lc_count >= _limit:
-                    break
-                doc = remap_features(
-                    json.loads(line),
-                    doc_feature,
-                    embed_feature,
-                    meta_features,
-                    id_feature,
-                )
-                _batch["documents"].append(doc.text_chunk)
-                _batch["embeddings"].append(
-                    doc.embedding if _embedding_function is None else None
-                )  # call EF?
-                _batch["metadatas"].append(doc.metadata)
-                _batch["ids"].append(doc.id if doc.id else uuid.uuid4())
-                if len(_batch["documents"]) >= _batch_size:
-                    add_to_col(chroma_collection, _batch, _upsert, _embedding_function)
-                    _batch = {
-                        "documents": [],
-                        "embeddings": [],
-                        "metadatas": [],
-                        "ids": [],
-                    }
-                lc_count += 1
-        if len(_batch["documents"]) > 0:
-            add_to_col(chroma_collection, _batch, _upsert, _embedding_function)
-    else:
-        for line in inf:
+    with smart_open(import_file, inf) as file_or_stdin:
+        for line in file_or_stdin:
             if lc_count < _offset:
                 continue
             if _limit != -1 and lc_count >= _limit:

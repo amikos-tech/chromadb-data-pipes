@@ -1,5 +1,5 @@
 from typing import Optional, Dict, Any, List
-
+from urllib.parse import urlparse, parse_qs
 import chromadb
 from chromadb import ClientAPI, GetResult
 from chromadb.api.models.Collection import Collection
@@ -39,11 +39,8 @@ def read_large_data_in_chunks(
     return result
 
 
-from urllib.parse import urlparse, parse_qs
-
-
 class CDPUri(BaseModel):
-    auth: Optional[dict] = None
+    auth: Optional[Dict[str, str]] = None
     host_or_path: Optional[str] = None
     port: Optional[int] = None
     database: Optional[str] = None
