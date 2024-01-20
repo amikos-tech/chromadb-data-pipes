@@ -32,7 +32,7 @@ def add_to_col(
 
 
 def chroma_import(
-    uri: Annotated[str, typer.Option(help="The Chroma endpoint.")],
+    uri: Annotated[str, typer.Argument(help="The Chroma endpoint.")],
     collection: Annotated[str, typer.Option(help="The Chroma collection.")] = None,
     inf: typer.FileText = typer.Argument(
         sys.stdin, help="Stdin input. Requires to pass `-` as the argument."
