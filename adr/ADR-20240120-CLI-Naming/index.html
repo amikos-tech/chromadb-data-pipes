@@ -8,22 +8,28 @@
       
       
       
+        <link rel="canonical" href="https://datapipes.chromadb.dev/adr/ADR-20240120-CLI-Naming/">
       
       
+        <link rel="prev" href="../../concepts/">
       
-      <link rel="icon" href="/assets/images/favicon.png">
+      
+        <link rel="next" href="../../processors/chunking/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.4">
     
     
       
-        <title>ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB</title>
+        <title>CLI Naming Conventions - ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
       
         
-        <link rel="stylesheet" href="/assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -42,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="/custom-styles.css">
+      <link rel="stylesheet" href="../../custom-styles.css">
     
-    <script>__md_scope=new URL("/",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -77,6 +83,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#cli-naming-conventions" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -91,7 +102,7 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="https://www.trychroma.com" title="ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB" class="md-header__button md-logo" aria-label="ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB" data-md-component="logo">
       
-  <img src="/assets/images/logo.png" alt="logo">
+  <img src="../../assets/images/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -108,7 +119,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              CLI Naming Conventions
             
           </span>
         </div>
@@ -197,7 +208,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href="https://www.trychroma.com" title="ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB" class="md-nav__button md-logo" aria-label="ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB" data-md-component="logo">
       
-  <img src="/assets/images/logo.png" alt="logo">
+  <img src="../../assets/images/logo.png" alt="logo">
 
     </a>
     ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB
@@ -224,7 +235,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -244,7 +255,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/concepts/" class="md-nav__link">
+      <a href="../../concepts/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -261,8 +272,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -272,12 +285,12 @@
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -291,7 +304,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Adr
@@ -302,10 +315,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="/adr/ADR-20240120-CLI-Naming/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    CLI Naming Conventions
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -314,6 +347,130 @@
   
 
       </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#context-and-problem-statement" class="md-nav__link">
+    <span class="md-ellipsis">
+      Context and Problem Statement
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#considered-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Considered Options
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision-outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decision Outcome
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Decision Outcome">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-use-of-import-and-export-for-chroma" class="md-nav__link">
+    <span class="md-ellipsis">
+      The use of import and export for Chroma
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-use-of-embed" class="md-nav__link">
+    <span class="md-ellipsis">
+      The use of embed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-use-of-chunk" class="md-nav__link">
+    <span class="md-ellipsis">
+      The use of chunk
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-use-of-ds-get-and-ds-put" class="md-nav__link">
+    <span class="md-ellipsis">
+      The use of ds-get and ds-put
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pros-and-cons-of-the-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pros and Cons of the Options
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pros and Cons of the Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extensive-use-of-subcommands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extensive use of subcommands
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ecosystem-centric-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ecosystem centric naming
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -378,7 +535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/processors/chunking/" class="md-nav__link">
+      <a href="../../processors/chunking/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -399,7 +556,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/processors/cleaning/" class="md-nav__link">
+      <a href="../../processors/cleaning/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -420,7 +577,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/processors/embedding/" class="md-nav__link">
+      <a href="../../processors/embedding/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -493,7 +650,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/producers/pdf/" class="md-nav__link">
+      <a href="../../producers/pdf/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -514,7 +671,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/producers/text/" class="md-nav__link">
+      <a href="../../producers/text/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -535,7 +692,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/producers/url/" class="md-nav__link">
+      <a href="../../producers/url/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -575,6 +732,118 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#context-and-problem-statement" class="md-nav__link">
+    <span class="md-ellipsis">
+      Context and Problem Statement
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#considered-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Considered Options
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision-outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decision Outcome
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Decision Outcome">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-use-of-import-and-export-for-chroma" class="md-nav__link">
+    <span class="md-ellipsis">
+      The use of import and export for Chroma
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-use-of-embed" class="md-nav__link">
+    <span class="md-ellipsis">
+      The use of embed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-use-of-chunk" class="md-nav__link">
+    <span class="md-ellipsis">
+      The use of chunk
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-use-of-ds-get-and-ds-put" class="md-nav__link">
+    <span class="md-ellipsis">
+      The use of ds-get and ds-put
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pros-and-cons-of-the-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pros and Cons of the Options
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pros and Cons of the Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#extensive-use-of-subcommands" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extensive use of subcommands
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ecosystem-centric-naming" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ecosystem centric naming
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -586,8 +855,71 @@
             <div class="md-content" data-md-component="content">
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+  
+  
+
+
+<h1 id="cli-naming-conventions">CLI Naming Conventions<a class="headerlink" href="#cli-naming-conventions" title="Permanent link">&para;</a></h1>
+<p>Date: 2024-01-20
+Tags: cli, naming, conventions
+Authors: <a href="https://github.com/tazarov">@tazarov</a></p>
+<h2 id="context-and-problem-statement">Context and Problem Statement<a class="headerlink" href="#context-and-problem-statement" title="Permanent link">&para;</a></h2>
+<p>We want to be mindful of the naming conventions we use for the CLI. We want to be consistent and clear about the
+commands we use and the order of the arguments.</p>
+<h2 id="considered-options">Considered Options<a class="headerlink" href="#considered-options" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Extensive use of subcommands</li>
+<li>Ecosystem centric naming</li>
+</ul>
+<h2 id="decision-outcome">Decision Outcome<a class="headerlink" href="#decision-outcome" title="Permanent link">&para;</a></h2>
+<p>Chosen option: "Ecosystem centric naming", because it will make the CLI more aligned with the ecosystem thus reducing
+the cognitive load on users.</p>
+<h3 id="the-use-of-import-and-export-for-chroma">The use of <code>import</code> and <code>export</code> for Chroma<a class="headerlink" href="#the-use-of-import-and-export-for-chroma" title="Permanent link">&para;</a></h3>
+<p>This is a toolchain in the chroma ecosystem and we want to be very explicit about the use of import and export. They
+must convey the core idea behind CDP, getting data in and out of Chroma.</p>
+<h3 id="the-use-of-embed">The use of <code>embed</code><a class="headerlink" href="#the-use-of-embed" title="Permanent link">&para;</a></h3>
+<p>A core concept around vector databases is embedding. We want to make the embedding a first class citizen of CDP this is
+why we choose to have embed as a top level command.</p>
+<h3 id="the-use-of-chunk">The use of <code>chunk</code><a class="headerlink" href="#the-use-of-chunk" title="Permanent link">&para;</a></h3>
+<p>Another core concept around vector databases and embedding models is context window. Each embedding model has a specific
+context window and sometimes the embedding models, make a trade-off to truncate data for better usability rather than
+warning or preventing the user from using the model with an oversized context window. To that end chunking (of mostly
+text data) has become a core concept in the ecosystem. We want to convey that by elevating the chunk command to a top
+level command.</p>
+<h3 id="the-use-of-ds-get-and-ds-put">The use of <code>ds-get</code> and <code>ds-put</code><a class="headerlink" href="#the-use-of-ds-get-and-ds-put" title="Permanent link">&para;</a></h3>
+<p>Working with datasets is another core concept in the econsystem. While we currently only plan to support HuggingFace
+datasets, we want to also put the datasets front and center in CDP CLI. This is why we choose to have <code>ds-get</code>
+and <code>ds-put</code> as top level commands.</p>
+<h2 id="pros-and-cons-of-the-options">Pros and Cons of the Options<a class="headerlink" href="#pros-and-cons-of-the-options" title="Permanent link">&para;</a></h2>
+<h3 id="extensive-use-of-subcommands">Extensive use of subcommands<a class="headerlink" href="#extensive-use-of-subcommands" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Good, because it allows for a more natural grouping of commands</li>
+<li>Good, because it will solve a top-level command sprawl</li>
+<li>Bad, because it will put a burden on the user to remember and navigate the subcommands</li>
+</ul>
+<h3 id="ecosystem-centric-naming">Ecosystem centric naming<a class="headerlink" href="#ecosystem-centric-naming" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Good, because it will make the CLI more consistent with the ecosystem</li>
+<li>Good, because it reduces the cognitive load on users by aligning with expectations set by the ecosystem</li>
+<li>Bad, because it will increase the number of top-level commands</li>
+</ul>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
               </article>
             </div>
           
@@ -737,12 +1069,12 @@
       </div>
       <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
     
-    <script id="__config" type="application/json">{"base": "/", "features": ["content.code.annotate", "content.code.copy", "navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.indexes"], "search": "/assets/javascripts/workers/search.c011b7c0.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.c011b7c0.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="/assets/javascripts/bundle.7389ff0e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.7389ff0e.min.js"></script>
       
-        <script src="/javascripts/gtag.js"></script>
+        <script src="../../javascripts/gtag.js"></script>
       
     
   </body>

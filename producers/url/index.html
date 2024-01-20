@@ -277,10 +277,6 @@
       
         
       
-        
-      
-        
-      
     
     
     
@@ -297,7 +293,7 @@
             
   
   <span class="md-ellipsis">
-    Processors
+    Adr
   </span>
   
 
@@ -306,6 +302,79 @@
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Adr
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../adr/ADR-20240120-CLI-Naming/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI Naming Conventions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Processors
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Processors
           </label>
@@ -407,10 +476,10 @@
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   <span class="md-ellipsis">
@@ -421,8 +490,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_4">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Producers
           </label>
@@ -658,7 +727,7 @@ Need this? Raise an issue <a href="https://github.com/amikos-tech/chromadb-data-
 <p>The following example imports data from ChromaDB documentation with max depth 3,
 chunks the data into 512 byte chunks, cleans the data of emojis, and embeds the data using the default embedding
 function.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>url<span class="w"> </span>https://docs.trychroma.com/<span class="w"> </span>-d<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">512</span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>emoji-clean<span class="w"> </span>-m<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>default
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>url<span class="w"> </span>https://docs.trychroma.com/<span class="w"> </span>-d<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">512</span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>tx<span class="w"> </span>emoji-clean<span class="w"> </span>-m<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>default
 </span></code></pre></div>
 
 
