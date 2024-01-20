@@ -1,7 +1,7 @@
 from chroma_dp.utils.chroma import CDPUri
 
 
-def test_parse_cdp_uri_basic():
+def test_parse_cdp_uri_basic() -> None:
     uri = (
         "https://basic_user:basic_password@localhost:5432"
         "/mycollection?tenant=mytenant&database=mydb&batch_size=100&limit=10&offset=0"
@@ -19,7 +19,7 @@ def test_parse_cdp_uri_basic():
     assert parsed.auth["password"] == "basic_password"
 
 
-def test_parse_cdp_uri_local_absolute():
+def test_parse_cdp_uri_local_absolute() -> None:
     uri = "file:///abs/path/persist_dir/some_collection?tenant=mytenant&database=db1&batch_size=100&limit=10&offset=0"
     parsed = CDPUri.from_uri(uri)
     assert parsed.is_local is True
@@ -29,7 +29,7 @@ def test_parse_cdp_uri_local_absolute():
     assert parsed.collection == "some_collection"
 
 
-def test_parse_cdp_uri_local_relative():
+def test_parse_cdp_uri_local_relative() -> None:
     uri = "file://abs/path/persist_dir/some_collection?tenant=mytenant&database=db1&batch_size=100&limit=10&offset=0"
     parsed = CDPUri.from_uri(uri)
     assert parsed.is_local is True
