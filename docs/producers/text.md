@@ -11,4 +11,3 @@ cdp imp txt sample-data/text/ | head -1 | cdp tx chunk -s 100 | tail -1 | cdp tx
 !!! note "Help"
 
     Run `cdp imp txt --help` for more information.
-a

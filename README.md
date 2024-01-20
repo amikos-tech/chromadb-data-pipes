@@ -1,7 +1,7 @@
 # ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB
 
-ChromaDB Data Pipes is a collection of tools to build data pipelines for Chroma DB, inspired by the Unix philosophy of "
-do one thing and do it well".
+ChromaDB Data Pipes is a collection of tools to build data pipelines for Chroma DB, inspired by the Unix philosophy of 
+"do one thing and do it well".
 
 Roadmap:
 

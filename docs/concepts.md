@@ -1,4 +1,23 @@
-# CDP Concepts
+# Concepts
+
+## EmbeddableResource
+
+ChromaDB Data Pipes operates over a structure called EmbeddableResource. The structure is a closely related to ChromaDB
+Documents. All core components of the library will either, produce, consume, or transform EmbeddableResources.
+
+Each embeddable resource has the following properties:
+
+- `id` - unique identifier of the resource
+- `metadata` - metadata of the resource
+- `embedding` - embedding of the resource
+
+For text resource we use `EmbeddableTextResource` which adds the following properties:
+
+- `text_chunk` - text of the resource
+
+!!! note "Evolution"
+
+    We plan to evolve the EmbeddableResource structure to support more types of resources, such as images, audio, video,
 
 ## Producer
 
@@ -19,5 +38,6 @@ stdout.
 
 Reusable set of producer, consumer, filter, and transformer.
 
-Properties:
-- Variables
+!!! note "WIP"
+
+    This is a work in progress. Stay tuned for more updates.
