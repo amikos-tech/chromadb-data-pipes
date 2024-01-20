@@ -8,8 +8,15 @@ Roadmap:
 - ✅ Integration with LangChain 🦜🔗
 - 🚫 Integration with LlamaIndex 🦙
 - ✅ Support more than `all-MiniLM-L6-v2` as embedding functions (head over
-  to [Embedding Processors](https://datapipes.chromadb.dev/processors/embedding/) for more info)
+  to [Embedding Processors](./processors/embedding.md) for more info)
 - 🚫 Multimodal support
+- ⚠️ Other Vector Store Import
+    - ✅ Qdrant
+    - 🚫 Pinecone
+    - 🚫 Weaviate
+    - 🚫 Faiss
+    - 🚫 Annoy
+    - 🚫 Milvus
 - ♾️ Much more!
 
 ## Installation
@@ -111,3 +118,14 @@ cdp imp pdf sample-data/papers/ | grep "2401.02412.pdf" | head -1 | cdp chunk -s
 ```bash
 cdp export "http://localhost:8000/chroma-qna" | wc -l
 ```
+
+### Migrate from Other Vector Databases
+
+**Migrate from Qdrant to Chroma DB:**
+
+```bash
+cdp qdrant-export http://localhost:6333/test_collection2 -d city | cdp import "http://localhost:8000/from-qdrant" --upsert --create
+```
+
+> Note: We have a script to create a docker instance of Qdrant under `scripts` and a notebook to create some basic data
+> under `notebooks`.

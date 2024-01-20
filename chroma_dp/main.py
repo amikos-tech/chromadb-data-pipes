@@ -7,6 +7,7 @@ from chroma_dp.huggingface import hf_import, hf_export
 from chroma_dp.processor.misc.emoji_clean import emoji_clean
 from chroma_dp.producer.file.pdf import pdf_import
 from chroma_dp.producer.file.text import txt_import
+from chroma_dp.producer.qdrant import qdrant_export
 from chroma_dp.producer.url.url_loader import url_import
 
 app = typer.Typer(no_args_is_help=True, help="ChromaDB Data Pipes commands.")
@@ -71,7 +72,6 @@ app.command(
     no_args_is_help=True,
 )(chroma_import)
 
-
 ## Dataset commands
 
 
@@ -86,6 +86,14 @@ app.command(
     help="Upload a dataset to HF.",
     no_args_is_help=True,
 )(hf_export)
+
+# Other vector store exports
+
+app.command(
+    name="qdrant-export",
+    help="Export data from Qdrant.",
+    no_args_is_help=True,
+)(qdrant_export)
 
 if __name__ == "__main__":
     app()
