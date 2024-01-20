@@ -106,3 +106,4 @@ dmypy.json
 cython_debug/
 .idea/
 .python-version
+qdrant*/

@@ -1,0 +1,20 @@
+name: CDP GH Action Test
+on:
+  workflow_dispatch:
+    inputs:
+      pipeline:
+        description: |
+          The pipeline to run. Example: `cdp ds-get \"hf://tazarov/chroma-qna?split=train\" | \
+          cdp import \"http://localhost:8000/default_database/chroma-qna\" --upsert --create`
+        required: true
+        type: string
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ChromaDB Data Pipes
+        uses: amikos-tech/cdp-action@main
+        with:
+          pipeline: |
+            cdp ds-get "hf://tazarov/chroma-qna?split=train"
