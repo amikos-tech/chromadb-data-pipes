@@ -26,6 +26,21 @@ pip install chromadb-data-pipes
 cdp --help
 ```
 
+
+### Example Use Cases
+
+This is a short list of use cases to evaluate whether this is the right tool for your needs:
+
+- Importing large datasets from local documents (PDF, TXT, etc.), from HuggingFace, from local persisted Chroma DB or
+  even another remote Chroma DB.
+- Exporting large dataset to HuggingFace or any other dataformat supported by the library (if your format is not
+  supported, either implement it in a small function or open an issue)
+- Create a dataset from your data that you can share with others (including the embeddings)
+- Clone Collection with different embedding function, distance function, and other HNSW fine-tuning parameters
+- Re-embed documents in a collection with a different embedding function
+- Backup your data to a `jsonl` file
+- Use other existing unix or other tools to transform your data after exporting from or before importing into Chroma DB
+
 ### Importing
 
 **Import data from HuggingFace Datasets to `.jsonl` file:**
