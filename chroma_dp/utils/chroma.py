@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Optional, Dict, Any, List
 from urllib.parse import urlparse, parse_qs
 import chromadb
@@ -39,6 +40,12 @@ def read_large_data_in_chunks(
     return result
 
 
+class DistanceFunction(str, Enum):
+    l2 = "l2"
+    ip = "ip"
+    cosine = "cosine"
+
+
 class CDPUri(BaseModel):
     auth: Optional[Dict[str, str]] = None
     host_or_path: Optional[str] = None
@@ -56,6 +63,7 @@ class CDPUri(BaseModel):
     offset: Optional[int] = None
     create_collection: Optional[bool] = False
     upsert: Optional[bool] = False
+    distance_function: Optional[DistanceFunction] = None
 
     @staticmethod
     def from_uri(uri: str) -> "CDPUri":
@@ -99,6 +107,7 @@ class CDPUri(BaseModel):
         upsert = query_params.get("upsert", [None])[0]
         limit = query_params.get("limit", [None])[0]
         offset = query_params.get("offset", [None])[0]
+        distance_function = query_params.get("df", [None])[0]
 
         return CDPUri(
             auth=auth,
@@ -113,6 +122,9 @@ class CDPUri(BaseModel):
             upsert=upsert,
             limit=limit,
             offset=offset,
+            distance_function=DistanceFunction[distance_function]
+            if distance_function
+            else None,
         )
 
 

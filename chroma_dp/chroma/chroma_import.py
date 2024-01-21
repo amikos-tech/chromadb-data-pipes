@@ -12,7 +12,12 @@ from chroma_dp.utils.embedding import (
     SupportedEmbeddingFunctions,
     get_embedding_function_for_name,
 )
-from chroma_dp.utils.chroma import CDPUri, get_client_for_uri, remap_features
+from chroma_dp.utils.chroma import (
+    CDPUri,
+    get_client_for_uri,
+    remap_features,
+    DistanceFunction,
+)
 
 
 def add_to_col(
@@ -63,6 +68,11 @@ def chroma_import(
     doc_feature: Annotated[
         str, typer.Option(help="The document feature.")
     ] = "text_chunk",
+    distance_function: Optional[DistanceFunction] = typer.Option(
+        None,
+        "--df",
+        help="The distance function to use when creating a collection",
+    ),
 ) -> None:
     _embedding_function = None
     if embedding_function is not None:
@@ -83,7 +93,16 @@ def chroma_import(
         "metadatas": [],
         "ids": [],
     }
-    chroma_collection = client.get_or_create_collection(_collection)
+    print(distance_function, parsed_uri.distance_function, sys.stderr)
+    _distance_function = (
+        distance_function or parsed_uri.distance_function or DistanceFunction.l2
+    )
+    if _create:
+        chroma_collection = client.get_or_create_collection(
+            _collection, metadata={"hnsw:space": _distance_function.value}
+        )
+    else:
+        chroma_collection = client.get_collection(_collection)
     lc_count = 0
     with smart_open(import_file, inf) as file_or_stdin:
         for line in file_or_stdin:
