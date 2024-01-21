@@ -93,7 +93,6 @@ def chroma_import(
         "metadatas": [],
         "ids": [],
     }
-    print(distance_function, parsed_uri.distance_function, sys.stderr)
     _distance_function = (
         distance_function or parsed_uri.distance_function or DistanceFunction.l2
     )

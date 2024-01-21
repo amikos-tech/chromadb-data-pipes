@@ -1,8 +1,9 @@
 import json
 from typing import Annotated, Optional, List, Dict, Any
 import typer
-from chromadb import GetResult
+from chromadb import GetResult, Where
 from chromadb.api.models import Collection
+from chromadb.api.types import validate_where
 
 from chroma_dp import EmbeddableTextResource
 from chroma_dp.utils.chroma import CDPUri, get_client_for_uri
@@ -28,36 +29,45 @@ def remap_features(
     doc_feature: Optional[str] = "text_chunk",
     embed_feature: Optional[str] = "embedding",
     id_feature: str = "id",
-    meta_features: List[str] = None,
+    meta_features: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
-    """Remaps ChromaDocument features to a dictionary."""
+    """Remaps EmbeddableTextResource features to a dictionary."""
 
     _metas = (
         doc.metadata
         if meta_features is None
-        else {k: doc.metadata[k] for k in meta_features}
+        else {
+            k: doc.metadata[k]
+            for k in meta_features
+            if doc.metadata is not None and k in doc.metadata
+        }
     )
     return {
         f"{doc_feature}": doc.text_chunk,
         f"{embed_feature}": doc.embedding,
         f"{id_feature}": doc.id,
-        **_metas,
+        **(_metas if _metas is not None else {}),
     }
 
 
 def read_large_data_in_chunks(
-    collection: Collection, offset: int = 0, limit: int = 100
+    collection: Collection, offset: int = 0, limit: int = 100, where: Where = None
 ) -> GetResult:
     """Reads large data in chunks from ChromaDB."""
     result = collection.get(
-        limit=limit, offset=offset, include=["embeddings", "documents", "metadatas"]
+        where=where,
+        limit=limit,
+        offset=offset,
+        include=["embeddings", "documents", "metadatas"],
     )
     return result
 
 
 def chroma_export(
     uri: Annotated[str, typer.Argument(help="The Chroma endpoint.")],
-    collection: Annotated[str, typer.Option(help="The Chroma collection.")] = None,
+    collection: Annotated[
+        Optional[str], typer.Option(help="The Chroma collection.")
+    ] = None,
     export_file: Optional[str] = typer.Option(
         None, "--out", help="Export .jsonl file."
     ),
@@ -69,13 +79,14 @@ def chroma_export(
         str, typer.Option(help="The embedding feature.")
     ] = "embedding",
     meta_features: Annotated[
-        List[str], typer.Option(help="The metadata features.")
+        Optional[List[str]], typer.Option(help="The metadata features.")
     ] = None,
     id_feature: Annotated[str, typer.Option(help="The id feature.")] = "id",
     doc_feature: Annotated[
         str, typer.Option(help="The document feature.")
     ] = "text_chunk",
-):
+    where: Annotated[Optional[str], typer.Option(help="The filter.")] = None,
+) -> None:
     if uri is None:
         raise ValueError("Please provide a ChromaDP URI.")
     parsed_uri = CDPUri.from_uri(uri)
@@ -84,16 +95,13 @@ def chroma_export(
     _batch_size = parsed_uri.batch_size or batch_size
     _offset = parsed_uri.offset or offset
     _limit = parsed_uri.limit or limit
-    _batch: Dict[str, Any] = {
-        "documents": [],
-        "embeddings": [],
-        "metadatas": [],
-        "ids": [],
-    }
-    _start = 0
+    _start = _offset if _offset > 0 else 0
     chroma_collection = client.get_collection(_collection)
     col_count = chroma_collection.count()
     total_results_to_fetch = min(col_count, _limit) if _limit > 0 else col_count
+    _where = None
+    if where:
+        _where = validate_where(json.loads(where))
     if export_file and not append:
         with open(export_file, "w") as f:
             f.write("")
@@ -103,9 +111,10 @@ def chroma_export(
                 chroma_collection,
                 offset=offset,
                 limit=min(total_results_to_fetch - offset, _batch_size),
+                where=_where,
             )
         )
-        _results = [
+        _final_results = [
             remap_features(
                 doc,
                 doc_feature=doc_feature,
@@ -117,8 +126,8 @@ def chroma_export(
         ]
         if export_file:
             with open(export_file, "a") as f:
-                for _doc in _results:
+                for _doc in _final_results:
                     f.write(json.dumps(_doc) + "\n")
         else:
-            for _doc in _results:
+            for _doc in _final_results:
                 typer.echo(json.dumps(_doc))

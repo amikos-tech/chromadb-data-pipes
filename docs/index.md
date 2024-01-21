@@ -46,7 +46,7 @@ cdp ds-get "hf://tazarov/chroma-qna?split=train" | cdp import "http://localhost:
 **Importing from a directory with PDF files into Local Persisted Chroma DB:**
 
 ```bash
-cdp ds-get sample-data/papers/ | grep "2401.02412.pdf" | head -1 | cdp chunk -s 500 | cdp embed --ef default | cdp import "http://chroma-data/my-pdfs" --upsert --create
+cdp ds-get sample-data/papers/ | grep "2401.02412.pdf" | head -1 | cdp chunk -s 500 | cdp embed --ef default | cdp import "file://chroma-data/my-pdfs" --upsert --create
 ```
 
 !!! note
@@ -61,7 +61,16 @@ cdp ds-get sample-data/papers/ | grep "2401.02412.pdf" | head -1 | cdp chunk -s 
 The below command will export the first 10 documents from the `chroma-qna` collection to `chroma-qna.jsonl` file.
 
 ```bash
-cdp export "http://chroma-data/chroma-qna" --limit 10 > chroma-qna.jsonl
+cdp export "file://chroma-data/chroma-qna" --limit 10 > chroma-qna.jsonl
+```
+
+**Export data from Local Persisted Chroma DB to `.jsonl` file with filter:**
+
+The below command will export data from local persisted Chroma DB to a `.jsonl` file using a `where` filter to select
+the documents to export.
+
+```bash
+cdp export "file://chroma-data/chroma-qna" --where '{"document_id": "123"}' > chroma-qna.jsonl
 ```
 
 **Export data from Chroma DB Server to HuggingFace Datasets:**
