@@ -1,6 +1,7 @@
 import json
 import sys
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 from typing import Annotated, Optional, List, Dict, Any
 
 import typer
@@ -73,6 +74,9 @@ def chroma_import(
         "--df",
         help="The distance function to use when creating a collection",
     ),
+    max_threads: Optional[int] = typer.Option(
+        1, "--max-threads", "-t", help="The maximum number of threads."
+    ),
 ) -> None:
     _embedding_function = None
     if embedding_function is not None:
@@ -104,28 +108,41 @@ def chroma_import(
         chroma_collection = client.get_collection(_collection)
     lc_count = 0
     with smart_open(import_file, inf) as file_or_stdin:
-        for line in file_or_stdin:
-            if lc_count < _offset:
-                continue
-            if _limit != -1 and lc_count >= _limit:
-                break
-            doc = remap_features(
-                json.loads(line), doc_feature, embed_feature, meta_features, id_feature
+        with ThreadPoolExecutor(max_workers=max_threads) as executor:
+            for line in file_or_stdin:
+                if lc_count < _offset:
+                    continue
+                if _limit != -1 and lc_count >= _limit:
+                    break
+                doc = remap_features(
+                    json.loads(line),
+                    doc_feature,
+                    embed_feature,
+                    meta_features,
+                    id_feature,
+                )
+                _batch["documents"].append(doc.text_chunk)
+                _batch["embeddings"].append(
+                    doc.embedding if _embedding_function is None else None
+                )  # call EF?
+                _batch["metadatas"].append(doc.metadata)
+                _batch["ids"].append(doc.id if doc.id else uuid.uuid4())
+                if len(_batch["documents"]) >= _batch_size:
+                    executor.submit(
+                        add_to_col,
+                        chroma_collection,
+                        _batch,
+                        _upsert,
+                        _embedding_function,
+                    )
+                    _batch = {
+                        "documents": [],
+                        "embeddings": [],
+                        "metadatas": [],
+                        "ids": [],
+                    }
+                lc_count += 1
+        if len(_batch["documents"]) > 0:
+            executor.submit(
+                add_to_col, chroma_collection, _batch, _upsert, _embedding_function
             )
-            _batch["documents"].append(doc.text_chunk)
-            _batch["embeddings"].append(
-                doc.embedding if _embedding_function is None else None
-            )  # call EF?
-            _batch["metadatas"].append(doc.metadata)
-            _batch["ids"].append(doc.id if doc.id else uuid.uuid4())
-            if len(_batch["documents"]) >= _batch_size:
-                add_to_col(chroma_collection, _batch, _upsert, _embedding_function)
-                _batch = {
-                    "documents": [],
-                    "embeddings": [],
-                    "metadatas": [],
-                    "ids": [],
-                }
-            lc_count += 1
-    if len(_batch["documents"]) > 0:
-        add_to_col(chroma_collection, _batch, _upsert, _embedding_function)
