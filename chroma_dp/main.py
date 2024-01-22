@@ -4,6 +4,7 @@ from chroma_dp.chroma.chroma_import import chroma_import
 from chroma_dp.processor.chunk import chunk_process
 from chroma_dp.processor.embed import filter_embed
 from chroma_dp.huggingface import hf_import, hf_export
+from chroma_dp.processor.id import id_process
 from chroma_dp.processor.metadata import meta_process
 from chroma_dp.processor.misc.emoji_clean import emoji_clean
 from chroma_dp.producer.file.pdf import pdf_import
@@ -94,5 +95,15 @@ app.command(
     help="Add or remove metadata.",
     no_args_is_help=True,
 )(meta_process)
+
+## ID processor
+
+
+app.command(
+    name="id",
+    help="Generate IDs for resources given a strategy.",
+    no_args_is_help=True,
+)(id_process)
+
 if __name__ == "__main__":
     app()
