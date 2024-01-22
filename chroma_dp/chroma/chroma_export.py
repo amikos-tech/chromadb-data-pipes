@@ -1,9 +1,9 @@
 import json
 from typing import Annotated, Optional, List, Dict, Any
 import typer
-from chromadb import GetResult, Where
+from chromadb import GetResult, Where, WhereDocument
 from chromadb.api.models import Collection
-from chromadb.api.types import validate_where
+from chromadb.api.types import validate_where, validate_where_document
 
 from chroma_dp import EmbeddableTextResource
 from chroma_dp.utils.chroma import CDPUri, get_client_for_uri
@@ -51,11 +51,16 @@ def remap_features(
 
 
 def read_large_data_in_chunks(
-    collection: Collection, offset: int = 0, limit: int = 100, where: Where = None
+    collection: Collection,
+    offset: int = 0,
+    limit: int = 100,
+    where: Where = None,
+    where_document: WhereDocument = None,
 ) -> GetResult:
     """Reads large data in chunks from ChromaDB."""
     result = collection.get(
         where=where,
+        where_document=where_document,
         limit=limit,
         offset=offset,
         include=["embeddings", "documents", "metadatas"],
@@ -85,7 +90,18 @@ def chroma_export(
     doc_feature: Annotated[
         str, typer.Option(help="The document feature.")
     ] = "text_chunk",
-    where: Annotated[Optional[str], typer.Option(help="The filter.")] = None,
+    where: Optional[str] = typer.Option(
+        None,
+        "--where",
+        "-m",
+        help='Metadata filter. JSON with Chroma syntax is expected - \'{"metadata_key": "metadata_value"}\'',
+    ),
+    where_document: Optional[str] = typer.Option(
+        None,
+        "--where-document",
+        "-d",
+        help='Document filter string - JSON with Chroma syntax is expected - \'{"$contains": "search for this"}\'',
+    ),
 ) -> None:
     if uri is None:
         raise ValueError("Please provide a ChromaDP URI.")
@@ -102,6 +118,9 @@ def chroma_export(
     _where = None
     if where:
         _where = validate_where(json.loads(where))
+    _where_document = None
+    if where_document:
+        _where_document = validate_where_document(json.loads(where_document))
     if export_file and not append:
         with open(export_file, "w") as f:
             f.write("")
@@ -112,6 +131,7 @@ def chroma_export(
                 offset=offset,
                 limit=min(total_results_to_fetch - offset, _batch_size),
                 where=_where,
+                where_document=_where_document,
             )
         )
         _final_results = [
