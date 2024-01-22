@@ -54,7 +54,7 @@ def emoji_clean(
         for doc in processor.process(
             documents=[doc],
         ):
-            typer.echo(doc.model_dump_json())
+            typer.echo(json.dumps(doc.model_dump()))
 
     if file:
         with open(file, "r") as inf:

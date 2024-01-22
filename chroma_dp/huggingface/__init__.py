@@ -263,7 +263,7 @@ def hf_import(
     )
     gen = HFChromaDocumentSourceGenerator(import_request)
     for doc in gen:
-        typer.echo(doc.model_dump_json())
+        typer.echo(json.dumps(doc.model_dump()))
 
 
 def hf_export(

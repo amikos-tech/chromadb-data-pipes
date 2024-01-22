@@ -63,9 +63,11 @@ def filter_embed(
                 _batch["embeddings"],
             ):
                 typer.echo(
-                    EmbeddableTextResource(
-                        text_chunk=d, metadata=m, id=i, embedding=e
-                    ).model_dump_json()
+                    json.dumps(
+                        EmbeddableTextResource(
+                            text_chunk=d, metadata=m, id=i, embedding=e
+                        ).model_dump()
+                    )
                 )
             _batch: Dict[str, Any] = {
                 "documents": [],
@@ -82,7 +84,9 @@ def filter_embed(
             _batch["embeddings"],
         ):
             typer.echo(
-                EmbeddableTextResource(
-                    text_chunk=d, metadata=m, id=i, embedding=e
-                ).model_dump_json()
+                json.dumps(
+                    EmbeddableTextResource(
+                        text_chunk=d, metadata=m, id=i, embedding=e
+                    ).model_dump()
+                )
             )

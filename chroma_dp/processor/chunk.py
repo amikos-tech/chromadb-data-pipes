@@ -96,7 +96,7 @@ def chunk_process(
             type=type,
             separator=separator,
         ):
-            typer.echo(doc.model_dump_json())
+            typer.echo(json.dumps(doc.model_dump()))
 
     if file:
         with open(file, "r") as inf:
