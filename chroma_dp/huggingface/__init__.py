@@ -32,6 +32,7 @@ class HFImportRequest(BaseModel):
     metadata_features: Optional[Sequence[str]] = Field(
         None, description="Metadata features"
     )
+    batch_size: Optional[int] = Field(100, description="Batch size")
 
     class Config:
         arbitrary_types_allowed = True
@@ -40,9 +41,9 @@ class HFImportRequest(BaseModel):
 def _doc_wrapper(
     row: Any,
     document_feature: str,
-    embedding_feature: str,
-    id_feature: str,
-    metadata_features: Dict[str, Any],
+    embedding_feature: Optional[str],
+    id_feature: Optional[str],
+    metadata_features: Optional[Sequence[str]],
 ) -> EmbeddableTextResource:
     doc = EmbeddableTextResource(
         id=row[id_feature] if id_feature else None,
@@ -70,18 +71,22 @@ class HFChromaDocumentSourceGenerator(
         else:
             self._dataset = import_request.dataset
 
-        if import_request.document_feature not in self._dataset.features.keys():
+        if (
+            not import_request.document_feature
+            or import_request.document_feature not in self._dataset.features.keys()
+        ):
             raise ValueError(
                 f"Document column {import_request.document_feature} not found in dataset"
             )
+        self._batch_size = import_request.batch_size or 100
         self._doc_feature = import_request.document_feature
         self._id_feature = import_request.id_feature
         self._embed_feature = import_request.embedding_feature
         self._meta_features = import_request.metadata_features
         self._extract_features = [self._doc_feature]
-        if import_request.id_feature:
+        if self._id_feature:
             self._extract_features.append(self._id_feature)
-        if import_request.embedding_feature:
+        if self._embed_feature:
             self._extract_features.append(self._embed_feature)
         if import_request.metadata_features:
             if not all(
@@ -108,9 +113,9 @@ class HFChromaDocumentSourceGenerator(
                 else _dataset_len
             )
         else:
-            self._limit = import_request.limit
-        self._offset = import_request.offset
-        self._stream = import_request.stream
+            self._limit = import_request.limit or -1
+        self._offset = import_request.offset or 0
+        self._stream = import_request.stream or False
 
     def _get_batch(self, offset: int, limit: int) -> Dataset:
         return self._dataset[offset : offset + limit]
@@ -120,8 +125,8 @@ class HFChromaDocumentSourceGenerator(
             yield from self._streaming_iterator()
         else:
             end = self._offset + self._limit
-            for start in range(self._offset, end, 10):
-                subset = self._dataset[start : min(start + 10, end)]
+            for start in range(self._offset, end, self._batch_size):
+                subset = self._dataset[start : min(start + self._batch_size, end)]
                 yield from [
                     _doc_wrapper(
                         dict(zip(self._extract_features, values)),
@@ -162,6 +167,7 @@ class HFImportUri(BaseModel):
         description="Make dataset private on Hugging Face Hub. "
         "Note: This parameter is only applicable to exports.",
     )
+    batch_size: Optional[int] = Field(100, description="Batch size")
 
     @staticmethod
     def from_uri(uri: str) -> "HFImportUri":
@@ -172,7 +178,7 @@ class HFImportUri(BaseModel):
             raise ValueError(
                 f"Unsupported scheme: {parsed_uri.scheme}. Must be 'hf:` or `file:`."
             )
-        dataset = parsed_uri.hostname + parsed_uri.path
+        dataset = (parsed_uri.hostname or "") + parsed_uri.path
         is_remote = False
         if parsed_uri.scheme == "hf":
             is_remote = True
@@ -186,6 +192,7 @@ class HFImportUri(BaseModel):
         embed_feature = query_params.get("embed_feature", [None])[0]
         meta_features = query_params.get("meta_features", [None])[0]
         private = bool_or_false(query_params.get("private", [False])[0])
+        batch_size = int_or_none(query_params.get("batch_size", [100])[0])
 
         return HFImportUri(
             dataset=dataset,
@@ -200,12 +207,13 @@ class HFImportUri(BaseModel):
             meta_features=meta_features.split(",") if meta_features else None,
             private=private,
             is_remote=is_remote,
+            batch_size=batch_size,
         )
 
 
 def hf_import(
     uri: Annotated[
-        str, typer.Argument(help="Dataset uri. eg. `hf:user/dataset?split=train`")
+        str, typer.Argument(help="Dataset uri. eg. `hf://user/dataset?split=train`")
     ],
     split: Annotated[
         Optional[str], typer.Option(help="The HuggingFace dataset split")
@@ -225,7 +233,10 @@ def hf_import(
     id_feature: Annotated[Optional[str], typer.Option(help="The id feature.")] = "id",
     limit: Annotated[Optional[int], typer.Option(help="The limit.")] = -1,
     offset: Annotated[Optional[int], typer.Option(help="The offset.")] = 0,
-):
+    batch_size: Optional[int] = typer.Option(
+        100, "--batch-size", "-b", help="The batch size."
+    ),
+) -> None:
     _hf_uri = HFImportUri.from_uri(uri)
     _dataset = _hf_uri.dataset
     _limit = _hf_uri.limit or limit
@@ -236,6 +247,7 @@ def hf_import(
     _doc_feature = _hf_uri.doc_feature or doc_feature
     _embed_feature = _hf_uri.embed_feature or embed_feature
     _meta_features = _hf_uri.meta_features or meta_features
+    _batch_size = batch_size or _hf_uri.batch_size
 
     import_request = HFImportRequest(
         dataset=_dataset,
@@ -247,6 +259,7 @@ def hf_import(
         id_feature=_id_feature,
         embedding_feature=_embed_feature,
         metadata_features=_meta_features,
+        batch_size=_batch_size,
     )
     gen = HFChromaDocumentSourceGenerator(import_request)
     for doc in gen:
@@ -280,7 +293,7 @@ def hf_export(
     private: Annotated[
         bool, typer.Option(help="Make dataset private on Hugging Face Hub. ")
     ] = False,
-):
+) -> None:
     _hf_uri = HFImportUri.from_uri(uri)
     _dataset = _hf_uri.dataset
     _limit = _hf_uri.limit or limit
