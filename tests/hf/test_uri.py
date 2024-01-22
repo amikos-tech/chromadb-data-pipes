@@ -14,4 +14,3 @@ def test_uri() -> None:
     assert uri.id_feature == "_id"
     assert uri.doc_feature == "text"
     assert uri.meta_features == ["title"]
-
