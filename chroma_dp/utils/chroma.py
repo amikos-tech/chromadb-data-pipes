@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, cast
 from urllib.parse import urlparse, parse_qs
 import chromadb
 from chromadb import ClientAPI, GetResult
@@ -153,6 +153,13 @@ def get_client_for_uri(uri: CDPUri) -> ClientAPI:
     return client
 
 
+def get_default_metadata(in_dict: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Attempts to get default metadata from a dictionary (of EmbeddableTextResource) or returns None."""
+    if "metadata" in in_dict:
+        return cast(Dict[str, Any], in_dict["metadata"])
+    return None
+
+
 def remap_features(
     in_dict: Dict[str, Any],
     doc_feature: str,
@@ -162,7 +169,11 @@ def remap_features(
 ) -> EmbeddableTextResource:
     _doc = in_dict[doc_feature]
     _embed = in_dict[embed_feature] if embed_feature else None
-    _meta = {k: in_dict[k] for k in meta_features} if meta_features else None
+    _meta = (
+        {k: in_dict[k] for k in meta_features}
+        if meta_features
+        else get_default_metadata(in_dict)
+    )
     _id = in_dict[id_feature] if id_feature else None
     return EmbeddableTextResource(
         text_chunk=_doc, embedding=_embed, metadata=_meta, id=_id
