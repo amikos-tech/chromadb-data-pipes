@@ -4,6 +4,7 @@ from chroma_dp.chroma.chroma_import import chroma_import
 from chroma_dp.processor.chunk import chunk_process
 from chroma_dp.processor.embed import filter_embed
 from chroma_dp.huggingface import hf_import, hf_export
+from chroma_dp.processor.metadata import meta_process
 from chroma_dp.processor.misc.emoji_clean import emoji_clean
 from chroma_dp.producer.file.pdf import pdf_import
 from chroma_dp.producer.file.text import txt_import
@@ -71,7 +72,6 @@ app.command(
     no_args_is_help=True,
 )(chroma_import)
 
-
 ## Dataset commands
 
 
@@ -87,5 +87,12 @@ app.command(
     no_args_is_help=True,
 )(hf_export)
 
+## Metadata processor
+
+app.command(
+    name="meta",
+    help="Add or remove metadata.",
+    no_args_is_help=True,
+)(meta_process)
 if __name__ == "__main__":
     app()
