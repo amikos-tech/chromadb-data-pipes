@@ -16,12 +16,19 @@ single-quotes `'` (e.g. `\'value\'`), the escaped single-quotes are removed and 
 
 To remove metadata keys use `-k` flag. If the key does not exist in the metadata dictionary, it is ignored.
 
-Examples:
+!!! note "Help"
 
-Add metadata keys:
+    Run `cdp meta --help` for more information.
+
+### Add metadata keys
 
 ```bash
 cat sample-data/metadata/metadata.jsonl | head -1 | cdp meta -m bool_value=false -m int_value=1 -m float_value=1.1 -m escaped_value=\'true\' | jq .metadata
+```
+
+Returns:
+
+```json
 {
   "title": "Animalia (book)",
   "bool_value": false,
@@ -31,7 +38,7 @@ cat sample-data/metadata/metadata.jsonl | head -1 | cdp meta -m bool_value=false
 }
 ```
 
-Overwrite metadata keys:
+### Overwrite metadata keys
 
 ```bash
 cat sample-data/metadata/metadata.jsonl | head -1 | cdp meta -m title="New Title" -o | jq .metadata
@@ -40,7 +47,7 @@ cat sample-data/metadata/metadata.jsonl | head -1 | cdp meta -m title="New Title
 }
 ```
 
-Remove metadata keys:
+### Remove metadata keys
 
 ```bash
 cat sample-data/metadata/metadata.jsonl | head -1 |  cdp meta -m bool_value=false -m int_value=1 | cdp meta -k int_value | jq .metadata
@@ -49,7 +56,3 @@ cat sample-data/metadata/metadata.jsonl | head -1 |  cdp meta -m bool_value=fals
   "bool_value": false
 }
 ```
-
-!!! note "Help"
-
-    Run `cdp chunk --help` for more information.
