@@ -3,7 +3,7 @@ import chromadb
 from chroma_dp.huggingface import HFImportRequest, HFChromaDocumentSourceGenerator
 
 
-def test_gen_streaming():
+def test_gen_streaming() -> None:
     client = chromadb.HttpClient()
     import_request = HFImportRequest(
         client=client,
@@ -29,7 +29,7 @@ def test_gen_streaming():
     assert count == 10
 
 
-def test_gen_non_streaming():
+def test_gen_non_streaming() -> None:
     client = chromadb.HttpClient()
     import_request = HFImportRequest(
         client=client,

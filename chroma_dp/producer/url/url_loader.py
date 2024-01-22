@@ -22,7 +22,7 @@ class BSExtractor:
         self.max_depth = max_depth
 
     def __call__(self, html: str) -> str:
-        return self.bs(html, "html.parser").text
+        return str(self.bs(html, "html.parser").text)
 
 
 class URLProducer(CdpProducer[EmbeddableTextResource]):

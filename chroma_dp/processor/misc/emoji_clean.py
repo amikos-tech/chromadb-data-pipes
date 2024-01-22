@@ -8,7 +8,7 @@ import typer
 from chroma_dp import EmbeddableTextResource, CdpProcessor
 
 
-def remove_emojis(text):
+def remove_emojis(text: str) -> str:
     emoji_pattern = re.compile(
         "["
         "\U0001F600-\U0001F64F"  # emoticons

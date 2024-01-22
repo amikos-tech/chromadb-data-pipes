@@ -63,4 +63,4 @@ def bool_or_false(value: Any) -> bool:
     if value is None:
         return False
     else:
-        return bool(value)
+        return value == "True" or value == "true" or value == "1"
