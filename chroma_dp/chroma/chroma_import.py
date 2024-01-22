@@ -142,7 +142,7 @@ def chroma_import(
                         "ids": [],
                     }
                 lc_count += 1
-        if len(_batch["documents"]) > 0:
-            executor.submit(
-                add_to_col, chroma_collection, _batch, _upsert, _embedding_function
-            )
+            if len(_batch["documents"]) > 0:
+                executor.submit(
+                    add_to_col, chroma_collection, _batch, _upsert, _embedding_function
+                )
