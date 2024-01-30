@@ -7,6 +7,7 @@ from chroma_dp.huggingface import hf_import, hf_export
 from chroma_dp.processor.id import id_process
 from chroma_dp.processor.metadata import meta_process
 from chroma_dp.processor.misc.emoji_clean import emoji_clean
+from chroma_dp.producer.file.csv import csv_import
 from chroma_dp.producer.file.pdf import pdf_import
 from chroma_dp.producer.file.text import txt_import
 from chroma_dp.producer.url.url_loader import url_import
@@ -27,6 +28,10 @@ import_commands.command(
 import_commands.command(
     name="txt", help="Import text files from target dir.", no_args_is_help=True
 )(txt_import)
+
+import_commands.command(name="csv", help="Import csv file.", no_args_is_help=True)(
+    csv_import
+)
 
 # Filter commands
 transform_commands = typer.Typer(no_args_is_help=True, help="Transformer commands.")
