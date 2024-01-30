@@ -4,7 +4,10 @@ from chroma_dp.chroma.chroma_import import chroma_import
 from chroma_dp.processor.chunk import chunk_process
 from chroma_dp.processor.embed import filter_embed
 from chroma_dp.huggingface import hf_import, hf_export
+from chroma_dp.processor.id import id_process
+from chroma_dp.processor.metadata import meta_process
 from chroma_dp.processor.misc.emoji_clean import emoji_clean
+from chroma_dp.producer.file.csv import csv_import
 from chroma_dp.producer.file.pdf import pdf_import
 from chroma_dp.producer.file.text import txt_import
 from chroma_dp.producer.url.url_loader import url_import
@@ -25,6 +28,10 @@ import_commands.command(
 import_commands.command(
     name="txt", help="Import text files from target dir.", no_args_is_help=True
 )(txt_import)
+
+import_commands.command(name="csv", help="Import csv file.", no_args_is_help=True)(
+    csv_import
+)
 
 # Filter commands
 transform_commands = typer.Typer(no_args_is_help=True, help="Transformer commands.")
@@ -71,7 +78,6 @@ app.command(
     no_args_is_help=True,
 )(chroma_import)
 
-
 ## Dataset commands
 
 
@@ -86,6 +92,23 @@ app.command(
     help="Upload a dataset to HF.",
     no_args_is_help=True,
 )(hf_export)
+
+## Metadata processor
+
+app.command(
+    name="meta",
+    help="Add or remove metadata.",
+    no_args_is_help=True,
+)(meta_process)
+
+## ID processor
+
+
+app.command(
+    name="id",
+    help="Generate IDs for resources given a strategy.",
+    no_args_is_help=True,
+)(id_process)
 
 if __name__ == "__main__":
     app()

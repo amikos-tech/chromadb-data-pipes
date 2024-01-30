@@ -8,7 +8,7 @@ import typer
 from chroma_dp import EmbeddableTextResource, CdpProcessor
 
 
-def remove_emojis(text):
+def remove_emojis(text: str) -> str:
     emoji_pattern = re.compile(
         "["
         "\U0001F600-\U0001F64F"  # emoticons
@@ -54,7 +54,7 @@ def emoji_clean(
         for doc in processor.process(
             documents=[doc],
         ):
-            typer.echo(doc.model_dump_json())
+            typer.echo(json.dumps(doc.model_dump()))
 
     if file:
         with open(file, "r") as inf:
