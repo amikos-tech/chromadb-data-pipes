@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.4">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.6">
     
     
       
@@ -300,6 +300,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#example-use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Use Cases
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#importing" class="md-nav__link">
     <span class="md-ellipsis">
       Importing
@@ -452,6 +461,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -545,6 +558,48 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="processors/id/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ID Generation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="processors/metadata/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Metadata
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -560,6 +615,8 @@
   
     
     
+      
+        
       
         
       
@@ -596,6 +653,27 @@
             Producers
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="producers/csv/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CSV Files
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -715,6 +793,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#example-use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Use Cases
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#importing" class="md-nav__link">
     <span class="md-ellipsis">
       Importing
@@ -792,6 +879,19 @@ do one thing and do it well".</p>
 <p><strong>Get help:</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cdp<span class="w"> </span>--help
 </span></code></pre></div>
+<h3 id="example-use-cases">Example Use Cases<a class="headerlink" href="#example-use-cases" title="Permanent link">&para;</a></h3>
+<p>This is a short list of use cases to evaluate whether this is the right tool for your needs:</p>
+<ul>
+<li>Importing large datasets from local documents (PDF, TXT, etc.), from HuggingFace, from local persisted Chroma DB or
+  even another remote Chroma DB.</li>
+<li>Exporting large dataset to HuggingFace or any other dataformat supported by the library (if your format is not
+  supported, either implement it in a small function or open an issue)</li>
+<li>Create a dataset from your data that you can share with others (including the embeddings)</li>
+<li>Clone Collection with different embedding function, distance function, and other HNSW fine-tuning parameters</li>
+<li>Re-embed documents in a collection with a different embedding function</li>
+<li>Backup your data to a <code>jsonl</code> file</li>
+<li>Use other existing unix or other tools to transform your data after exporting from or before importing into Chroma DB</li>
+</ul>
 <h3 id="importing">Importing<a class="headerlink" href="#importing" title="Permanent link">&para;</a></h3>
 <p><strong>Import data from HuggingFace Datasets to <code>.jsonl</code> file:</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cdp<span class="w"> </span>ds-get<span class="w"> </span><span class="s2">&quot;hf://tazarov/chroma-qna?split=train&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>chroma-qna.jsonl
@@ -1018,10 +1118,10 @@ If you want your dataset to be private, add <code>--private</code> flag to the <
       </div>
       <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["content.code.annotate", "content.code.copy", "navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.indexes"], "search": "assets/javascripts/workers/search.c011b7c0.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": ".", "features": ["content.code.annotate", "content.code.copy", "navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.indexes"], "search": "assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="assets/javascripts/bundle.7389ff0e.min.js"></script>
+      <script src="assets/javascripts/bundle.e1c3ead8.min.js"></script>
       
         <script src="javascripts/gtag.js"></script>
       

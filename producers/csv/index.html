@@ -8,22 +8,28 @@
       
       
       
+        <link rel="canonical" href="https://datapipes.chromadb.dev/producers/csv/">
       
       
+        <link rel="prev" href="../../processors/metadata/">
       
-      <link rel="icon" href="/assets/images/favicon.png">
+      
+        <link rel="next" href="../pdf/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.6">
     
     
       
-        <title>ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB</title>
+        <title>CSV Files - ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
       
         
-        <link rel="stylesheet" href="/assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -42,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="/custom-styles.css">
+      <link rel="stylesheet" href="../../custom-styles.css">
     
-    <script>__md_scope=new URL("/",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -77,6 +83,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#csv-files" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -91,7 +102,7 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="https://www.trychroma.com" title="ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB" class="md-header__button md-logo" aria-label="ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB" data-md-component="logo">
       
-  <img src="/assets/images/logo.png" alt="logo">
+  <img src="../../assets/images/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -108,7 +119,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              CSV Files
             
           </span>
         </div>
@@ -197,7 +208,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href="https://www.trychroma.com" title="ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB" class="md-nav__button md-logo" aria-label="ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB" data-md-component="logo">
       
-  <img src="/assets/images/logo.png" alt="logo">
+  <img src="../../assets/images/logo.png" alt="logo">
 
     </a>
     ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB
@@ -224,7 +235,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -244,7 +255,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/concepts/" class="md-nav__link">
+      <a href="../../concepts/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -305,7 +316,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/adr/ADR-20240120-CLI-Naming/" class="md-nav__link">
+      <a href="../../adr/ADR-20240120-CLI-Naming/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -382,7 +393,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/processors/chunking/" class="md-nav__link">
+      <a href="../../processors/chunking/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -403,7 +414,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/processors/cleaning/" class="md-nav__link">
+      <a href="../../processors/cleaning/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -424,7 +435,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/processors/embedding/" class="md-nav__link">
+      <a href="../../processors/embedding/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -445,7 +456,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/processors/id/" class="md-nav__link">
+      <a href="../../processors/id/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -466,7 +477,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/processors/metadata/" class="md-nav__link">
+      <a href="../../processors/metadata/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -491,8 +502,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -508,12 +521,12 @@
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -527,7 +540,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Producers
@@ -538,10 +551,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="/producers/csv/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    CSV Files
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -550,6 +583,52 @@
   
 
       </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#default-csv-file-generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default CSV File Generator
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Default CSV File Generator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Options
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -562,7 +641,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/producers/pdf/" class="md-nav__link">
+      <a href="../pdf/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -583,7 +662,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/producers/text/" class="md-nav__link">
+      <a href="../text/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -604,7 +683,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/producers/url/" class="md-nav__link">
+      <a href="../url/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -644,6 +723,40 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#default-csv-file-generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default CSV File Generator
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Default CSV File Generator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    <span class="md-ellipsis">
+      Options
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -655,8 +768,53 @@
             <div class="md-content" data-md-component="content">
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+  
+  
+
+
+<h1 id="csv-files">CSV Files<a class="headerlink" href="#csv-files" title="Permanent link">&para;</a></h1>
+<h2 id="default-csv-file-generator">Default CSV File Generator<a class="headerlink" href="#default-csv-file-generator" title="Permanent link">&para;</a></h2>
+<p>The default CSV file generator reads a single CSV file provided as argument to <code>cdp imp csv</code> command.</p>
+<p>Practical example:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w"> </span>cdp<span class="w"> </span>imp<span class="w"> </span>csv<span class="w"> </span>sample-data/csv/employees_with_resumes.csv<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>--meta-features<span class="w"> </span>Name<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>--meta-features<span class="w"> </span>Department<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>--doc-feature<span class="w"> </span>Resume<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-1<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>default
+</span></code></pre></div>
+<p>The above command will read the CSV file <code>sample-data/csv/employees_with_resumes.csv</code> and will use the columns <code>Name</code>
+and <code>Department</code> as metadata features and the column <code>Resume</code> as document feature. The output of the command is piped
+to <code>cdp embed</code> which will embed the document feature using the default embedding function.</p>
+<h3 id="options">Options<a class="headerlink" href="#options" title="Permanent link">&para;</a></h3>
+<ul>
+<li><code>--meta-features</code> - a list of columns to be used as metadata features (specified multiple times, once per column)</li>
+<li><code>--doc-feature</code> - a column to be used as document feature. If unspecified, the entire row is used as document feature.</li>
+<li><code>--batch-size</code> - the number of rows to sbe read at once. Defaults to 100.</li>
+<li><code>--delimiter</code> - the delimiter used in the CSV file. Defaults to <code>,</code>.</li>
+<li><code>--quotechar</code> - the quote character used in the CSV file. Defaults to <code>"</code>.</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Help</p>
+<p>Run <code>cdp imp csv --help</code> for more information.</p>
+</div>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
               </article>
             </div>
           
@@ -806,12 +964,12 @@
       </div>
       <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
     
-    <script id="__config" type="application/json">{"base": "/", "features": ["content.code.annotate", "content.code.copy", "navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.indexes"], "search": "/assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="/assets/javascripts/bundle.e1c3ead8.min.js"></script>
+      <script src="../../assets/javascripts/bundle.e1c3ead8.min.js"></script>
       
-        <script src="/javascripts/gtag.js"></script>
+        <script src="../../javascripts/gtag.js"></script>
       
     
   </body>

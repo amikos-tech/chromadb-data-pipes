@@ -8,22 +8,28 @@
       
       
       
+        <link rel="canonical" href="https://datapipes.chromadb.dev/processors/id/">
       
       
+        <link rel="prev" href="../embedding/">
       
-      <link rel="icon" href="/assets/images/favicon.png">
+      
+        <link rel="next" href="../metadata/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.6">
     
     
       
-        <title>ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB</title>
+        <title>ID Generation - ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
       
         
-        <link rel="stylesheet" href="/assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -42,9 +48,9 @@
       
     
     
-      <link rel="stylesheet" href="/custom-styles.css">
+      <link rel="stylesheet" href="../../custom-styles.css">
     
-    <script>__md_scope=new URL("/",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
   
@@ -77,6 +83,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#id-generation" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -91,7 +102,7 @@
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="https://www.trychroma.com" title="ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB" class="md-header__button md-logo" aria-label="ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB" data-md-component="logo">
       
-  <img src="/assets/images/logo.png" alt="logo">
+  <img src="../../assets/images/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -108,7 +119,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              ID Generation
             
           </span>
         </div>
@@ -197,7 +208,7 @@
   <label class="md-nav__title" for="__drawer">
     <a href="https://www.trychroma.com" title="ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB" class="md-nav__button md-logo" aria-label="ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB" data-md-component="logo">
       
-  <img src="/assets/images/logo.png" alt="logo">
+  <img src="../../assets/images/logo.png" alt="logo">
 
     </a>
     ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB
@@ -224,7 +235,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -244,7 +255,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/concepts/" class="md-nav__link">
+      <a href="../../concepts/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -305,7 +316,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/adr/ADR-20240120-CLI-Naming/" class="md-nav__link">
+      <a href="../../adr/ADR-20240120-CLI-Naming/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -330,8 +341,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -349,12 +362,12 @@
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
@@ -368,7 +381,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Processors
@@ -382,7 +395,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/processors/chunking/" class="md-nav__link">
+      <a href="../chunking/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -403,7 +416,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/processors/cleaning/" class="md-nav__link">
+      <a href="../cleaning/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -424,7 +437,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/processors/embedding/" class="md-nav__link">
+      <a href="../embedding/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -442,10 +455,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="/processors/id/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    ID Generation
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -454,6 +487,88 @@
   
 
       </a>
+      
+        
+
+  
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#uuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      UUID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ulid" class="md-nav__link">
+    <span class="md-ellipsis">
+      ULID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#document-hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      Document Hash
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      Random Hash
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expression" class="md-nav__link">
+    <span class="md-ellipsis">
+      Expression
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -466,7 +581,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/processors/metadata/" class="md-nav__link">
+      <a href="../metadata/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -541,7 +656,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/producers/csv/" class="md-nav__link">
+      <a href="../../producers/csv/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -562,7 +677,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/producers/pdf/" class="md-nav__link">
+      <a href="../../producers/pdf/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -583,7 +698,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/producers/text/" class="md-nav__link">
+      <a href="../../producers/text/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -604,7 +719,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/producers/url/" class="md-nav__link">
+      <a href="../../producers/url/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -644,6 +759,76 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#uuid" class="md-nav__link">
+    <span class="md-ellipsis">
+      UUID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ulid" class="md-nav__link">
+    <span class="md-ellipsis">
+      ULID
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#document-hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      Document Hash
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#random-hash" class="md-nav__link">
+    <span class="md-ellipsis">
+      Random Hash
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#expression" class="md-nav__link">
+    <span class="md-ellipsis">
+      Expression
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -655,8 +840,85 @@
             <div class="md-content" data-md-component="content">
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+  
+  
+
+
+<h1 id="id-generation">ID Generation<a class="headerlink" href="#id-generation" title="Permanent link">&para;</a></h1>
+<p>CDP provides a number of ID generation strategies that can be used to generate or regenerate IDs for a given dataset.</p>
+<p>The following strategies are available:</p>
+<ul>
+<li><a href="#uuid">UUID</a> - IDS are generated using the UUID</li>
+<li><a href="#ulid">ULID</a> - IDS are generated using the ULID</li>
+<li><a href="#document-hash">Document Hash</a> - IDS are generated using the document hash (SHA256)</li>
+<li><a href="#random-hash">Random Hash</a> - IDS are generated using a random hash (SHA256)</li>
+<li><a href="#expression">Expression</a> - IDS are generated using a Jinja2 expression</li>
+</ul>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Help</p>
+<p>Run <code>cdp id --help</code> for more information.</p>
+</div>
+<h3 id="uuid">UUID<a class="headerlink" href="#uuid" title="Permanent link">&para;</a></h3>
+<p>This strategy generates a unique ID based on UUIDv4.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>cat<span class="w"> </span>sample-data/metadata/metadata.jsonl<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>id<span class="w"> </span>--uuid<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.id&#39;</span>
+</span></code></pre></div>
+<p>Returns:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="s2">&quot;5bf1d91b-817c-47a2-a6cb-94894c1b42c3&quot;</span>
+</span></code></pre></div>
+<h3 id="ulid">ULID<a class="headerlink" href="#ulid" title="Permanent link">&para;</a></h3>
+<p>This strategy generates a unique ID based on <a href="https://pypi.org/project/py-ulid/">ULID</a>.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cat<span class="w"> </span>sample-data/metadata/metadata.jsonl<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>id<span class="w"> </span>--ulid<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.id&#39;</span>
+</span></code></pre></div>
+<p>Returns:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="s2">&quot;01HMR7V5MMVD3Q1PA5PPSF0FA1&quot;</span>
+</span></code></pre></div>
+<h3 id="document-hash">Document Hash<a class="headerlink" href="#document-hash" title="Permanent link">&para;</a></h3>
+<p>This strategy generates unique IDs based on the document hash (SHA256).</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cat<span class="w"> </span>sample-data/metadata/metadata.jsonl<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>id<span class="w"> </span>--doc-hash<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.id&#39;</span>
+</span></code></pre></div>
+<p>Returns:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="s2">&quot;3143643f8520f32f7b04fff2cd524acbe32ef989b2bd6cc89d687743a909bfa6&quot;</span>
+</span></code></pre></div>
+<h3 id="random-hash">Random Hash<a class="headerlink" href="#random-hash" title="Permanent link">&para;</a></h3>
+<p>This strategy generates unique IDs based on a random hash (SHA256).</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cat<span class="w"> </span>sample-data/metadata/metadata.jsonl<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>id<span class="w"> </span>--random-hash<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.id&#39;</span>
+</span></code></pre></div>
+<p>Returns:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="s2">&quot;f4d7bc16f4ddbd080b08c4836efa93ed51e85ea1289df6c5851e261893e6ad52&quot;</span>
+</span></code></pre></div>
+<h3 id="expression">Expression<a class="headerlink" href="#expression" title="Permanent link">&para;</a></h3>
+<p>Generates ID based on provided <a href="https://pypi.org/project/Jinja2/">Jinja2</a> expression. The following variables are available for use in the expression:</p>
+<ul>
+<li><code>metadata</code> - the metadata for the document</li>
+<li><code>text_chunks</code> - the text chunks for the document</li>
+<li><code>id</code> - existing ID for the document</li>
+<li><code>embedding</code> - the embedding for the document</li>
+<li><code>uuid</code> - function that generates a UUID (example usage <code>{{uuid()}}</code>)</li>
+<li><code>ulid</code> - function that generates a ULID (example usage <code>{{ulid()}}</code>)</li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cat<span class="w"> </span>sample-data/metadata/metadata.jsonl<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>id<span class="w"> </span>--expr<span class="w"> </span><span class="s1">&#39;{{ulid()}}-{{metadata.title}}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.id&#39;</span>
+</span></code></pre></div>
+<p>Returns:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="s2">&quot;01HMR8308TMG80XYV9CHNAF0A3-Animalia (book)&quot;</span>
+</span></code></pre></div>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
               </article>
             </div>
           
@@ -806,12 +1068,12 @@
       </div>
       <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout(function(){document.querySelector("[data-md-component=consent]").hidden=!1},250);var action,form=document.forms.consent;for(action of["submit","reset"])form.addEventListener(action,function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map(function(e){return[e,!0]}))),location.hash="",location.reload()})</script>
     
-    <script id="__config" type="application/json">{"base": "/", "features": ["content.code.annotate", "content.code.copy", "navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.indexes"], "search": "/assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="/assets/javascripts/bundle.e1c3ead8.min.js"></script>
+      <script src="../../assets/javascripts/bundle.e1c3ead8.min.js"></script>
       
-        <script src="/javascripts/gtag.js"></script>
+        <script src="../../javascripts/gtag.js"></script>
       
     
   </body>
