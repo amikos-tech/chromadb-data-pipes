@@ -1,4 +1,4 @@
-import json
+import orjson as json
 from typing import Annotated, Optional, List, Dict, Any
 import typer
 from chromadb import GetResult, Where, WhereDocument
@@ -147,7 +147,7 @@ def chroma_export(
         if export_file:
             with open(export_file, "a") as f:
                 for _doc in _final_results:
-                    f.write(json.dumps(_doc) + "\n")
+                    f.write(str(json.dumps(_doc)) + "\n")
         else:
             for _doc in _final_results:
                 typer.echo(json.dumps(_doc))

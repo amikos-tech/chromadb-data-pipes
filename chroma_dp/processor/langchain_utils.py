@@ -1,4 +1,4 @@
-import json
+import orjson as json
 import uuid
 from typing import Any, Dict, Optional, Union
 

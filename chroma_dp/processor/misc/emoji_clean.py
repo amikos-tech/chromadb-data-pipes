@@ -1,4 +1,4 @@
-import json
+import orjson as json
 import re
 import sys
 from typing import Optional, Iterable, Any
