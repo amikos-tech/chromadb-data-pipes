@@ -34,9 +34,15 @@ pip install openai
 
 !!! note "OpenAI API Key"
 
-    You need to have an OpenAI API key to use this embedding function. You can get an API key by signing up for an account
-    at [OpenAI](https://openai.com/api/).
+    You need to have an OpenAI API key to use this embedding function. 
+    You can get an API key by signing up for an account at [OpenAI API Keys page](https://platform.openai.com/api-keys).
     The API key must be exported as env variable `OPENAI_API_KEY=sk-xxxxxx`.
+
+!!! note "OpenAI Embedding Models"
+
+    By default, if not specified, the `text-embedding-ada-002` model is used.
+    You can pass in an optional `--model=text-embedding-3-small` argument or
+    env variable `GEMINI_MODEL_NAME=text-embedding-3-large` , which lets you choose which OpenAI embeddings model to use.
 
 The below command will read a PDF files at the specified path, filter the output for a particular pdf (`grep`). Select
 the first document's page, chunk it to 500 characters, embed each chunk using OpenAI's text-embedding-ada-002 model.
@@ -88,7 +94,8 @@ cdp imp pdf sample-data/papers/ | tail -1 | cdp chunk -s 100 | cdp embed --ef co
 
     By default, if not specified, the `sentence-transformers/all-MiniLM-L6-v2` model is used.
     You can pass in an optional `--model=BAAI/bge-large-en-v1.5` argument or
-    env variable `HF_MODEL_NAME=BAAI/bge-large-en-v1.5` , which lets you choose which Cohere embeddings model to use.
+    env variable `HF_MODEL_NAME=BAAI/bge-large-en-v1.5` , which lets you choose which 
+    Hugging Frace embeddings model to use.
 
 The below command will read a PDF files at the specified path, select
 the first two pages, chunk it to 150 characters, selects the last chunk and embeds the chunk
@@ -122,4 +129,36 @@ using BAAI/bge-small-en-v1.5 model.
 ```bash
 export ST_MODEL_NAME="BAAI/bge-small-en-v1.5"
 cdp imp pdf sample-data/papers/ | head -2 | cdp chunk -s 150 | tail -1 | cdp embed --ef st
+```
+
+#### Google Generative AI Embedding (Gemini)
+
+To use Google Generative AI Embedding (Gemini) function, you need to install the `google-generativeai` python package.
+
+```bash
+pip install google-generativeai
+```
+
+!!! note "Google API Key"
+
+    You need to have a Google API key to use this embedding function.
+    To manage your keys go to [Maker Suite](https://makersuite.google.com/).
+    The API key must be exported as env variable `GEMINI_API_KEY=xxxx`.
+
+!!! note "Models"
+
+    By default, if not specified, the `models/embedding-001` model is used.
+    You can pass in an optional `--model=models/embedding-001` argument or
+    env variable `GEMINI_MODEL_NAME=models/embedding-001`, which lets you choose which Gemini embeddings model to use.
+
+!!! note "Task Type"
+
+    The embedding function also supports task type parameter. By default we use `RETRIEVAL_DOCUMENT`, For more details
+    visit [Gemini API Docs](https://ai.google.dev/examples/doc_search_emb#api_changes_to_embeddings_with_model_embedding-001).
+
+The below command will read a PDF files at the specified path, select the first two pages, chunk it to 150 characters, 
+selects the last chunk and embeds the chunk using `models/embedding-001` model.
+
+```bash
+cdp imp pdf sample-data/papers/ | head -2 | cdp chunk -s 150 | tail -1 | cdp embed --ef gemini
 ```
