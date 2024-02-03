@@ -9,6 +9,7 @@ from chromadb.utils.embedding_functions import (
     CohereEmbeddingFunction,
     HuggingFaceEmbeddingFunction,
     SentenceTransformerEmbeddingFunction,
+    GoogleGenerativeAiEmbeddingFunction,
 )
 
 
@@ -18,6 +19,7 @@ class SupportedEmbeddingFunctions(str, Enum):
     cohere = "cohere"
     hf = "hf"
     st = "st"
+    gemini = "gemini"
 
 
 def get_embedding_function_for_name(
@@ -64,6 +66,22 @@ def get_embedding_function_for_name(
             model_name=model,
             device=os.environ.get("ST_DEVICE", "cpu"),
             normalize_embeddings=os.environ.get("ST_NORMALIZE", "True") == "True",
+        )
+    elif name == SupportedEmbeddingFunctions.gemini:
+        model = (
+            kwargs.get("model")
+            if kwargs.get("model")
+            else os.environ.get("GEMINI_MODEL_NAME", "models/embedding-001")
+        )
+        task_type = (
+            kwargs.get("task_type")
+            if kwargs.get("task_type")
+            else os.environ.get("GEMINI_TASK_TYPE", "RETRIEVAL_DOCUMENT")
+        )
+        return GoogleGenerativeAiEmbeddingFunction(
+            api_key=os.environ.get("GEMINI_API_KEY"),
+            model_name=model,
+            task_type=task_type
         )
     else:
         raise ValueError("Please provide a valid embedding function.")
