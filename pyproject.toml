@@ -27,6 +27,7 @@ fastapi = "^0.108.0"
 langchain = "^0.1.0"
 pypdf = "^3.17.4"
 py-ulid = "^1.0.3"
+python-dotenv = "^1.0.1"
 
 
 [tool.poetry.group.dev.dependencies]

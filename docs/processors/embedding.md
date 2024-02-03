@@ -12,6 +12,13 @@ CDP comes with a default embedding processor that supports the following embeddi
 
 The embedding functions are based on [ChromaDB's embedding functions](https://docs.trychroma.com/embeddings).
 
+
+!!! note ".env Files"
+
+    CDP supports loading environment variables from `.env` files. You can create a `.env` file in the root of 
+    your project (or from wherever you run CDP commands) and add environment-specific variables on new lines 
+    in the form of `NAME=VALUE`.
+
 ### Usage
 
 #### Default

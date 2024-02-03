@@ -26,6 +26,12 @@ pip install chromadb-data-pipes
 cdp --help
 ```
 
+!!! note ".env Files"
+
+    CDP supports loading environment variables from `.env` files. You can create a `.env` file in the root of 
+    your project (or from wherever you run CDP commands) and add environment-specific variables on new lines 
+    in the form of `NAME=VALUE`.
+
 
 ### Example Use Cases
 
