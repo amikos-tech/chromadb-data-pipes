@@ -1,4 +1,4 @@
-import json
+import orjson as json
 import sys
 from typing import Annotated, Optional, List, Dict, Any
 

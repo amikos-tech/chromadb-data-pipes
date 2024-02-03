@@ -1,4 +1,5 @@
 import importlib
+import orjson as json
 import sys
 from typing import Optional, Callable, Dict, Any, Iterable, Annotated
 
@@ -88,7 +89,7 @@ def url_import(
     for doc in producer.produce():
         if count < start:
             continue
-        typer.echo(doc.model_dump_json())
+        typer.echo(json.dumps(doc.model_dump()))
         count += 1
         if count >= max:
             break

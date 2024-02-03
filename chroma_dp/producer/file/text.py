@@ -1,3 +1,4 @@
+import orjson as json
 from typing import Dict, Any, Iterable, Optional, Annotated
 
 import typer
@@ -77,4 +78,4 @@ def txt_import(
         path=path, glob=glob, recursive=recursive, batch_size=batch_size
     )
     for doc in producer.produce():
-        typer.echo(doc.model_dump_json())
+        typer.echo(json.dumps(doc.model_dump()))

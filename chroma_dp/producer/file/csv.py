@@ -1,3 +1,4 @@
+import orjson as json
 from typing import Dict, Any, Iterable, Optional, Annotated, List
 import csv
 import typer
@@ -118,4 +119,4 @@ def csv_import(
         quotechar=quotechar,
     )
     for doc in producer.produce():
-        typer.echo(doc.model_dump_json())
+        typer.echo(json.dumps(doc.model_dump()))

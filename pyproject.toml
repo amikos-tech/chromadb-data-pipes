@@ -28,6 +28,7 @@ langchain = "^0.1.0"
 pypdf = "^3.17.4"
 py-ulid = "^1.0.3"
 python-dotenv = "^1.0.1"
+orjson = "^3.9.12"
 
 
 [tool.poetry.group.dev.dependencies]
