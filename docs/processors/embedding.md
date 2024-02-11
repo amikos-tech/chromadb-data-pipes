@@ -15,8 +15,8 @@ The embedding functions are based on [ChromaDB's embedding functions](https://do
 
 !!! note ".env Files"
 
-    CDP supports loading environment variables from `.env` files. You can create a `.env` file in the root of 
-    your project (or from wherever you run CDP commands) and add environment-specific variables on new lines 
+    CDP supports loading environment variables from `.env` files. You can create a `.env` file in the root of
+    your project (or from wherever you run CDP commands) and add environment-specific variables on new lines
     in the form of `NAME=VALUE`.
 
 ### Usage
@@ -41,7 +41,7 @@ pip install openai
 
 !!! note "OpenAI API Key"
 
-    You need to have an OpenAI API key to use this embedding function. 
+    You need to have an OpenAI API key to use this embedding function.
     You can get an API key by signing up for an account at [OpenAI API Keys page](https://platform.openai.com/api-keys).
     The API key must be exported as env variable `OPENAI_API_KEY=sk-xxxxxx`.
 
@@ -101,7 +101,7 @@ cdp imp pdf sample-data/papers/ | tail -1 | cdp chunk -s 100 | cdp embed --ef co
 
     By default, if not specified, the `sentence-transformers/all-MiniLM-L6-v2` model is used.
     You can pass in an optional `--model=BAAI/bge-large-en-v1.5` argument or
-    env variable `HF_MODEL_NAME=BAAI/bge-large-en-v1.5` , which lets you choose which 
+    env variable `HF_MODEL_NAME=BAAI/bge-large-en-v1.5` , which lets you choose which
     Hugging Frace embeddings model to use.
 
 The below command will read a PDF files at the specified path, select
@@ -163,7 +163,7 @@ pip install google-generativeai
     The embedding function also supports task type parameter. By default we use `RETRIEVAL_DOCUMENT`, For more details
     visit [Gemini API Docs](https://ai.google.dev/examples/doc_search_emb#api_changes_to_embeddings_with_model_embedding-001).
 
-The below command will read a PDF files at the specified path, select the first two pages, chunk it to 150 characters, 
+The below command will read a PDF files at the specified path, select the first two pages, chunk it to 150 characters,
 selects the last chunk and embeds the chunk using `models/embedding-001` model.
 
 ```bash

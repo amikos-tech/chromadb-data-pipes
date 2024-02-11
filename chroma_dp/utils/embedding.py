@@ -81,7 +81,7 @@ def get_embedding_function_for_name(
         return GoogleGenerativeAiEmbeddingFunction(
             api_key=os.environ.get("GEMINI_API_KEY"),
             model_name=model,
-            task_type=task_type
+            task_type=task_type,
         )
     else:
         raise ValueError("Please provide a valid embedding function.")

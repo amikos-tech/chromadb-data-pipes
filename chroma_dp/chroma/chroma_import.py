@@ -118,8 +118,8 @@ def chroma_import(
                     json.loads(line),
                     doc_feature,
                     embed_feature,
-                    meta_features,
                     id_feature,
+                    meta_features,
                 )
                 _batch["documents"].append(doc.text_chunk)
                 _batch["embeddings"].append(
