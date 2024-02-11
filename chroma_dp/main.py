@@ -12,6 +12,7 @@ from chroma_dp.producer.file.csv import csv_import
 from chroma_dp.producer.file.pdf import pdf_import
 from chroma_dp.producer.file.text import txt_import
 from chroma_dp.producer.url.url_loader import url_import
+
 load_dotenv()
 app = typer.Typer(no_args_is_help=True, help="ChromaDB Data Pipes commands.")
 

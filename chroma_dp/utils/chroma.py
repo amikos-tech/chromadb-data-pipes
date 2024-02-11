@@ -164,16 +164,21 @@ def remap_features(
     in_dict: Dict[str, Any],
     doc_feature: str,
     embed_feature: str,
-    meta_features: Optional[List[str]],
     id_feature: str,
+    meta_features: Optional[List[str]] = None,
 ) -> EmbeddableTextResource:
+    # if standard metadata is present and no specific metadata is provided use the standard metadata
+    if "metadata" in in_dict and not meta_features:
+        # print("in_dict", in_dict)
+        _meta = get_default_metadata(in_dict)
+    elif "metadata" in in_dict and meta_features:
+        _meta = {k: in_dict["metadata"][k] for k in meta_features}
+    elif "metadata" not in in_dict and meta_features:
+        _meta = {k: None for k in meta_features}
+    else:
+        _meta = None
     _doc = in_dict[doc_feature]
     _embed = in_dict[embed_feature] if embed_feature else None
-    _meta = (
-        {k: in_dict[k] for k in meta_features}
-        if meta_features
-        else get_default_metadata(in_dict)
-    )
     _id = in_dict[id_feature] if id_feature else None
     return EmbeddableTextResource(
         text_chunk=_doc, embedding=_embed, metadata=_meta, id=_id
