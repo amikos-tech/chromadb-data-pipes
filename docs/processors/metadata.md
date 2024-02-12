@@ -46,6 +46,11 @@ Returns:
 
 ```bash
 cat sample-data/metadata/metadata.jsonl | head -1 | cdp meta -a title="New Title" -o | jq .metadata
+```
+
+Returns:
+
+```json
 {
   "title": "New Title"
 }
@@ -55,8 +60,38 @@ cat sample-data/metadata/metadata.jsonl | head -1 | cdp meta -a title="New Title
 
 ```bash
 cat sample-data/metadata/metadata.jsonl | head -1 |  cdp meta -a bool_value=false -a int_value=1 | cdp meta -k int_value | jq .metadata
+```
+
+Returns:
+
+```json
 {
   "title": "Animalia (book)",
   "bool_value": false
 }
 ```
+
+### Templating
+
+It is also possible to pass template values to metadata values. The template values must be valid JINJA2 templates.
+
+```bash
+cat sample-data/metadata/metadata.jsonl | head -1 | cdp meta -a extracted_title="{{ metadata.title | upper}}" | jq .metadata
+```
+
+Returns:
+
+```json
+{
+  "title": "Animalia (book)",
+  "extracted_title": "ANIMALIA (BOOK)"
+}
+```
+
+The following context vars and functions are available in the template:
+
+- `metadata`: the metadata dictionary of the original doc
+- `text_chunk`: the text chunk of the original doc
+- `now`: the current datetime. Example usage `{{ now }}`
+- `date`: Date in specified format, if not specified epoch time is returned. Example usage `{{ '%Y-%m-%d'| date }}`
+- All the default [jinja2 filters.](https://jinja.palletsprojects.com/en/3.1.x/templates/#list-of-builtin-filters)

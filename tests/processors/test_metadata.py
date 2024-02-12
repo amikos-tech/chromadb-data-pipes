@@ -1,5 +1,6 @@
 import subprocess
 import tempfile
+import time
 
 import orjson as json
 
@@ -94,3 +95,33 @@ def test_meta_process_remove_metadata_stdin() -> None:
         assert doc.metadata is not None
         assert "key1" not in doc.metadata
         assert "key2" not in doc.metadata
+
+
+def test_meta_process_add_metadata_template_stdin() -> None:
+    embeddable_text_resource = EmbeddableTextResource(
+        id="test_id", text_chunk="test_text", metadata=None, embedding=None
+    )
+    start_time = time.time()
+    with tempfile.TemporaryFile() as input_file:
+        input_file.write(json.dumps(embeddable_text_resource.model_dump()))
+        input_file.write(b"\n")
+        input_file.seek(0)
+        result = subprocess.run(
+            [
+                *cdp_cmd_args,
+                "meta",
+                "-a",
+                "date_key={{'epoch'|date}}",
+                "--attr",
+                "key2=true",
+            ],
+            stdin=input_file,
+            capture_output=True,
+        )
+        assert result.returncode == 0
+        print(result.stderr.decode())
+        doc = EmbeddableTextResource(**json.loads(result.stdout.decode()))
+        assert doc.metadata is not None
+        assert "date_key" in doc.metadata
+        end_time = time.time()
+        assert start_time <= float(doc.metadata["date_key"]) <= end_time

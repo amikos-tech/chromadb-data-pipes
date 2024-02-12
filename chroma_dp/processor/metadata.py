@@ -1,17 +1,26 @@
 import orjson as json
 import sys
-from typing import Any, Iterable, Annotated, Optional, List, Union
+from typing import Any, Iterable, Annotated, Optional, List, Union, Dict
 
 import typer
+from jinja2 import Template
 
 from chroma_dp import EmbeddableTextResource, CdpProcessor, Metadata
 from chroma_dp.utils import smart_open
+from chroma_dp.utils.templating import get_jinja_env
 
 
-def process_value(value: str) -> Union[bool, float, int, str]:
+_jinja_env = get_jinja_env()
+
+
+def process_value(value: str) -> Union[bool, float, int, str, Template]:
     """Parse the value as follows: bool>float>int>string"""
+    print(value, file=sys.stderr)
     if value.startswith("'") and value.endswith("'"):
-        return value[1:-1]
+        value = value[1:-1]
+    if value.startswith("{{") and value.endswith("}}"):
+        print(value, file=sys.stderr)
+        return _jinja_env.from_string(value)
     if value.lower() == "true":
         return True
     elif value.lower() == "false":
@@ -29,10 +38,13 @@ def process_value(value: str) -> Union[bool, float, int, str]:
     return value
 
 
+TemplateMetadata = Dict[str, Union[str, int, float, bool, Template]]
+
+
 class MetadataProcessor(CdpProcessor[EmbeddableTextResource]):
     def __init__(
         self,
-        metadata: Optional[Metadata] = None,
+        metadata: Optional[TemplateMetadata] = None,
         remove_keys: Optional[List[str]] = None,
         overwrite: bool = False,
     ):
@@ -52,8 +64,12 @@ class MetadataProcessor(CdpProcessor[EmbeddableTextResource]):
                 if not doc.metadata:
                     doc.metadata = {}
                 for k, v in self._metadata.items():
-                    if self._overwrite or k not in doc.metadata.keys():
-                        doc.metadata[k] = v
+                    if isinstance(v, Template):
+                        # process rendered value
+                        doc.metadata[k] = process_value(v.render(**doc.model_dump()))
+                    else:
+                        if self._overwrite or k not in doc.metadata.keys():
+                            doc.metadata[k] = v
             yield doc
 
 
