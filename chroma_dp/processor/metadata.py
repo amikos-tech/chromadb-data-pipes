@@ -48,11 +48,12 @@ class MetadataProcessor(CdpProcessor[EmbeddableTextResource]):
                 for k in self._remove_keys:
                     if k in doc.metadata.keys():
                         del doc.metadata[k]
-            if self._metadata and doc.metadata:
+            if self._metadata:
+                if not doc.metadata:
+                    doc.metadata = {}
                 for k, v in self._metadata.items():
                     if self._overwrite or k not in doc.metadata.keys():
                         doc.metadata[k] = v
-
             yield doc
 
 
@@ -63,6 +64,8 @@ def meta_process(
         Optional[List[str]],
         typer.Option(
             ...,
+            "--attr",
+            "-a",
             "--meta",
             "-m",
             help="The metadata key value pairs to add e.g. key=value. "
@@ -117,10 +120,10 @@ def meta_process(
 
     def process_docs(in_line: str) -> None:
         doc = EmbeddableTextResource(**json.loads(in_line))
-        for doc in processor.process(
+        for _doc in processor.process(
             documents=[doc],
         ):
-            typer.echo(json.dumps(doc.model_dump()))
+            typer.echo(json.dumps(_doc.model_dump()))
 
     with smart_open(file, inf) as file_or_stdin:
         for line in file_or_stdin:
