@@ -15,11 +15,9 @@ _jinja_env = get_jinja_env()
 
 def process_value(value: str) -> Union[bool, float, int, str, Template]:
     """Parse the value as follows: bool>float>int>string"""
-    print(value, file=sys.stderr)
     if value.startswith("'") and value.endswith("'"):
         value = value[1:-1]
     if value.startswith("{{") and value.endswith("}}"):
-        print(value, file=sys.stderr)
         return _jinja_env.from_string(value)
     if value.lower() == "true":
         return True
