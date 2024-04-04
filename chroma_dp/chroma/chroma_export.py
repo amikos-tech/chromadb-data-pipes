@@ -35,7 +35,7 @@ def remap_features(
 
     _metas = (
         doc.metadata
-        if meta_features is None
+        if meta_features is None or len(meta_features) == 0
         else {
             k: doc.metadata[k]
             for k in meta_features
@@ -83,9 +83,7 @@ def chroma_export(
     embed_feature: Annotated[
         str, typer.Option(help="The embedding feature.")
     ] = "embedding",
-    meta_features: Annotated[
-        Optional[List[str]], typer.Option(help="The metadata features.")
-    ] = None,
+    meta_features: Optional[List[str]] = typer.Option(None,help="The metadata features."),
     id_feature: Annotated[str, typer.Option(help="The id feature.")] = "id",
     doc_feature: Annotated[
         str, typer.Option(help="The document feature.")
