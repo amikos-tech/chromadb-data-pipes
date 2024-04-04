@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.6">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
     
     
       
@@ -26,7 +26,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bcfcd587.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -282,10 +282,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
@@ -361,10 +359,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
@@ -563,6 +559,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#templating" class="md-nav__link">
+    <span class="md-ellipsis">
+      Templating
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -604,10 +609,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
@@ -787,6 +790,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#templating" class="md-nav__link">
+    <span class="md-ellipsis">
+      Templating
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -814,9 +826,14 @@
 <p>The library offers a way to easily manipulate metadata values by adding or updating existing metadata keys as well as
 removing metadata keys from the metadata dictionary.</p>
 <h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>cdp<span class="w"> </span>meta<span class="w"> </span><span class="o">[</span>-m<span class="w"> </span><span class="nv">key</span><span class="o">=</span>value<span class="o">]</span><span class="w"> </span><span class="o">[</span>-k<span class="w"> </span>key_to_remove<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="o">]</span>
+<div class="admonition warning">
+<p class="admonition-title">Deprecation</p>
+<div class="language-text highlight"><pre><span></span><code>We are removing `-m` and `--meta` flags as they break from our end goal of consistent and non-ambiguous CLI flags.
+</code></pre></div>
+</div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>cdp<span class="w"> </span>meta<span class="w"> </span><span class="o">[</span>-a<span class="w"> </span><span class="nv">key</span><span class="o">=</span>value<span class="o">]</span><span class="w"> </span><span class="o">[</span>-k<span class="w"> </span>key_to_remove<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="o">]</span>
 </span></code></pre></div>
-<p>To add or update metadata key use <code>-m</code> flag with a <code>key=value</code> pair. The key is always assumed to be a string. The
+<p>To add or update metadata key use <code>-a</code> flag with a <code>key=value</code> pair. The key is always assumed to be a string. The
 value is processed as follows - boolean value (true/false), float value, integer value. If the value
 cannot be parsed as any of the above types, it is assumed to be a string. If the value is with escaped
 single-quotes <code>'</code> (e.g. <code>\'value\'</code>), the escaped single-quotes are removed and the value treated as a string.</p>
@@ -826,7 +843,7 @@ single-quotes <code>'</code> (e.g. <code>\'value\'</code>), the escaped single-q
 <p>Run <code>cdp meta --help</code> for more information.</p>
 </div>
 <h3 id="add-metadata-keys">Add metadata keys<a class="headerlink" href="#add-metadata-keys" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cat<span class="w"> </span>sample-data/metadata/metadata.jsonl<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>meta<span class="w"> </span>-m<span class="w"> </span><span class="nv">bool_value</span><span class="o">=</span><span class="nb">false</span><span class="w"> </span>-m<span class="w"> </span><span class="nv">int_value</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>-m<span class="w"> </span><span class="nv">float_value</span><span class="o">=</span><span class="m">1</span>.1<span class="w"> </span>-m<span class="w"> </span><span class="nv">escaped_value</span><span class="o">=</span><span class="se">\&#39;</span>true<span class="se">\&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.metadata
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>cat<span class="w"> </span>sample-data/metadata/metadata.jsonl<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>meta<span class="w"> </span>-a<span class="w"> </span><span class="nv">bool_value</span><span class="o">=</span><span class="nb">false</span><span class="w"> </span>-a<span class="w"> </span><span class="nv">int_value</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>-a<span class="w"> </span><span class="nv">float_value</span><span class="o">=</span><span class="m">1</span>.1<span class="w"> </span>-a<span class="w"> </span><span class="nv">escaped_value</span><span class="o">=</span><span class="se">\&#39;</span>true<span class="se">\&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.metadata
 </span></code></pre></div>
 <p>Returns:</p>
 <div class="language-json highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{</span>
@@ -838,18 +855,40 @@ single-quotes <code>'</code> (e.g. <code>\'value\'</code>), the escaped single-q
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">}</span>
 </span></code></pre></div>
 <h3 id="overwrite-metadata-keys">Overwrite metadata keys<a class="headerlink" href="#overwrite-metadata-keys" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cat<span class="w"> </span>sample-data/metadata/metadata.jsonl<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>meta<span class="w"> </span>-m<span class="w"> </span><span class="nv">title</span><span class="o">=</span><span class="s2">&quot;New Title&quot;</span><span class="w"> </span>-o<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.metadata
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="o">{</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="s2">&quot;title&quot;</span>:<span class="w"> </span><span class="s2">&quot;New Title&quot;</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="o">}</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cat<span class="w"> </span>sample-data/metadata/metadata.jsonl<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>meta<span class="w"> </span>-a<span class="w"> </span><span class="nv">title</span><span class="o">=</span><span class="s2">&quot;New Title&quot;</span><span class="w"> </span>-o<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.metadata
+</span></code></pre></div>
+<p>Returns:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;New Title&quot;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="p">}</span>
 </span></code></pre></div>
 <h3 id="remove-metadata-keys">Remove metadata keys<a class="headerlink" href="#remove-metadata-keys" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>cat<span class="w"> </span>sample-data/metadata/metadata.jsonl<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w">  </span>cdp<span class="w"> </span>meta<span class="w"> </span>-m<span class="w"> </span><span class="nv">bool_value</span><span class="o">=</span><span class="nb">false</span><span class="w"> </span>-m<span class="w"> </span><span class="nv">int_value</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>meta<span class="w"> </span>-k<span class="w"> </span>int_value<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.metadata
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="o">{</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="s2">&quot;title&quot;</span>:<span class="w"> </span><span class="s2">&quot;Animalia (book)&quot;</span>,
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="s2">&quot;bool_value&quot;</span>:<span class="w"> </span><span class="nb">false</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="o">}</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>cat<span class="w"> </span>sample-data/metadata/metadata.jsonl<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w">  </span>cdp<span class="w"> </span>meta<span class="w"> </span>-a<span class="w"> </span><span class="nv">bool_value</span><span class="o">=</span><span class="nb">false</span><span class="w"> </span>-a<span class="w"> </span><span class="nv">int_value</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>meta<span class="w"> </span>-k<span class="w"> </span>int_value<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.metadata
 </span></code></pre></div>
+<p>Returns:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="p">{</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Animalia (book)&quot;</span><span class="p">,</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">&quot;bool_value&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="templating">Templating<a class="headerlink" href="#templating" title="Permanent link">&para;</a></h3>
+<p>It is also possible to pass template values to metadata values. The template values must be valid JINJA2 templates.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>cat<span class="w"> </span>sample-data/metadata/metadata.jsonl<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>meta<span class="w"> </span>-a<span class="w"> </span><span class="nv">extracted_title</span><span class="o">=</span><span class="s2">&quot;{{ metadata.title | upper}}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.metadata
+</span></code></pre></div>
+<p>Returns:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Animalia (book)&quot;</span><span class="p">,</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">&quot;extracted_title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ANIMALIA (BOOK)&quot;</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>The following context vars and functions are available in the template:</p>
+<ul>
+<li><code>metadata</code>: the metadata dictionary of the original doc</li>
+<li><code>text_chunk</code>: the text chunk of the original doc</li>
+<li><code>now</code>: the current datetime. Example usage <code>{{ now }}</code></li>
+<li><code>date</code>: Date in specified format, if not specified epoch time is returned. Example usage <code>{{ '%Y-%m-%d'| date }}</code></li>
+<li>All the default <a href="https://jinja.palletsprojects.com/en/3.1.x/templates/#list-of-builtin-filters">jinja2 filters.</a></li>
+</ul>
 
 
 
@@ -1017,7 +1056,7 @@ single-quotes <code>'</code> (e.g. <code>\'value\'</code>), the escaped single-q
     <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.e1c3ead8.min.js"></script>
+      <script src="../../assets/javascripts/bundle.1e8ae164.min.js"></script>
       
         <script src="../../javascripts/gtag.js"></script>
       

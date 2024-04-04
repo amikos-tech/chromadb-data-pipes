@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.6">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
     
     
       
@@ -26,7 +26,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.bcfcd587.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -282,10 +282,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
@@ -361,10 +359,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
@@ -586,10 +582,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
@@ -785,6 +779,12 @@
 <li>SentenceTransformers (<code>st</code>) - SentenceTransformers' embedding models.</li>
 </ul>
 <p>The embedding functions are based on <a href="https://docs.trychroma.com/embeddings">ChromaDB's embedding functions</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">.env Files</p>
+<p>CDP supports loading environment variables from <code>.env</code> files. You can create a <code>.env</code> file in the root of
+your project (or from wherever you run CDP commands) and add environment-specific variables on new lines
+in the form of <code>NAME=VALUE</code>.</p>
+</div>
 <h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
 <h4 id="default">Default<a class="headerlink" href="#default" title="Permanent link">&para;</a></h4>
 <p>The below command will read a PDF files at the specified path, filter the output for a particular pdf (<code>grep</code>). Select
@@ -798,9 +798,15 @@ resulting documents with embeddings will be written to <code>chroma-data.jsonl</
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">OpenAI API Key</p>
-<p>You need to have an OpenAI API key to use this embedding function. You can get an API key by signing up for an account
-at <a href="https://openai.com/api/">OpenAI</a>.
+<p>You need to have an OpenAI API key to use this embedding function.
+You can get an API key by signing up for an account at <a href="https://platform.openai.com/api-keys">OpenAI API Keys page</a>.
 The API key must be exported as env variable <code>OPENAI_API_KEY=sk-xxxxxx</code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">OpenAI Embedding Models</p>
+<p>By default, if not specified, the <code>text-embedding-ada-002</code> model is used.
+You can pass in an optional <code>--model=text-embedding-3-small</code> argument or
+env variable <code>GEMINI_MODEL_NAME=text-embedding-3-large</code> , which lets you choose which OpenAI embeddings model to use.</p>
 </div>
 <p>The below command will read a PDF files at the specified path, filter the output for a particular pdf (<code>grep</code>). Select
 the first document's page, chunk it to 500 characters, embed each chunk using OpenAI's text-embedding-ada-002 model.</p>
@@ -841,7 +847,8 @@ The API key must be exported as env variable <code>HF_TOKEN=hf_xxxx</code>.</p>
 <p class="admonition-title">HF Embedding Models</p>
 <p>By default, if not specified, the <code>sentence-transformers/all-MiniLM-L6-v2</code> model is used.
 You can pass in an optional <code>--model=BAAI/bge-large-en-v1.5</code> argument or
-env variable <code>HF_MODEL_NAME=BAAI/bge-large-en-v1.5</code> , which lets you choose which Cohere embeddings model to use.</p>
+env variable <code>HF_MODEL_NAME=BAAI/bge-large-en-v1.5</code> , which lets you choose which
+Hugging Frace embeddings model to use.</p>
 </div>
 <p>The below command will read a PDF files at the specified path, select
 the first two pages, chunk it to 150 characters, selects the last chunk and embeds the chunk
@@ -866,6 +873,31 @@ the first two pages, chunk it to 150 characters, selects the last chunk and embe
 using BAAI/bge-small-en-v1.5 model.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ST_MODEL_NAME</span><span class="o">=</span><span class="s2">&quot;BAAI/bge-small-en-v1.5&quot;</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>cdp<span class="w"> </span>imp<span class="w"> </span>pdf<span class="w"> </span>sample-data/papers/<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-2<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">150</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>st
+</span></code></pre></div>
+<h4 id="google-generative-ai-embedding-gemini">Google Generative AI Embedding (Gemini)<a class="headerlink" href="#google-generative-ai-embedding-gemini" title="Permanent link">&para;</a></h4>
+<p>To use Google Generative AI Embedding (Gemini) function, you need to install the <code>google-generativeai</code> python package.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>pip<span class="w"> </span>install<span class="w"> </span>google-generativeai
+</span></code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Google API Key</p>
+<p>You need to have a Google API key to use this embedding function.
+To manage your keys go to <a href="https://makersuite.google.com/">Maker Suite</a>.
+The API key must be exported as env variable <code>GEMINI_API_KEY=xxxx</code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Models</p>
+<p>By default, if not specified, the <code>models/embedding-001</code> model is used.
+You can pass in an optional <code>--model=models/embedding-001</code> argument or
+env variable <code>GEMINI_MODEL_NAME=models/embedding-001</code>, which lets you choose which Gemini embeddings model to use.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Task Type</p>
+<p>The embedding function also supports task type parameter. By default we use <code>RETRIEVAL_DOCUMENT</code>, For more details
+visit <a href="https://ai.google.dev/examples/doc_search_emb#api_changes_to_embeddings_with_model_embedding-001">Gemini API Docs</a>.</p>
+</div>
+<p>The below command will read a PDF files at the specified path, select the first two pages, chunk it to 150 characters,
+selects the last chunk and embeds the chunk using <code>models/embedding-001</code> model.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>cdp<span class="w"> </span>imp<span class="w"> </span>pdf<span class="w"> </span>sample-data/papers/<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-2<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>chunk<span class="w"> </span>-s<span class="w"> </span><span class="m">150</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>cdp<span class="w"> </span>embed<span class="w"> </span>--ef<span class="w"> </span>gemini
 </span></code></pre></div>
 
 
@@ -1034,7 +1066,7 @@ using BAAI/bge-small-en-v1.5 model.</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.e1c3ead8.min.js"></script>
+      <script src="../../assets/javascripts/bundle.1e8ae164.min.js"></script>
       
         <script src="../../javascripts/gtag.js"></script>
       
