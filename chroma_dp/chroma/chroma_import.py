@@ -62,9 +62,10 @@ def chroma_import(
     embed_feature: Annotated[
         str, typer.Option(help="The embedding feature.")
     ] = "embedding",
-    meta_features: Annotated[
-        Optional[List[str]], typer.Option(help="The metadata features.")
-    ] = None,
+    meta_features: Optional[List[str]] = typer.Option(None,
+                                                      '-m',
+                                                      '--meta-features',
+                                                      help="The metadata features to import."),
     id_feature: Annotated[str, typer.Option(help="The id feature.")] = "id",
     doc_feature: Annotated[
         str, typer.Option(help="The document feature.")
