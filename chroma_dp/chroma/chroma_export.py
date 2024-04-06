@@ -100,6 +100,10 @@ def chroma_export(
         "-d",
         help='Document filter string - JSON with Chroma syntax is expected - \'{"$contains": "search for this"}\'',
     ),
+    format_output: Optional[str] = typer.Option(
+        "record", "--format",
+        help="Export format. Default is `record`. Supported formats: `record` and `jsonl`. "
+    ),
 ) -> None:
     if uri is None:
         raise ValueError("Please provide a ChromaDP URI.")
@@ -132,16 +136,21 @@ def chroma_export(
                 where_document=_where_document,
             )
         )
-        _final_results = [
-            remap_features(
-                doc,
-                doc_feature=doc_feature,
-                embed_feature=embed_feature,
-                id_feature=id_feature,
-                meta_features=meta_features,
-            )
-            for doc in _results
-        ]
+        if format_output == "record":
+            _final_results = [r.model_dump() for r in _results]
+        elif format_output == "jsonl":
+            _final_results = [
+                remap_features(
+                    doc,
+                    doc_feature=doc_feature,
+                    embed_feature=embed_feature,
+                    id_feature=id_feature,
+                    meta_features=meta_features,
+                )
+                for doc in _results
+            ]
+        else:
+            raise ValueError(f"Unsupported format: {format}")
         if export_file:
             with open(export_file, "a") as f:
                 for _doc in _final_results:
