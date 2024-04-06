@@ -174,7 +174,7 @@ def remap_features(
     elif "metadata" in in_dict and meta_features:
         _meta = {k: in_dict["metadata"][k] for k in meta_features}
     elif "metadata" not in in_dict and meta_features:
-        _meta = {k: None for k in meta_features}
+        _meta = {k: in_dict[k] for k in meta_features}
     else:
         _meta = None
     _doc = in_dict[doc_feature]
