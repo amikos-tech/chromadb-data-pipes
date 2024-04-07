@@ -1,6 +1,6 @@
 import typer
 from dotenv import load_dotenv
-from chroma_dp.chroma.chroma_export import chroma_export
+from chroma_dp.chroma.chroma_export import chroma_export_cli
 from chroma_dp.chroma.chroma_import import chroma_import
 from chroma_dp.processor.chunk import chunk_process
 from chroma_dp.processor.embed import filter_embed
@@ -72,7 +72,7 @@ app.command(
     name="export",
     help="Export data from ChromaDB.",
     no_args_is_help=True,
-)(chroma_export)
+)(chroma_export_cli)
 
 app.command(
     name="import",
@@ -80,7 +80,7 @@ app.command(
     no_args_is_help=True,
 )(chroma_import)
 
-## Dataset commands
+# Dataset commands
 
 
 app.command(
@@ -95,7 +95,7 @@ app.command(
     no_args_is_help=True,
 )(hf_export)
 
-## Metadata processor
+# Metadata processor
 
 app.command(
     name="meta",
@@ -103,7 +103,7 @@ app.command(
     no_args_is_help=True,
 )(meta_process)
 
-## ID processor
+# ID processor
 
 
 app.command(
