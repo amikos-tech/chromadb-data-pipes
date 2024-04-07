@@ -71,8 +71,6 @@ def read_large_data_in_chunks(
 def chroma_export(
     uri: str,
     collection: Optional[str] = None,
-    export_file: Optional[str] = None,
-    append: Optional[bool] = False,
     limit: Optional[int] = -1,
     offset: Optional[int] = 0,
     batch_size: Optional[int] = 100,
@@ -100,9 +98,6 @@ def chroma_export(
     _where_document = None
     if where_document:
         _where_document = validate_where_document(json.loads(where_document))
-    if export_file and not append:
-        with open(export_file, "w") as f:
-            f.write("")
     for offset in range(_start, total_results_to_fetch, _batch_size):
         _results = _get_result_to_chroma_doc_list(
             read_large_data_in_chunks(
@@ -171,11 +166,12 @@ def chroma_export_cli(
         help="Export format. Default is `record`. Supported formats: `record` and `jsonl`. ",
     ),
 ) -> None:
+    if export_file and not append:
+        with open(export_file, "w") as f:
+            f.write("")
     _final_results = chroma_export(
         uri=uri,
         collection=collection,
-        export_file=export_file,
-        append=append,
         limit=limit,
         offset=offset,
         batch_size=batch_size,
