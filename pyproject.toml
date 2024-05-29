@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "chromadb-data-pipes"
-version = "0.0.9"
+version = "0.0.10"
 description = "ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB"
 authors = ["Trayan Azarov <trayan.azarov@amikos.tech>"]
 license = "MIT"
@@ -29,6 +29,7 @@ pypdf = "^3.17.4"
 py-ulid = "^1.0.3"
 python-dotenv = "^1.0.1"
 orjson = "^3.9.12"
+essential-generators = "^1.0"
 
 
 [tool.poetry.group.dev.dependencies]
