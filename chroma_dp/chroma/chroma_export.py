@@ -1,5 +1,5 @@
 import orjson as json
-from typing import Annotated, Optional, List, Dict, Any
+from typing import Annotated, Optional, List, Dict, Any, Generator
 import typer
 from chromadb import GetResult, Where, WhereDocument
 from chromadb.api.models import Collection
@@ -81,7 +81,7 @@ def chroma_export(
     where: Optional[str] = None,
     where_document: Optional[str] = None,
     format_output: Optional[str] = "record",
-) -> List[Dict[str, Any]]:
+) -> Generator[Dict[str, Any], None, None]:
     parsed_uri = CDPUri.from_uri(uri)
     client = get_client_for_uri(parsed_uri)
     _collection = parsed_uri.collection or collection
@@ -123,7 +123,8 @@ def chroma_export(
             ]
         else:
             raise ValueError(f"Unsupported format: {format}")
-        return _final_results
+        for _doc in _final_results:
+            yield _doc
 
 
 def chroma_export_cli(
@@ -169,25 +170,37 @@ def chroma_export_cli(
     if export_file and not append:
         with open(export_file, "w") as f:
             f.write("")
-    _final_results = chroma_export(
-        uri=uri,
-        collection=collection,
-        limit=limit,
-        offset=offset,
-        batch_size=batch_size,
-        embed_feature=embed_feature,
-        meta_features=meta_features,
-        id_feature=id_feature,
-        doc_feature=doc_feature,
-        where=where,
-        where_document=where_document,
-        format_output=format_output,
-    )
 
     if export_file:
         with open(export_file, "a") as f:
-            for _doc in _final_results:
+            for _doc in chroma_export(
+                uri=uri,
+                collection=collection,
+                limit=limit,
+                offset=offset,
+                batch_size=batch_size,
+                embed_feature=embed_feature,
+                meta_features=meta_features,
+                id_feature=id_feature,
+                doc_feature=doc_feature,
+                where=where,
+                where_document=where_document,
+                format_output=format_output,
+            ):
                 f.write(str(json.dumps(_doc)) + "\n")
     else:
-        for _doc in _final_results:
+        for _doc in chroma_export(
+            uri=uri,
+            collection=collection,
+            limit=limit,
+            offset=offset,
+            batch_size=batch_size,
+            embed_feature=embed_feature,
+            meta_features=meta_features,
+            id_feature=id_feature,
+            doc_feature=doc_feature,
+            where=where,
+            where_document=where_document,
+            format_output=format_output,
+        ):
             typer.echo(json.dumps(_doc))
