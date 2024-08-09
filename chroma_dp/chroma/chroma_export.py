@@ -1,3 +1,6 @@
+from concurrent.futures import ThreadPoolExecutor
+from queue import Queue
+
 import orjson as json
 from typing import Annotated, Optional, List, Dict, Any, Generator
 import typer
@@ -52,11 +55,12 @@ def remap_features(
 
 def read_large_data_in_chunks(
     collection: Collection,
-    offset: int = 0,
-    limit: int = 100,
+    queue: Queue,
+    offset: Optional[int] = None,
+    limit: Optional[int] = None,
     where: Where = None,
     where_document: WhereDocument = None,
-) -> GetResult:
+):
     """Reads large data in chunks from ChromaDB."""
     result = collection.get(
         where=where,
@@ -65,7 +69,10 @@ def read_large_data_in_chunks(
         offset=offset,
         include=["embeddings", "documents", "metadatas"],
     )
-    return result
+    try:
+        queue.put(result)
+    except Exception as e:
+        queue.put(e)
 
 
 def chroma_export(
@@ -82,6 +89,7 @@ def chroma_export(
     where_document: Optional[str] = None,
     format_output: Optional[str] = "record",
 ) -> Generator[Dict[str, Any], None, None]:
+    """Exports data from ChromaDB."""
     parsed_uri = CDPUri.from_uri(uri)
     client = get_client_for_uri(parsed_uri)
     _collection = parsed_uri.collection or collection
@@ -98,16 +106,40 @@ def chroma_export(
     _where_document = None
     if where_document:
         _where_document = validate_where_document(json.loads(where_document))
-    for offset in range(_start, total_results_to_fetch, _batch_size):
-        _results = _get_result_to_chroma_doc_list(
-            read_large_data_in_chunks(
-                chroma_collection,
+
+    queue = Queue()
+    num_batches = (total_results_to_fetch - _start + _batch_size - 1) // _batch_size
+
+    with ThreadPoolExecutor(max_workers=5) as executor:
+        futures = []
+        for batch in range(num_batches):
+            offset = _start + batch * _batch_size
+            batch_limit = min(total_results_to_fetch - offset, _batch_size)
+            future = executor.submit(
+                read_large_data_in_chunks,
+                collection=chroma_collection,
+                queue=queue,
                 offset=offset,
-                limit=min(total_results_to_fetch - offset, _batch_size),
+                limit=batch_limit,
                 where=_where,
                 where_document=_where_document,
             )
-        )
+            futures.append(future)
+
+        # Wait for all futures to complete
+        for future in futures:
+            future.result()
+
+        # Signal end of data
+        queue.put(None)
+
+    while True:
+        _results = queue.get()
+        if _results is None:
+            break
+        if isinstance(_results, Exception):
+            raise _results
+        _results = _get_result_to_chroma_doc_list(_results)
         if format_output == "record":
             _final_results = [r.model_dump() for r in _results]
         elif format_output == "jsonl":
@@ -122,7 +154,7 @@ def chroma_export(
                 for doc in _results
             ]
         else:
-            raise ValueError(f"Unsupported format: {format}")
+            raise ValueError(f"Unsupported format: {format_output}")
         for _doc in _final_results:
             yield _doc
 
