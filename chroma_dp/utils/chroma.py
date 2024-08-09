@@ -1,3 +1,4 @@
+import os
 from enum import Enum
 from typing import Optional, Dict, Any, List, cast
 from urllib.parse import urlparse, parse_qs
@@ -79,15 +80,23 @@ class CDPUri(BaseModel):
         user_info = parsed.username or None
         password_token = parsed.password or None
         if user_info == "__auth_token__":
-            auth = {"type": "token", "token": password_token, "header": "AUTHORIZATION"}
+            auth = {
+                "type": "token",
+                "token": password_token,
+                "header": "Authorization",
+            }
         elif user_info == "__x_chroma_token__":
             auth = {
                 "type": "token",
                 "token": password_token,
-                "header": "X-CHROMA-TOKEN",
+                "header": "X-Chroma-Token",
             }
         elif user_info is not None:
-            auth = {"type": "basic", "username": user_info, "password": password_token}
+            auth = {
+                "type": "basic",
+                "username": user_info,
+                "password": password_token,
+            }
         else:
             auth = None
 
@@ -128,6 +137,43 @@ class CDPUri(BaseModel):
         )
 
 
+def _get_auth_settings_for_uri(uri: CDPUri) -> chromadb.Settings:
+    """Gets the authentication settings for a given URI."""
+    if uri.auth is not None:
+        if uri.auth["type"] == "basic":
+            # provider = "chromadb.auth.basic_authn.BasicAuthClientProvider" if tuple(map(int, chromadb.__version__.split("."))) < (0, 5, 0) else ""
+            # TODO support < 0.5.0?
+            return chromadb.Settings(
+                chroma_client_auth_provider="chromadb.auth.basic_authn.BasicAuthClientProvider",
+                chroma_client_auth_credentials=f"{uri.auth['username']}:{uri.auth['password']}",
+            )
+        if uri.auth["type"] == "token":
+            return chromadb.Settings(
+                chroma_client_auth_provider="chromadb.auth.token_authn.TokenAuthClientProvider",
+                chroma_client_auth_credentials=uri.auth["token"],
+                chroma_auth_token_transport_header=uri.auth["header"],
+            )
+        raise ValueError(f"Unsupported auth type: {uri.auth['type']}")
+    if os.environ.get("CHROMA_BASIC_AUTH"):
+        return chromadb.Settings(
+            chroma_client_auth_provider="chromadb.auth.basic_authn.BasicAuthClientProvider",
+            chroma_client_auth_credentials=os.environ["CHROMA_BASIC_AUTH"],
+        )
+    if os.environ.get("CHROMA_TOKEN_AUTH"):
+        return chromadb.Settings(
+            chroma_client_auth_provider="chromadb.auth.token_authn.TokenAuthClientProvider",
+            chroma_client_auth_credentials=os.environ["CHROMA_TOKEN_AUTH"],
+            chroma_auth_token_transport_header="Authorization",
+        )
+    if os.environ.get("CHROMA_XTOKEN_AUTH"):
+        return chromadb.Settings(
+            chroma_client_auth_provider="chromadb.auth.token_authn.TokenAuthClientProvider",
+            chroma_client_auth_credentials=os.environ["CHROMA_XTOKEN_AUTH"],
+            chroma_auth_token_transport_header="X-Chroma-Token",
+        )
+    return chromadb.Settings()
+
+
 def get_client_for_uri(uri: CDPUri) -> ClientAPI:
     """Gets a ChromaDB client for a given URI."""
     if uri.is_local:
@@ -139,15 +185,12 @@ def get_client_for_uri(uri: CDPUri) -> ClientAPI:
     else:
         client = chromadb.HttpClient(
             host=uri.host_or_path,
-            port=f"{uri.port}",
+            port=uri.port,
             database=uri.database or chromadb.api.DEFAULT_DATABASE,
             tenant=uri.tenant or chromadb.api.DEFAULT_TENANT,
-            # TODO auth
-            # settings=chromadb.Settings(
-            #     chroma_client_auth_provider="chromadb.auth.token.TokenAuthClientProvider",
-            #     chroma_client_auth_credentials=parsed_uri.auth,
-            #     chroma_client_auth_token_transport_header="X-CHROMA-TOKEN",
-            # )
+            settings=_get_auth_settings_for_uri(
+                uri
+            ),  # TODO this is not optimal if we want to configure extra settings
         )
 
     return client
