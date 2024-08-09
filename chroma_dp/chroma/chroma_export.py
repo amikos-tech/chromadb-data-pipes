@@ -88,6 +88,7 @@ def chroma_export(
     where: Optional[str] = None,
     where_document: Optional[str] = None,
     format_output: Optional[str] = "record",
+    max_threads: Optional[int] = 1,
 ) -> Generator[Dict[str, Any], None, None]:
     """Exports data from ChromaDB."""
     parsed_uri = CDPUri.from_uri(uri)
@@ -99,6 +100,8 @@ def chroma_export(
     _start = _offset if _offset > 0 else 0
     chroma_collection = client.get_collection(_collection)
     col_count = chroma_collection.count()
+    # precondition the DB for fetching data
+    chroma_collection.get(limit=1, include=["embeddings"])  # noqa
     total_results_to_fetch = min(col_count, _limit) if _limit > 0 else col_count
     _where = None
     if where:
@@ -109,13 +112,12 @@ def chroma_export(
 
     queue = Queue()
     num_batches = (total_results_to_fetch - _start + _batch_size - 1) // _batch_size
-
-    with ThreadPoolExecutor(max_workers=5) as executor:
-        futures = []
+    fetched_results = 0
+    with ThreadPoolExecutor(max_workers=max_threads) as executor:
         for batch in range(num_batches):
             offset = _start + batch * _batch_size
             batch_limit = min(total_results_to_fetch - offset, _batch_size)
-            future = executor.submit(
+            executor.submit(
                 read_large_data_in_chunks,
                 collection=chroma_collection,
                 queue=queue,
@@ -124,39 +126,32 @@ def chroma_export(
                 where=_where,
                 where_document=_where_document,
             )
-            futures.append(future)
 
-        # Wait for all futures to complete
-        for future in futures:
-            future.result()
-
-        # Signal end of data
-        queue.put(None)
-
-    while True:
-        _results = queue.get()
-        if _results is None:
-            break
-        if isinstance(_results, Exception):
-            raise _results
-        _results = _get_result_to_chroma_doc_list(_results)
-        if format_output == "record":
-            _final_results = [r.model_dump() for r in _results]
-        elif format_output == "jsonl":
-            _final_results = [
-                remap_features(
-                    doc,
-                    doc_feature=doc_feature,
-                    embed_feature=embed_feature,
-                    id_feature=id_feature,
-                    meta_features=meta_features,
-                )
-                for doc in _results
-            ]
-        else:
-            raise ValueError(f"Unsupported format: {format_output}")
-        for _doc in _final_results:
-            yield _doc
+        while fetched_results < total_results_to_fetch:
+            _results = queue.get()
+            if _results is None:
+                break
+            if isinstance(_results, Exception):
+                raise _results
+            _results = _get_result_to_chroma_doc_list(_results)
+            fetched_results += len(_results)
+            if format_output == "record":
+                _final_results = [r.model_dump() for r in _results]
+            elif format_output == "jsonl":
+                _final_results = [
+                    remap_features(
+                        doc,
+                        doc_feature=doc_feature,
+                        embed_feature=embed_feature,
+                        id_feature=id_feature,
+                        meta_features=meta_features,
+                    )
+                    for doc in _results
+                ]
+            else:
+                raise ValueError(f"Unsupported format: {format_output}")
+            for _doc in _final_results:
+                yield _doc
 
 
 def chroma_export_cli(
@@ -198,11 +193,13 @@ def chroma_export_cli(
         "--format",
         help="Export format. Default is `record`. Supported formats: `record` and `jsonl`. ",
     ),
+    max_threads: Optional[int] = typer.Option(
+        1, "--max-threads", "-t", help="The maximum number of threads."
+    ),
 ) -> None:
     if export_file and not append:
         with open(export_file, "w") as f:
             f.write("")
-
     if export_file:
         with open(export_file, "a") as f:
             for _doc in chroma_export(
@@ -218,6 +215,7 @@ def chroma_export_cli(
                 where=where,
                 where_document=where_document,
                 format_output=format_output,
+                max_threads=max_threads,
             ):
                 f.write(str(json.dumps(_doc)) + "\n")
     else:
@@ -234,5 +232,6 @@ def chroma_export_cli(
             where=where,
             where_document=where_document,
             format_output=format_output,
+            max_threads=max_threads,
         ):
             typer.echo(json.dumps(_doc))
