@@ -16,7 +16,7 @@ packages = [{ include = "chroma_dp" }]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
-chromadb = "0.4.24"
+chromadb = ">=0.4.0,<0.6.0"
 datasets = "^2.15.0"
 tqdm = "^4.66.1"
 rich = "^13.7.0"
