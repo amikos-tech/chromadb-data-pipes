@@ -11,6 +11,9 @@ from chromadb.utils.embedding_functions import (
     SentenceTransformerEmbeddingFunction,
     GoogleGenerativeAiEmbeddingFunction,
 )
+from chromadb.utils.embedding_functions.ollama_embedding_function import (
+    OllamaEmbeddingFunction,
+)
 
 
 class SupportedEmbeddingFunctions(str, Enum):
@@ -20,6 +23,7 @@ class SupportedEmbeddingFunctions(str, Enum):
     hf = "hf"
     st = "st"
     gemini = "gemini"
+    ollama = "ollama"
 
 
 def get_embedding_function_for_name(
@@ -82,6 +86,19 @@ def get_embedding_function_for_name(
             api_key=os.environ.get("GEMINI_API_KEY"),
             model_name=model,
             task_type=task_type,
+        )
+    elif name == SupportedEmbeddingFunctions.ollama:
+        model = (
+            kwargs.get("model")
+            if kwargs.get("model")
+            else os.environ.get("OLLAMA_MODEL_NAME", "chroma/all-minilm-l6-v2-f32")
+        )
+        url = os.environ.get(
+            "OLLAMA_EMBED_URL", "http://localhost:11434/api/embeddings"
+        )
+        return OllamaEmbeddingFunction(
+            model_name=model,
+            url=url,
         )
     else:
         raise ValueError("Please provide a valid embedding function.")

@@ -9,9 +9,9 @@ CDP comes with a default embedding processor that supports the following embeddi
 - Cohere (`cohere`) - Cohere's embedding models.
 - HuggingFrace (`hf`) - HuggingFace's embedding models.
 - SentenceTransformers (`st`) - SentenceTransformers' embedding models.
+- Ollama (`ollama`) - Ollama's embedding models.
 
 The embedding functions are based on [ChromaDB's embedding functions](https://docs.trychroma.com/embeddings).
-
 
 !!! note ".env Files"
 
@@ -168,4 +168,28 @@ selects the last chunk and embeds the chunk using `models/embedding-001` model.
 
 ```bash
 cdp imp pdf sample-data/papers/ | head -2 | cdp chunk -s 150 | tail -1 | cdp embed --ef gemini
+```
+
+#### Ollama Embeddings
+
+To use Ollama embedding function, you need to run an Ollama server see instructions on
+official [Ollama GH repo](https://github.com/ollama/ollama?tab=readme-ov-file)
+
+!!! note "Models"
+
+    By default, if not specified, the `chroma/all-minilm-l6-v2-f32` model is used.
+    You can pass in an optional `--model=nomic-embed-text` argument or
+    env variable `OLLAMA_MODEL_NAME=nomic-embed-text`, which lets you choose which Ollama embeddings model to use.
+
+!!! note "Embedding URL"
+
+    By default the embedding function will try to connect to Ollama server running on `http://localhost:11434/api/embeddings`
+    endpoint. If you whish to override that you can export an env var `OLLAMA_EMBED_URL`
+
+
+The below command will read a PDF files at the specified path, select the first two pages, chunk it to 150 characters,
+selects the last chunk and embeds the chunk using `nomic-embed-text` model.
+
+```bash
+cdp imp pdf sample-data/papers/ | head -2 | cdp chunk -s 150 | tail -1 | cdp embed --ef ollama --model=chroma/all-minilm-l6-v2-f32
 ```
