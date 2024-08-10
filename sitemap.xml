@@ -2,62 +2,67 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://datapipes.chromadb.dev/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-08-10</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://datapipes.chromadb.dev/auth/</loc>
+         <lastmod>2024-08-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datapipes.chromadb.dev/concepts/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-08-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datapipes.chromadb.dev/adr/ADR-20240120-CLI-Naming/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-08-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datapipes.chromadb.dev/processors/chunking/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-08-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datapipes.chromadb.dev/processors/cleaning/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-08-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datapipes.chromadb.dev/processors/embedding/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-08-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datapipes.chromadb.dev/processors/id/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-08-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datapipes.chromadb.dev/processors/metadata/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-08-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datapipes.chromadb.dev/producers/csv/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-08-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datapipes.chromadb.dev/producers/pdf/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-08-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datapipes.chromadb.dev/producers/text/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-08-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://datapipes.chromadb.dev/producers/url/</loc>
-         <lastmod>2024-05-29</lastmod>
+         <lastmod>2024-08-10</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
