@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "chromadb-data-pipes"
-version = "0.0.10"
-description = "ChromaDB Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB"
+version = "0.0.11"
+description = "Chroma Data Pipes 🖇️ - The easiest way to get data into and out of ChromaDB"
 authors = ["Trayan Azarov <trayan.azarov@amikos.tech>"]
 license = "MIT"
 readme = "README.md"
