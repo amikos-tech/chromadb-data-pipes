@@ -11,6 +11,7 @@ from chroma_dp.processor.misc.emoji_clean import emoji_clean
 from chroma_dp.producer.file.csv import csv_import
 from chroma_dp.producer.file.pdf import pdf_import
 from chroma_dp.producer.file.text import txt_import
+from chroma_dp.producer.test.perf import perf_dataset_cli
 from chroma_dp.producer.url.url_loader import url_import
 
 load_dotenv()
@@ -111,6 +112,14 @@ app.command(
     help="Generate IDs for resources given a strategy.",
     no_args_is_help=True,
 )(id_process)
+
+# Generate Dataset
+
+app.command(
+    name="perf-gen",
+    help="Generate a performance test dataset for ChromaDB.",
+    no_args_is_help=True,
+)(perf_dataset_cli)
 
 if __name__ == "__main__":
     app()
