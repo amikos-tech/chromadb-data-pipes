@@ -339,6 +339,7 @@ def hf_export(
             for key in doc.metadata.keys():
                 if f"metadata.{key}" not in features:
                     features[f"metadata.{key}"] = _infer_hf_type(doc.metadata[key])
+                    _batch[f"metadata.{key}"] = []
                 _batch[f"metadata.{key}"].append(doc.metadata[key])
 
         if len(_batch["document"]) >= _batch_size:
@@ -394,7 +395,7 @@ def hf_export(
         custom_metadata = {
             "license": "mit",
             "language": "en",
-            "pretty_name": f"Chroma export of collection N/A",
+            "pretty_name": "Chroma export of collection N/A",
             "size_categories": ["n<1K"],
             "x-chroma": {
                 "description": "Chroma Dataset",
