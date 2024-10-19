@@ -1,3 +1,5 @@
+import numpy as np
+
 try:
     import chromadb  # noqa: F401
 except ImportError:
@@ -19,7 +21,7 @@ from typing import (
 )
 
 from chromadb.api.types import Embedding
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 C = TypeVar("C")
 
@@ -31,17 +33,22 @@ class ResourceFeature(BaseModel, Generic[C]):
 
 Metadata = Dict[str, Union[str, int, float, bool]]
 
+EmbeddingWrapper = Union[Embedding, np.ndarray]
+
 
 class EmbeddableResource(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     id: Optional[str] = Field(None, description="Document ID")
     metadata: Optional[Metadata] = Field(None, description="Document metadata")
-    embedding: Optional[Embedding] = Field(None, description="Document embedding")
+    embedding: Optional[EmbeddingWrapper] = Field(
+        None, description="Document embedding"
+    )
 
     @staticmethod
     def resource_features() -> Sequence[ResourceFeature]:
         return [
-            ResourceFeature[Embedding](
-                feature_name="embedding", feature_type=Embedding
+            ResourceFeature[EmbeddingWrapper](
+                feature_name="embedding", feature_type=EmbeddingWrapper
             ),
             ResourceFeature[Metadata](feature_name="metadata", eature_type=Metadata),
             ResourceFeature[str](feature_name="id", feature_type=str),
@@ -57,6 +64,13 @@ class EmbeddableTextResource(EmbeddableResource):
             ResourceFeature[str](feature_name="text_chunk", feature_type=str),
             *super().resource_features(),
         ]
+
+    def model_dump(self, **kwargs):
+        # Convert NumPy arrays to lists before dumping
+        data = super().model_dump(**kwargs)
+        if isinstance(data["embedding"], np.ndarray):
+            data["embedding"] = data["embedding"].tolist()
+        return data
 
 
 D = TypeVar("D", bound=EmbeddableResource, contravariant=True)
