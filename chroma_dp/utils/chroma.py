@@ -3,6 +3,7 @@ from enum import Enum
 from typing import Optional, Dict, Any, List, cast
 from urllib.parse import urlparse, parse_qs
 import chromadb
+import numpy as np
 from chromadb import ClientAPI, GetResult
 from chromadb.api.models.Collection import Collection
 
@@ -223,6 +224,8 @@ def remap_features(
     _doc = in_dict[doc_feature]
     _embed = in_dict[embed_feature] if embed_feature else None
     _id = in_dict[id_feature] if id_feature else None
+    if not isinstance(_embed, np.ndarray):
+        _embed = np.array(_embed)
     return EmbeddableTextResource(
         text_chunk=_doc, embedding=_embed, metadata=_meta, id=_id
     )

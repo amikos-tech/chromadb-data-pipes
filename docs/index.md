@@ -67,7 +67,7 @@ cdp ds-get "hf://tazarov/chroma-qna?split=train" | cdp import "http://localhost:
 **Importing from a directory with PDF files into Local Persisted Chroma DB:**
 
 ```bash
-cdp ds-get sample-data/papers/ | grep "2401.02412.pdf" | head -1 | cdp chunk -s 500 | cdp embed --ef default | cdp import "file://chroma-data/my-pdfs" --upsert --create
+cdp imp pdf sample-data/papers/ | grep "2401.02412.pdf" | head -1 | cdp chunk -s 500 | cdp embed --ef default | cdp import "file://chroma-data/my-pdfs" --upsert --create
 ```
 
 !!! note

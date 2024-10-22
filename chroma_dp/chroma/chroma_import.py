@@ -1,3 +1,4 @@
+import numpy as np
 import orjson as json
 import sys
 import uuid
@@ -28,6 +29,11 @@ def add_to_col(
     ef: EmbeddingFunction = None,
 ) -> None:
     try:
+        if "embeddings" in batch and len(batch["embeddings"]) > 0:
+            batch["embeddings"] = [
+                e.tolist() if isinstance(e, np.ndarray) else e
+                for e in batch["embeddings"]
+            ]
         if ef:
             batch["embeddings"] = ef(batch["documents"])
         if upsert:
@@ -35,6 +41,7 @@ def add_to_col(
         else:
             col.add(**batch)
     except Exception as e:
+        print(e, file=sys.stderr)
         raise e
 
 
